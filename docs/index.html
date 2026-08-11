@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星耀启程 · 人格测评</title>
+    <style>
+        :root {
+            --color-primary: #4F46E5;
+            --color-primary-hover: #4338CA;
+            --color-primary-light: #EEF2FF;
+            --color-secondary: #7C3AED;
+            --color-secondary-light: #F5F3FF;
+            --color-bg: #F9FAFB;
+            --color-surface: #FFFFFF;
+            --color-border: #E5E7EB;
+            --color-text: #111827;
+            --color-text-secondary: #6B7280;
+            --color-text-muted: #9CA3AF;
+            --color-success: #10B981;
+            --color-error: #EF4444;
+            --color-warning: #F59E0B;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { font-family: var(--font-family); background: var(--color-bg); color: var(--color-text); line-height: 1.6; }
+        a { color: var(--color-primary); text-decoration: none; }
+        a:hover { color: var(--color-primary-hover); }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: #fff;
+            padding: 80px 20px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--color-bg);
+            clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 60px);
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+            letter-spacing: 0.05em;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .hero p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary {
+            background: #fff;
+            color: var(--color-primary);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: var(--color-primary-hover);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.4);
+        }
+        .btn-outline:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: -60px 20px 60px;
+            position: relative;
+            z-index: 1;
+        }
+        .stat-card {
+            background: var(--color-surface);
+            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-md);
+            padding: 24px 36px;
+            text-align: center;
+            min-width: 140px;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Section */
+        .section {
+            padding: 60px 0;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        /* System cards */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .system-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            transition: all 0.2s;
+        }
+        .system-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .system-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        .system-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .system-card p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Flow */
+        .flow-steps {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .flow-step {
+            flex: 1;
+            min-width: 180px;
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            border-left: 4px solid var(--color-primary);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+        .flow-step-num {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--color-primary);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .flow-step h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 8px 0 6px;
+        }
+        .flow-step p {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Radar chart */
+        .radar-section {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .radar-svg {
+            flex: 0 0 300px;
+            margin: 0 auto;
+        }
+        .radar-info {
+            flex: 1;
+            min-width: 250px;
+        }
+        .radar-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+        .radar-info ul {
+            list-style: none;
+            padding: 0;
+        }
+        .radar-info li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .radar-info li::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .radar-info li:nth-child(1)::before { background: #4F46E5; }
+        .radar-info li:nth-child(2)::before { background: #7C3AED; }
+        .radar-info li:nth-child(3)::before { background: #10B981; }
+        .radar-info li:nth-child(4)::before { background: #F59E0B; }
+
+        /* Tech badges */
+        .tech-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tech-badge {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tech-badge strong {
+            color: var(--color-text);
+        }
+
+        /* CTA */
+        .cta {
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            text-align: center;
+            margin: 60px 0;
+        }
+        .cta h2 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+        .cta p {
+            color: var(--color-text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .stat-card { padding: 16px 24px; min-width: 110px; }
+            .stat-number { font-size: 1.5rem; }
+            .radar-section { padding: 24px; }
+            .radar-svg { flex: 0 0 220px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+    <span class="hero-badge">人格测评平台</span>
+    <h1>星耀启程</h1>
+    <p>融合九型人格 · MBTI · 霍兰德 · 盖洛普四体系，1500 题智能融合题库，AI 深度解读</p>
+    <div class="hero-buttons">
+        <a href="https://github.com/NicholasKYuan/Personalitytest" class="btn btn-primary">查看源码</a>
+        <a href="#features" class="btn btn-outline">了解功能</a>
+    </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+    <div class="stat-card">
+        <div class="stat-number">1500</div>
+        <div class="stat-label">融合题库</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">4</div>
+        <div class="stat-label">测评体系</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">120</div>
+        <div class="stat-label">动态筛选</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">9000+</div>
+        <div class="stat-label">字 AI 解读</div>
+    </div>
+</div>
+
+<!-- Four Systems -->
+<div class="container">
+    <section class="section" id="features">
+        <h2 class="section-title">四体系融合测评</h2>
+        <p class="section-subtitle">每道题同时映射 1-4 个体系，一次答题获得全景画像</p>
+        <div class="systems-grid">
+            <div class="system-card">
+                <div class="system-icon" style="background:var(--color-primary-light);color:var(--color-primary);">9</div>
+                <h3>九型人格</h3>
+                <p>9 种人格类型，洞察核心动机与恐惧</p>
+            </div>
+            <div class="system-card">
+                <div class="system-icon" style="background:var(--color-secondary-light);color:var(--color-secondary);">M</div>
+                <h3>MBTI</h3>
+                <p>8 维认知功能，理解信息处理与决策风格</p>
+            </div>
+            <div class="system-card">
+                <div class="system-icon" style="background:#D1FAE5;color:#10B981;">H</div>
+                <h3>霍兰德</h3>
+                <p>6 种职业兴趣类型，匹配职业方向</p>
+            </div>
+            <div class="system-card">
+                <div class="system-icon" style="background:#FEF3C7;color:#F59E0B;">G</div>
+                <h3>盖洛普</h3>
+                <p>4 大优势领域，34 主题精准标注</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flow -->
+    <section class="section">
+        <h2 class="section-title">三步完成测评</h2>
+        <p class="section-subtitle">从填写信息到获取报告，全流程丝滑体验</p>
+        <div class="flow-steps">
+            <div class="flow-step">
+                <div class="flow-step-num">1</div>
+                <h4>填写画像</h4>
+                <p>年龄、角色、目的、出生日期，用于智能选题</p>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">2</div>
+                <h4>答题 120 题</h4>
+                <p>forced-choice + likert-4 混合，约 8 分钟</p>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-num">3</div>
+                <h4>获取报告</h4>
+                <p>免费简评 + AI 深度解读 + 可下载报告</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Radar Sample -->
+    <section class="section">
+        <h2 class="section-title">可视化报告</h2>
+        <p class="section-subtitle">雷达图 + 柱状图 + 分段解读，一目了然</p>
+        <div class="radar-section">
+            <div class="radar-svg">
+                <svg viewBox="0 0 300 300" width="300" height="300">
+                    <!-- Grid -->
+                    <polygon points="150,30 255,90 255,210 150,270 45,210 45,90" fill="none" stroke="#E5E7EB" stroke-width="1"/>
+                    <polygon points="150,60 228,105 228,195 150,240 72,195 72,105" fill="none" stroke="#E5E7EB" stroke-width="1"/>
+                    <polygon points="150,90 201,120 201,180 150,210 99,180 99,120" fill="none" stroke="#E5E7EB" stroke-width="1"/>
+                    <polygon points="150,120 174,135 174,165 150,180 126,165 126,135" fill="none" stroke="#E5E7EB" stroke-width="1"/>
+                    <!-- Axes -->
+                    <line x1="150" y1="150" x2="150" y2="30" stroke="#E5E7EB" stroke-width="1"/>
+                    <line x1="150" y1="150" x2="255" y2="90" stroke="#E5E7EB" stroke-width="1"/>
+                    <line x1="150" y1="150" x2="255" y2="210" stroke="#E5E7EB" stroke-width="1"/>
+                    <line x1="150" y1="150" x2="150" y2="270" stroke="#E5E7EB" stroke-width="1"/>
+                    <line x1="150" y1="150" x2="45" y2="210" stroke="#E5E7EB" stroke-width="1"/>
+                    <line x1="150" y1="150" x2="45" y2="90" stroke="#E5E7EB" stroke-width="1"/>
+                    <!-- Data -->
+                    <polygon points="150,45 240,98 235,200 150,255 65,200 58,100"
+                        fill="rgba(79,70,229,0.15)" stroke="#4F46E5" stroke-width="2" stroke-linejoin="round"/>
+                    <!-- Labels -->
+                    <text x="150" y="20" text-anchor="middle" font-size="11" fill="#6B7280">九型-8</text>
+                    <text x="265" y="85" text-anchor="middle" font-size="11" fill="#6B7280">MBTI-N</text>
+                    <text x="265" y="220" text-anchor="middle" font-size="11" fill="#6B7280">Holland-I</text>
+                    <text x="150" y="288" text-anchor="middle" font-size="11" fill="#6B7280">Gallup-S</text>
+                    <text x="30" y="220" text-anchor="middle" font-size="11" fill="#6B7280">Gallup-E</text>
+                    <text x="30" y="85" text-anchor="middle" font-size="11" fill="#6B7280">九型-5</text>
+                    <!-- Points -->
+                    <circle cx="150" cy="45" r="4" fill="#4F46E5"/>
+                    <circle cx="240" cy="98" r="4" fill="#7C3AED"/>
+                    <circle cx="235" cy="200" r="4" fill="#10B981"/>
+                    <circle cx="150" cy="255" r="4" fill="#F59E0B"/>
+                    <circle cx="65" cy="200" r="4" fill="#EF4444"/>
+                    <circle cx="58" cy="100" r="4" fill="#7C3AED"/>
+                </svg>
+            </div>
+            <div class="radar-info">
+                <h3>报告包含</h3>
+                <ul>
+                    <li>四体系维度雷达图（可交互 SVG）</li>
+                    <li>九型人格 Top 3 型号详解</li>
+                    <li>MBTI 四维度偏好分析</li>
+                    <li>盖洛普优势领域 + 34 主题标注</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="section">
+        <h2 class="section-title">技术栈</h2>
+        <p class="section-subtitle">轻量高效，无前端框架依赖</p>
+        <div class="tech-badges">
+            <div class="tech-badge"><strong>FastAPI</strong> 后端</div>
+            <div class="tech-badge"><strong>Uvicorn</strong> ASGI</div>
+            <div class="tech-badge"><strong>原生 HTML/CSS/JS</strong> 前端</div>
+            <div class="tech-badge"><strong>Minimax M3</strong> AI 分析</div>
+            <div class="tech-badge"><strong>JSONL</strong> 题库</div>
+            <div class="tech-badge"><strong>Python</strong> 3.10+</div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta">
+        <h2>开始使用</h2>
+        <p>克隆仓库，安装依赖，一行命令启动</p>
+        <div style="background:#1a1a2e;color:#a5d6ff;padding:16px 24px;border-radius:8px;font-family:monospace;font-size:0.9rem;margin:16px auto;max-width:480px;text-align:left;">
+            git clone git@github.com:NicholasKYuan/Personalitytest.git<br>
+            cd Personalitytest<br>
+            pip install -r webapp/backend/requirements.txt<br>
+            cd webapp/backend && uvicorn app:app --port 8000
+        </div>
+        <a href="https://github.com/NicholasKYuan/Personalitytest" class="btn btn-primary" style="margin-top:8px;">前往 GitHub</a>
+    </div>
+</div>
+
+<footer>
+    <p>星耀启程 · 人格测评 &copy; 2026 · MIT License</p>
+    <p style="margin-top:4px;">融合九型人格 · MBTI · 霍兰德 · 盖洛普</p>
+</footer>
+
+</body>
+</html>
