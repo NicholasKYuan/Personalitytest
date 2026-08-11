@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# 环境变量
+.env
+.env.local
+
+# 会话数据（用户隐私）
+webapp/backend/sessions/*.json
+
+# 测试产物
+test_report.html
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+
+# WorkBuddy
+.workbuddy/

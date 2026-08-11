@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星耀启程 · 测评结果</title>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-light: #EEF2FF;
+            --secondary: #7C3AED;
+            --bg: #F9FAFB;
+            --surface: #FFFFFF;
+            --border: #E5E7EB;
+            --text: #111827;
+            --text-2: #6B7280;
+            --text-3: #9CA3AF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --radius: 10px;
+            --radius-lg: 16px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08);
+            --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                    "Microsoft YaHei", "Helvetica Neue", sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font);
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+        .report { max-width: 720px; margin: 0 auto; padding: 2rem 1rem; }
+
+        /* ---- 头部 ---- */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border-radius: var(--radius-lg);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .header h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .header .subtitle { font-size: 0.85rem; opacity: 0.85; }
+        .header .user-name {
+            display: inline-block;
+            margin-top: 0.75rem;
+            padding: 0.3rem 1rem;
+            background: rgba(255,255,255,0.15);
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        /* ---- 四体系卡片 ---- */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .sys-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .sys-card .sys-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+        .sys-card .sys-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-2);
+            margin-bottom: 0.5rem;
+        }
+        .sys-card .sys-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        .sys-card .sys-label {
+            font-size: 0.8rem;
+            color: var(--text-2);
+            margin-top: 0.2rem;
+        }
+        .sys-card--enneagram { border-top: 3px solid var(--warning); }
+        .sys-card--enneagram .sys-value { color: var(--warning); }
+        .sys-card--mbti { border-top: 3px solid #3B82F6; }
+        .sys-card--mbti .sys-value { color: #3B82F6; letter-spacing: 0.12em; }
+        .sys-card--holland { border-top: 3px solid var(--success); }
+        .sys-card--holland .sys-value { color: var(--success); letter-spacing: 0.12em; }
+        .sys-card--gallup { border-top: 3px solid var(--secondary); }
+        .sys-card--gallup .sys-value { color: var(--secondary); font-size: 1.1rem; }
+
+        /* ---- 维度得分条 ---- */
+        .dim-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        .dim-section h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .dim-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+        .dim-bar:last-child { margin-bottom: 0; }
+        .dim-bar .dim-label {
+            width: 3.5rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-2);
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .dim-bar .dim-track {
+            flex: 1;
+            height: 20px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .dim-bar .dim-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+        .dim-bar .dim-score {
+            width: 2rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text);
+            flex-shrink: 0;
+        }
+
+        /* 九型颜色 */
+        .fill-enneagram { background: linear-gradient(90deg, #F59E0B, #FBBF24); }
+        /* MBTI 颜色 */
+        .fill-mbti { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+        /* 霍兰德颜色 */
+        .fill-holland { background: linear-gradient(90deg, #10B981, #34D399); }
+        /* 盖洛普颜色 */
+        .fill-gallup { background: linear-gradient(90deg, #7C3AED, #A78BFA); }
+
+        /* ---- 简要解读 ---- */
+        .summary-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        .summary-section h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .summary-section p {
+            font-size: 0.88rem;
+            color: var(--text-2);
+            line-height: 1.8;
+        }
+
+        /* ---- 付费引导 ---- */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            text-align: center;
+            color: #fff;
+        }
+        .cta-section h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+        .cta-section p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        .cta-btn {
+            display: inline-block;
+            padding: 0.7rem 2rem;
+            background: #fff;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 999px;
+            text-decoration: none;
+        }
+
+        /* ---- 页脚 ---- */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-3);
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 480px) {
+            .systems-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.25rem; }
+        }
+
+        @media print {
+            body { background: #fff; }
+            .cta-section { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="report">
+
+    <!-- 头部 -->
+    <header class="header">
+        <h1>星耀启程 · 测评结果</h1>
+        <p class="subtitle">融合九型人格 · MBTI · 霍兰德 · 盖洛普</p>
+        <!-- {{USER_NAME}} -->
+        <span class="user-name">{{USER_NAME}}</span>
+    </header>
+
+    <!-- 四体系结果卡片 -->
+    <div class="systems-grid">
+        <!-- 九型人格 -->
+        <div class="sys-card sys-card--enneagram">
+            <div class="sys-icon">🎭</div>
+            <div class="sys-name">九型人格</div>
+            <!-- {{ENNEAGRAM_TYPE}} {{ENNEAGRAM_NAME}} -->
+            <div class="sys-value">{{ENNEAGRAM_TYPE}}号</div>
+            <div class="sys-label">{{ENNEAGRAM_NAME}}</div>
+        </div>
+
+        <!-- MBTI -->
+        <div class="sys-card sys-card--mbti">
+            <div class="sys-icon">🧩</div>
+            <div class="sys-name">MBTI</div>
+            <!-- {{MBTI_TYPE}} -->
+            <div class="sys-value">{{MBTI_TYPE}}</div>
+            <div class="sys-label">{{MBTI_LABEL}}</div>
+        </div>
+
+        <!-- 霍兰德 -->
+        <div class="sys-card sys-card--holland">
+            <div class="sys-icon">🧭</div>
+            <div class="sys-name">霍兰德职业兴趣</div>
+            <!-- {{HOLLAND_CODE}} -->
+            <div class="sys-value">{{HOLLAND_CODE}}</div>
+            <div class="sys-label">{{HOLLAND_LABEL}}</div>
+        </div>
+
+        <!-- 盖洛普 -->
+        <div class="sys-card sys-card--gallup">
+            <div class="sys-icon">🏆</div>
+            <div class="sys-name">盖洛普优势</div>
+            <!-- {{GALLUP_DOMAIN_CN}} -->
+            <div class="sys-value">{{GALLUP_DOMAIN_CN}}</div>
+            <div class="sys-label">{{GALLUP_THEMES_CN}}</div>
+        </div>
+    </div>
+
+    <!-- 九型人格各类型得分 -->
+    <div class="dim-section">
+        <h3>九型人格 · 各类型得分</h3>
+        <!-- 动态生成：每行一个 dim-bar -->
+        <!-- {{ENNEAGRAM_BARS}} -->
+        <div class="dim-bar">
+            <span class="dim-label">1号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_1}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_1}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">2号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_2}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_2}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">3号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_3}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_3}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">4号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_4}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_4}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">5号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_5}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_5}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">6号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_6}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_6}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">7号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_7}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_7}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">8号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_8}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_8}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">9号</span>
+            <div class="dim-track"><div class="dim-fill fill-enneagram" style="width:{{ENNEAGRAM_PCT_9}}%"></div></div>
+            <span class="dim-score">{{ENNEAGRAM_SCORE_9}}</span>
+        </div>
+    </div>
+
+    <!-- MBTI 维度得分 -->
+    <div class="dim-section">
+        <h3>MBTI · 维度得分</h3>
+        <div class="dim-bar">
+            <span class="dim-label">E 外向</span>
+            <div class="dim-track"><div class="dim-fill fill-mbti" style="width:{{MBTI_PCT_E}}%"></div></div>
+            <span class="dim-score">{{MBTI_SCORE_E}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">I 内向</span>
+            <div class="dim-track"><div class="dim-fill fill-mbti" style="width:{{MBTI_PCT_I}}%"></div></div>
+            <span class="dim-score">{{MBTI_SCORE_I}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">S 实感</span>
+            <div class="dim-track"><div class="dim-fill fill-mbti" style="width:{{MBTI_PCT_S}}%"></div></div>
+            <span class="dim-score">{{MBTI_SCORE_S}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">N 直觉</span>
+            <div class="dim-track"><div class="dim-fill fill-mbti" style="width:{{MBTI_PCT_N}}%"></div></div>
+            <span class="dim-score">{{MBTI_SCORE_N}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">T 思考</span>
+            <div class="dim-track"><div class="dim-fill fill-mbti" style="width:{{MBTI_PCT_T}}%"></div></div>
+            <span class="dim-score">{{MBTI_SCORE_T}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">F 情感</span>
+            <div class="dim-track"><div class="dim-fill fill-mbti" style="width:{{MBTI_PCT_F}}%"></div></div>
+            <span class="dim-score">{{MBTI_SCORE_F}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">J 判断</span>
+            <div class="dim-track"><div class="dim-fill fill-mbti" style="width:{{MBTI_PCT_J}}%"></div></div>
+            <span class="dim-score">{{MBTI_SCORE_J}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">P 感知</span>
+            <div class="dim-track"><div class="dim-fill fill-mbti" style="width:{{MBTI_PCT_P}}%"></div></div>
+            <span class="dim-score">{{MBTI_SCORE_P}}</span>
+        </div>
+    </div>
+
+    <!-- 霍兰德各类型得分 -->
+    <div class="dim-section">
+        <h3>霍兰德 · 类型得分</h3>
+        <div class="dim-bar">
+            <span class="dim-label">R 实际</span>
+            <div class="dim-track"><div class="dim-fill fill-holland" style="width:{{HOLLAND_PCT_R}}%"></div></div>
+            <span class="dim-score">{{HOLLAND_SCORE_R}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">I 研究</span>
+            <div class="dim-track"><div class="dim-fill fill-holland" style="width:{{HOLLAND_PCT_I}}%"></div></div>
+            <span class="dim-score">{{HOLLAND_SCORE_I}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">A 艺术</span>
+            <div class="dim-track"><div class="dim-fill fill-holland" style="width:{{HOLLAND_PCT_A}}%"></div></div>
+            <span class="dim-score">{{HOLLAND_SCORE_A}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">S 社会</span>
+            <div class="dim-track"><div class="dim-fill fill-holland" style="width:{{HOLLAND_PCT_S}}%"></div></div>
+            <span class="dim-score">{{HOLLAND_SCORE_S}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">E 企业</span>
+            <div class="dim-track"><div class="dim-fill fill-holland" style="width:{{HOLLAND_PCT_E}}%"></div></div>
+            <span class="dim-score">{{HOLLAND_SCORE_E}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">C 常规</span>
+            <div class="dim-track"><div class="dim-fill fill-holland" style="width:{{HOLLAND_PCT_C}}%"></div></div>
+            <span class="dim-score">{{HOLLAND_SCORE_C}}</span>
+        </div>
+    </div>
+
+    <!-- 盖洛普四领域得分 -->
+    <div class="dim-section">
+        <h3>盖洛普 · 领域得分</h3>
+        <div class="dim-bar">
+            <span class="dim-label">执行力</span>
+            <div class="dim-track"><div class="dim-fill fill-gallup" style="width:{{GALLUP_PCT_EXEC}}%"></div></div>
+            <span class="dim-score">{{GALLUP_SCORE_EXEC}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">影响力</span>
+            <div class="dim-track"><div class="dim-fill fill-gallup" style="width:{{GALLUP_PCT_INFL}}%"></div></div>
+            <span class="dim-score">{{GALLUP_SCORE_INFL}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">关系建立</span>
+            <div class="dim-track"><div class="dim-fill fill-gallup" style="width:{{GALLUP_PCT_REL}}%"></div></div>
+            <span class="dim-score">{{GALLUP_SCORE_REL}}</span>
+        </div>
+        <div class="dim-bar">
+            <span class="dim-label">战略思维</span>
+            <div class="dim-track"><div class="dim-fill fill-gallup" style="width:{{GALLUP_PCT_STRAT}}%"></div></div>
+            <span class="dim-score">{{GALLUP_SCORE_STRAT}}</span>
+        </div>
+    </div>
+
+    <!-- 简要解读 -->
+    <div class="summary-section">
+        <h3>简要解读</h3>
+        <!-- {{FREE_SUMMARY}} -->
+        <p>{{FREE_SUMMARY}}</p>
+    </div>
+
+    <!-- 付费引导 -->
+    <div class="cta-section">
+        <h3>解锁完整深度解读</h3>
+        <p>获取四体系交叉分析、AI 个性化建议、职业发展路径，以及盲派八字参考</p>
+        <a href="#" class="cta-btn" id="btn-unlock">立即解锁</a>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>星耀启程 &copy; 2026 — 发现你的独特光芒</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,5987 @@
+{
+  "profile": {
+    "age": 35,
+    "role": "entrepreneur",
+    "purpose": "entrepreneur-fit",
+    "current_state": "stress",
+    "decision_horizon": "immediate"
+  },
+  "total_questions": 100,
+  "questions": [
+    {
+      "id": "Q0216",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对批评，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "听但不接受",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "仔细想想",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2
+          }
+        },
+        {
+          "text": "不舒服但记下来",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type4": 1
+          }
+        },
+        {
+          "text": "据情况而定",
+          "score": {
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 1,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0245",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对压力我很难入睡",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.I": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type6": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.S": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "career-transition",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": true,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0189",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "被夸奖时我",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "自然接受",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.E": 1
+          }
+        },
+        {
+          "text": "谦虚否认",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type2": 1
+          }
+        },
+        {
+          "text": "觉得不好意思",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "看真假判断",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.T": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "self-exploration",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1139",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我常常不知道自己真正想要什么（动机）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type9": 3,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "entrepreneur-stage",
+        "leadership-growth"
+      ],
+      "difficulty": 2,
+      "reverse": true
+    },
+    {
+      "id": "Q1299",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对自己害怕",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "按规律作息恢复",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "尝试新的放松法",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "沉浸爱好",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "和亲近的人在一起",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "relationship-conflict",
+        "leadership-growth"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0175",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "工作上我不太愿意主动承担额外责任",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type9": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type3": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.J": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 2,
+      "reverse": true,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0050",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "和人讨论时，我",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "享受碰撞观点",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.E": 1,
+            "mbti.N": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "喜欢倾听",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.I": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "需要时间整理",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "倾向于沉默",
+          "score": {
+            "enneagram.type9": 1,
+            "enneagram.type5": 1,
+            "mbti.I": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "woo",
+        "intellection"
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "academic-stress",
+        "leadership-growth"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0219",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "团队中有人拖后腿，我",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "直接指出",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "私下提醒",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "帮他一起做",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2
+          }
+        },
+        {
+          "text": "避开他做事",
+          "score": {
+            "enneagram.type5": 1,
+            "enneagram.type9": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": [
+        "command"
+      ]
+    },
+    {
+      "id": "Q1191",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对有趣的内容",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "挑最难的先攻克",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "挑最轻松的开始",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "从最基础的开始",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2,
+            "holland.I": 2
+          }
+        },
+        {
+          "text": "从最新奇的开始",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "entrepreneur-stage",
+        "academic-stress",
+        "career-transition"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0181",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对公司的办公室政治",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "主动参与",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "远离",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 2
+          }
+        },
+        {
+          "text": "看清楚再决定",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.T": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "妥协适应",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": [
+        "command",
+        "strategic"
+      ]
+    },
+    {
+      "id": "Q0071",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "我制定计划后",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "几乎都按计划执行",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "holland.C": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "计划经常被新想法打断",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "计划是参考，遇到更好的就改",
+          "score": {
+            "mbti.P": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "不太爱做计划，见招拆招",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.P": 2,
+            "holland.R": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "career-transition",
+        "study-direction",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q1209",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "学新东西的深度",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "挑最难的先攻克",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "挑最轻松的开始",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "从最基础的开始",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2,
+            "holland.I": 2
+          }
+        },
+        {
+          "text": "从最新奇的开始",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0209",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "对于长期主义我的态度",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "坚信长期",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type3": 1,
+            "mbti.J": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "部分认同",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "看阶段",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "更看重当下",
+          "score": {
+            "mbti.S": 2,
+            "enneagram.type9": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "entrepreneur-stage",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": [
+        "futuristic"
+      ]
+    },
+    {
+      "id": "Q1301",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对自己难过",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "说出来就好了",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "消化完再说",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "直接面对引发源",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "等情绪过去",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q1166",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "什么让我愿意付出（动机）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "把事情做对",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "被人喜欢",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "忠于自己",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "履行责任",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "academic-stress",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q1399",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "比起长久我更在意此刻（未来）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type7": 3,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career",
+        "study-direction"
+      ],
+      "difficulty": 2,
+      "reverse": true
+    },
+    {
+      "id": "Q0078",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "计划被突发干扰，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "迅速调整",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "有点烦但接受",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "重新规划",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "顺其自然",
+          "score": {
+            "enneagram.type9": 1,
+            "enneagram.type7": 1,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "adaptability",
+        "arranger"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q1309",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "独处时我",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "让情绪自然流动",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "控制情绪表达",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "向信任的人敞开",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "把情绪变动力",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "parenting-teen",
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0080",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "收尾阶段，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "精雕细琢",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "尽快交付",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 2,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "检查关键项",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.T": 1,
+            "mbti.J": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "有点不舍得结束",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "focus"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "entrepreneur-stage",
+        "career-transition"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q1451",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我常想象最坏的打算",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "影响力越来越大",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "越来越像自己",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "帮助了很多人",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "完成了所有目标",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "entrepreneur-stage",
+        "academic-stress"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0221",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "被陌生人激怒，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "当场回击",
+          "score": {
+            "enneagram.type8": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "走开冷静",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.I": 1
+          }
+        },
+        {
+          "text": "表达不满但不升级",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type8": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "忍住，但事后反复想",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type4": 1,
+            "mbti.F": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": [
+        "command"
+      ]
+    },
+    {
+      "id": "Q1334",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对自己焦虑（情绪）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "写日记",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "出门走走",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "安静思考",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "找朋友聊",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "entrepreneur-stage",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0499",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "一天结束时你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "列明天清单",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type3": 1,
+            "mbti.J": 2,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "回顾今天",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type1": 1,
+            "mbti.I": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "随手记灵感",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type7": 1,
+            "mbti.N": 1,
+            "mbti.P": 1,
+            "holland.A": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "直接睡",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "achiever",
+        "responsibility",
+        "ideation",
+        "harmony"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0360",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "当努力没看到结果",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "继续坚持",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 2
+          }
+        },
+        {
+          "text": "调整方法",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2
+          }
+        },
+        {
+          "text": "重新选择",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "放弃",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-transition",
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1342",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对内心矛盾（情绪）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "要求自己扛住",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "允许自己脆弱",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "用成就感覆盖",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "旁观自己的情绪",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0094",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "团队分歧严重，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "推动达成共识",
+          "score": {
+            "enneagram.type8": 1,
+            "enneagram.type3": 2,
+            "mbti.E": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "让大家先冷静",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "提出折中方案",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.N": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "请领导定",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "harmony"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0596",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "gallup"
+      ],
+      "stem": "我经常因为追求完美而拖延",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type4": 1,
+            "mbti.J": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type1": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "mbti.P": 1,
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "maximizer",
+        "discipline",
+        "activator"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q0446",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "工作上突发状况你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "马上介入",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.P": 1,
+            "holland.E": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "先稳住再处理",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "找人一起想办法",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type6": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "等指示",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 0
+          }
+        }
+      ],
+      "gallup_themes": [
+        "activator",
+        "command",
+        "discipline",
+        "compliance"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "entrepreneur-stage",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0456",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "gallup"
+      ],
+      "stem": "比起被喜欢，我更想被尊重",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type1": 1,
+            "mbti.T": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type1": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "relator"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0174",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "我喜欢被叫作专家吗",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "是，证明自己",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "是，但不刻意追求",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2
+          }
+        },
+        {
+          "text": "不在意",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "不喜欢被贴标签",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type5": 1,
+            "mbti.I": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "self-exploration",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0016",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "身边人意见都不一致，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "坚持自己判断",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "少数服从多数",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "找最权威的人定",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "拖一拖，让时间筛一筛",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "self_assurance",
+        "harmony"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0003",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "团队里有人被忽视，你会",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "主动把话头引给 ta",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.E": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "不动声色，让流程自然进行",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.I": 1
+          }
+        },
+        {
+          "text": "事后私下关心 ta",
+          "score": {
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "觉得这是 ta 自己的事",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.T": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "includer",
+        "empathy"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career",
+        "parenting-teen"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0520",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对不想帮的请求你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "直接拒绝",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "mbti.J": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "找借口",
+          "score": {
+            "enneagram.type5": 1,
+            "enneagram.type9": 1,
+            "mbti.T": 1,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "勉强答应",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "谈条件",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "relator",
+        "maximizer"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0330",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "工作中遇到不靠谱的合作伙伴",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "直接指出",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "私下沟通",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "自己多做一点",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type3": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "考虑终止合作",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0448",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "压力大时你倾向",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "一个人待着",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type4": 1,
+            "mbti.I": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "找人倾诉",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.E": 1,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "去运动或出门",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1,
+            "holland.R": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "工作转移注意力",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.T": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "restorative",
+        "adaptability",
+        "intellection",
+        "activator"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q1208",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "学新东西的频率",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "按自己节奏",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "制定学习计划",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "哪里有趣学哪里",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "和别人一起学",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "entrepreneur-stage",
+        "academic-stress",
+        "relationship-conflict"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0089",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "你希望留下的东西是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "作品",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "holland.A": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "影响",
+          "score": {
+            "enneagram.type8": 1,
+            "enneagram.type3": 2,
+            "mbti.E": 2,
+            "holland.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "传承",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "回忆",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 2,
+            "holland.A": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "significance"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "entrepreneur-stage",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0521",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "做不喜欢的应酬",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "能避就避",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type9": 1,
+            "mbti.I": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "应付一下",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "认真投入",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type3": 1,
+            "mbti.F": 1,
+            "mbti.E": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "借机拓展人脉",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.E": 1,
+            "holland.E": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "harmony",
+        "woo",
+        "intellection"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0461",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "我做事的标准是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "做到极致",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type3": 1,
+            "mbti.J": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "够用就好",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "看性价比",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "看大家需要",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "maximizer",
+        "responsibility",
+        "harmony",
+        "analytical"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0523",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "公私分明对你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "很容易",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.T": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "比较难",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type4": 1,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "看对象",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.F": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "从不分",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type9": 1,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "harmony",
+        "context",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0053",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "你更享受",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "带头冲锋",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.E": 1,
+            "holland.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "在背后支持",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 1,
+            "holland.S": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "出谋划策",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "默默把事做好",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.I": 1,
+            "holland.C": 1,
+            "gallup.executing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "focus"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q1218",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对枯燥的内容（学习）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先建框架再填细节",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2,
+            "holland.I": 2
+          }
+        },
+        {
+          "text": "直接上手试",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "找人带着学",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "按教程一步步来",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "leadership-growth"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0144",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对一刀切的规则",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "服从",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type6": 1
+          }
+        },
+        {
+          "text": "找漏洞变通",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "提出异议",
+          "score": {
+            "enneagram.type8": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "看规则合理性再决定",
+          "score": {
+            "mbti.T": 2,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": [
+        "activator",
+        "analytical"
+      ]
+    },
+    {
+      "id": "Q0600",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "gallup"
+      ],
+      "stem": "我经常把事情想得很完美但做不到",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type4": 1,
+            "mbti.J": 1,
+            "mbti.F": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type1": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "mbti.P": 1,
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "maximizer",
+        "discipline",
+        "activator"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q0436",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对多个目标，我会",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "全部同步推进",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 1,
+            "holland.E": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "排优先级逐个做",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "看哪个先出结果",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "先做最难的",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.executing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "focus",
+        "activator"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "entrepreneur-stage",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0464",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "如果贡献被忽视，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "默默接受",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "争取应得认可",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "直接表达不满",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "换个环境",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "significance",
+        "harmony",
+        "command",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0617",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "群体讨论你更倾向",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "提出不同看法",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type4": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "倾听整合",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "支持别人",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "mbti.E": 1,
+            "holland.S": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "等结果",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type9": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "harmony",
+        "relator",
+        "compliance"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0699",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对紧急任务你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先放下其他",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type8": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "继续手上的",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "多线并行",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 2,
+            "holland.E": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "会慌",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "focus",
+        "achiever",
+        "deliberative"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0546",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "遇到紧急任务你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "立刻介入",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.P": 1,
+            "holland.E": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "先稳住再处理",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type9": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "找帮手",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type6": 1,
+            "mbti.F": 1,
+            "mbti.E": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "看情况",
+          "score": {
+            "enneagram.type9": 1,
+            "enneagram.type5": 1,
+            "mbti.P": 1,
+            "holland.C": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "activator",
+        "discipline",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0619",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "与价值观差异大的人共事",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "保持距离",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type1": 1,
+            "mbti.I": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "尽量理解",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "就事论事",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type5": 1,
+            "mbti.T": 2,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "会起冲突",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type4": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy",
+        "command",
+        "individualization",
+        "analytical"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0801",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "做事过程中你倾向",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "不断复盘",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "随机应变",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type9": 1,
+            "mbti.P": 2,
+            "holland.A": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "继续推进",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 1,
+            "holland.E": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "看心情",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "responsibility",
+        "adaptability",
+        "achiever",
+        "harmony"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0333",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "和一个价值观不同的人共事",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "求同存异",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "尝试说服",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "保持距离",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 2
+          }
+        },
+        {
+          "text": "找领导",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0623",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "你更倾向哪种谈判方式",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "强压式",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "协作式",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "分析式",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "拖延式",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "relator",
+        "analytical",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0440",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "gallup"
+      ],
+      "stem": "做了失败的决定我会反复回想",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type4": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type3": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.T": 2,
+            "enneagram.type8": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "deliberative",
+        "self_assurance",
+        "self_assurance"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q1223",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "跨领域学习（学习）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "讲给别人听",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "写成笔记",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "做成作品",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "融入自己体系",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2,
+            "holland.I": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "leadership-growth"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0428",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "gallup"
+      ],
+      "stem": "别人给你提建议时",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type4": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.T": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "self_assurance"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q0715",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对利益冲突你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "据理力争",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "礼让",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "谈条件",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "看情况",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 1,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "harmony",
+        "maximizer",
+        "context"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0059",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "工作中责任边界模糊时，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "主动揽过来",
+          "score": {
+            "enneagram.type8": 1,
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "明确划清",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "看情况",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "觉得不舒服",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "responsibility",
+        "deliberative"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0646",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对突发事件你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "立刻行动",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.P": 1,
+            "holland.R": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "先稳住",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type9": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "分析原因",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "求援",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type6": 1,
+            "mbti.F": 1,
+            "mbti.E": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "activator",
+        "analytical",
+        "discipline",
+        "relator"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0719",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对必须得罪一方的选择",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "选利大的",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "选伤害小的",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "拖延不决",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "谁都不选",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "maximizer",
+        "harmony",
+        "deliberative",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0441",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "接到任务后你第一反应",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "拆解步骤",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "mbti.T": 1,
+            "holland.C": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "找人协作",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type3": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "先查资料",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 1,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "马上开干",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 2,
+            "gallup.influencing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "analytical",
+        "achiever",
+        "input",
+        "activator"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0652",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "压力时你更愿",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "独处",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type4": 1,
+            "mbti.I": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "找人聊",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.E": 1,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "做事",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "睡觉",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type5": 1,
+            "mbti.S": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "intellection",
+        "restorative",
+        "relator",
+        "achiever"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0721",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对不合理的规则你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "直接挑战",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type1": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "绕着走",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type9": 1,
+            "mbti.T": 1,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "被动接受",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "推动修改",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "activator",
+        "context",
+        "compliance"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0654",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "连续高压的尾声你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "会生病",
+          "score": {
+            "enneagram.type9": 1,
+            "enneagram.type4": 1,
+            "mbti.F": 1,
+            "mbti.S": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "会反弹爆发",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "会主动休整",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type9": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "会麻木",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type9": 1,
+            "mbti.I": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "restorative",
+        "adaptability",
+        "activator",
+        "discipline"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress",
+        "parenting-teen"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0629",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "gallup"
+      ],
+      "stem": "我经常主动缓和紧张气氛",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "mbti.T": 1,
+            "enneagram.type8": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "harmony",
+        "command"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0817",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对不同声音你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "耐心倾听",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "据理力争",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.T": 1,
+            "mbti.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "会沉默",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type5": 1,
+            "mbti.I": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "会整合",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "mbti.T": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy",
+        "command",
+        "harmony",
+        "arranger"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0984",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "聚会散场后我",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "主动带动气氛",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2,
+            "holland.S": 1
+          }
+        },
+        {
+          "text": "安静观察后再加入",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "留意谁需要陪伴",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2,
+            "holland.S": 2
+          }
+        },
+        {
+          "text": "先和熟人待在一起",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0750",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "压力下你的睡眠",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "会失眠",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type4": 1,
+            "mbti.F": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "会嗜睡",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type7": 1,
+            "mbti.S": 1,
+            "mbti.P": 2,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "影响不大",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "看压力源",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 1,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "restorative",
+        "self_assurance",
+        "self_assurance",
+        "context"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0821",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对公开批评你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "当场回应",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.T": 1,
+            "mbti.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "会回避",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type5": 1,
+            "mbti.I": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "私下找对方",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.F": 1,
+            "mbti.I": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "会自我消化",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type4": 1,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "harmony",
+        "adaptability",
+        "relator",
+        "intellection"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0180",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "做一个项目时我更倾向",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "自己说了算",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type5": 1,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "跟团队协作",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type3": 1,
+            "mbti.E": 1,
+            "holland.S": 1
+          }
+        },
+        {
+          "text": "跟着指令做",
+          "score": {
+            "enneagram.type6": 1,
+            "enneagram.type1": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "看情况",
+          "score": {
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": [
+        "developer"
+      ]
+    },
+    {
+      "id": "Q0752",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对压力你愿意",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "找人陪伴",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.E": 1,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "独处消化",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type4": 1,
+            "mbti.I": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "做事转移",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "出门走走",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1,
+            "holland.R": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "relator",
+        "adaptability",
+        "intellection",
+        "achiever"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0380",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "跨部门合作",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "主动沟通",
+          "score": {
+            "mbti.E": 2,
+            "enneagram.type3": 1
+          }
+        },
+        {
+          "text": "等对方来",
+          "score": {
+            "mbti.I": 1,
+            "enneagram.type5": 1
+          }
+        },
+        {
+          "text": "看项目需要",
+          "score": {
+            "mbti.P": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "找共同朋友",
+          "score": {
+            "mbti.F": 1,
+            "enneagram.type2": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0848",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "压力下你的饮食变化",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "没胃口",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type6": 1,
+            "mbti.F": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "会暴食",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type7": 1,
+            "mbti.F": 1,
+            "mbti.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "正常吃",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.S": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "会忘记",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "holland.R": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "restorative",
+        "discipline",
+        "adaptability",
+        "achiever"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0280",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "holland",
+        "mbti"
+      ],
+      "stem": "副业和主业的平衡",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "副业为主",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "主业为主",
+          "score": {
+            "enneagram.type3": 1,
+            "mbti.J": 1,
+            "holland.C": 1
+          }
+        },
+        {
+          "text": "两者并行",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.E": 1,
+            "holland.E": 1
+          }
+        },
+        {
+          "text": "没副业",
+          "score": {
+            "mbti.J": 1,
+            "enneagram.type9": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "entrepreneur-stage",
+        "career-transition",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1135",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "工作让我最看重的是（动机）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "有影响力",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "被爱包围",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "搞懂真理",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "活出独特",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0480",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "做汇报/展示时你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "提前演练",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "mbti.T": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "即兴发挥",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type3": 1,
+            "mbti.P": 2,
+            "mbti.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "列大纲",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "让同事代讲",
+          "score": {
+            "enneagram.type5": 1,
+            "enneagram.type9": 1,
+            "mbti.I": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "communication",
+        "discipline",
+        "activator",
+        "analytical",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q1175",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "什么让我充实（动机）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "深刻的连接",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "显赫的成就",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "可预期的生活",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "丰富的经历",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "entrepreneur-stage",
+        "academic-stress"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0482",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "团队里你更愿当",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "主导者",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 2,
+            "mbti.E": 1,
+            "holland.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "协调者",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "holland.S": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "执行者",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "参谋",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "mbti.I": 1,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "relator",
+        "responsibility",
+        "analytical"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "fresh-grad",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0324",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对价值观不同的合作者",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "尝试沟通",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type3": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "保持工作关系",
+          "score": {
+            "enneagram.type1": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "尽量减少交集",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1
+          }
+        },
+        {
+          "text": "不能合作就换",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0577",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "同事能力不行时你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "耐心教",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type1": 1,
+            "mbti.F": 1,
+            "holland.S": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "自己干",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "找领导",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "保持距离",
+          "score": {
+            "enneagram.type5": 1,
+            "enneagram.type9": 1,
+            "mbti.I": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "developer",
+        "compliance",
+        "achiever",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0439",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "如果一件事做了3个月没效果",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "立刻换方向",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "再坚持一段时间",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type3": 1,
+            "mbti.J": 2,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "复盘哪里出问题",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "看别人怎么做的",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "deliberative",
+        "analytical",
+        "adaptability",
+        "discipline",
+        "connectedness"
+      ],
+      "applicable_states": [
+        "entrepreneur-stage",
+        "career-transition",
+        "mid-career"
+      ],
+      "difficulty": 4
+    },
+    {
+      "id": "Q0580",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "工作里被夸你会",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "感到被认可",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type3": 1,
+            "mbti.F": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "没什么感觉",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type4": 1,
+            "mbti.I": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "希望被夸更多",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.T": 1,
+            "holland.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "担心下次做不到",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type1": 1,
+            "mbti.F": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "relator",
+        "significance",
+        "intellection",
+        "deliberative"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q1305",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对自己迷茫",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "按规律作息恢复",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "尝试新的放松法",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "沉浸爱好",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "和亲近的人在一起",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "parenting-teen",
+        "mid-career"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0582",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对加班",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "积极响应",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "按价值判断",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "看团队需要",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "尽量避免",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type4": 1,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "harmony",
+        "analytical",
+        "relator"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q1057",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "选专业/选工作时（决策）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "选最稳妥的",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1,
+            "holland.C": 1
+          }
+        },
+        {
+          "text": "选最有挑战的",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "选最符合长远目标的",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "选不后悔的",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "relationship-conflict",
+        "leadership-growth"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0677",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "开会时你更愿",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "发言主导",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.E": 1,
+            "holland.E": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "提建议",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "记录",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type6": 1,
+            "mbti.S": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "观察",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type9": 1,
+            "mbti.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "analytical",
+        "discipline",
+        "intellection"
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0128",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对网络上不认识的人的攻击，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "回击",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.E": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "忽略",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.I": 2
+          }
+        },
+        {
+          "text": "反思是不是自己的问题",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.I": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "感到受伤但沉默",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "leadership-growth",
+        "mid-career"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": [
+        "communication"
+      ]
+    },
+    {
+      "id": "Q0680",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "工作和生活平衡你倾向",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "严格分开",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "完全融合",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type3": 1,
+            "mbti.P": 2,
+            "holland.A": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "看心情",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "以工作为主",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.T": 1,
+            "holland.E": 2,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "adaptability",
+        "harmony",
+        "achiever"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q1077",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对新机会（决策）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "收集信息到足够再定",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "先试试再调",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "请教过来人",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "相信第一感觉",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0778",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "面对领导批评你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "接受并改",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "mbti.S": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "先消化",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type4": 1,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "反驳",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.T": 1,
+            "mbti.E": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "找他人聊",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type6": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "command",
+        "intellection",
+        "relator"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0424",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "和价值观完全不同的人共事",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "求同存异",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "找领导",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "调整自己",
+          "score": {
+            "enneagram.type9": 1,
+            "enneagram.type1": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "坚持己见",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "leadership-growth",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0106",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我不太愿意承担需要长期负责的项目",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type9": 1,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type1": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type3": 1,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "responsibility",
+        "achiever"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q0452",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "持续高压下你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "会更努力",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.T": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "会想逃跑",
+          "score": {
+            "enneagram.type7": 1,
+            "enneagram.type9": 1,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "会身体出状况",
+          "score": {
+            "enneagram.type4": 1,
+            "enneagram.type6": 1,
+            "mbti.F": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "会找外援",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.E": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "restorative",
+        "achiever",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "academic-stress",
+        "parenting-teen"
+      ],
+      "difficulty": 4
+    },
+    {
+      "id": "Q0997",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "和领导单独相处时",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "直接说出我的想法",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "先听大家怎么说",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "分享独特视角",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "照顾每个人感受",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2,
+            "holland.S": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "academic-stress",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q1227",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常因为怕学不会而不敢开始（学习）③",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type6": 3,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "career-choice",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 4,
+      "reverse": true
+    },
+    {
+      "id": "Q1300",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对自己开心",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "要求自己扛住",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "允许自己脆弱",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "用成就感覆盖",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "旁观自己的情绪",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "self-exploration",
+        "mid-career"
+      ],
+      "difficulty": 5,
+      "reverse": false
+    },
+    {
+      "id": "Q0377",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "holland",
+        "mbti"
+      ],
+      "stem": "我理想的下半场职业",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "做咨询分享经验",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "holland.S": 1
+          }
+        },
+        {
+          "text": "继续做专业的事",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2,
+            "holland.I": 2
+          }
+        },
+        {
+          "text": "尝试新领域",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "退而不休",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "career-transition",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1420",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "我常想象如果成功",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "不断有新的可能",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1,
+            "holland.A": 2
+          }
+        },
+        {
+          "text": "一步步登高",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "岁月静好",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "不断想通问题",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "academic-stress",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 5,
+      "reverse": false
+    },
+    {
+      "id": "Q0207",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "如果我能给二十岁的自己一句话",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "别怕失败",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type8": 1,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "请照顾好自己",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "坚持你认为对的事",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type4": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "跟着心走",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 1,
+            "mbti.N": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": [
+        "connectedness"
+      ]
+    },
+    {
+      "id": "Q1410",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "我常想象理想的父母",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "事业有成的样子",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "家人围坐的样子",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "周游世界的样子",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1,
+            "holland.A": 2
+          }
+        },
+        {
+          "text": "著作等身的样子",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "academic-stress"
+      ],
+      "difficulty": 5,
+      "reverse": false
+    }
+  ],
+  "selection_reasons": {
+    "Q0216": "匹配当前状态：leadership-growth,mid-career",
+    "Q0245": "匹配当前状态：academic-stress,mid-career",
+    "Q0189": "匹配当前状态：leadership-growth,mid-career",
+    "Q1139": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q1299": "匹配当前状态：academic-stress,leadership-growth",
+    "Q0175": "匹配当前状态：leadership-growth,mid-career",
+    "Q0050": "匹配当前状态：academic-stress,leadership-growth",
+    "Q0219": "匹配当前状态：leadership-growth,mid-career",
+    "Q1191": "匹配当前状态：academic-stress,entrepreneur-stage",
+    "Q0181": "匹配当前状态：leadership-growth,mid-career",
+    "Q0071": "匹配当前状态：academic-stress,entrepreneur-stage",
+    "Q1209": "匹配当前状态：leadership-growth,mid-career",
+    "Q0209": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q1301": "匹配当前状态：academic-stress,mid-career",
+    "Q1166": "匹配当前状态：academic-stress,mid-career",
+    "Q1399": "匹配当前状态：leadership-growth,mid-career",
+    "Q0078": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q1309": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q0080": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q1451": "匹配当前状态：academic-stress,entrepreneur-stage",
+    "Q0221": "匹配当前状态：leadership-growth,mid-career",
+    "Q1334": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q0499": "匹配当前状态：leadership-growth,mid-career",
+    "Q0360": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q1342": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q0094": "匹配当前状态：entrepreneur-stage,leadership-growth,mid-career",
+    "Q0596": "匹配当前状态：academic-stress,mid-career",
+    "Q0446": "匹配当前状态：entrepreneur-stage,leadership-growth,mid-career",
+    "Q0456": "匹配当前状态：leadership-growth,mid-career",
+    "Q0174": "匹配当前状态：leadership-growth,mid-career",
+    "Q0016": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q0003": "匹配当前状态：leadership-growth,mid-career",
+    "Q0520": "匹配当前状态：leadership-growth,mid-career",
+    "Q0330": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q0448": "匹配当前状态：academic-stress,mid-career",
+    "Q1208": "匹配当前状态：academic-stress,entrepreneur-stage",
+    "Q0089": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q0521": "匹配当前状态：leadership-growth,mid-career",
+    "Q0461": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q0523": "匹配当前状态：leadership-growth,mid-career",
+    "Q0053": "匹配当前状态：entrepreneur-stage,leadership-growth,mid-career",
+    "Q1218": "匹配当前状态：academic-stress,leadership-growth",
+    "Q0144": "匹配当前状态：leadership-growth,mid-career",
+    "Q0600": "匹配当前状态：academic-stress,mid-career",
+    "Q0436": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q0464": "匹配当前状态：leadership-growth,mid-career",
+    "Q0617": "匹配当前状态：leadership-growth,mid-career",
+    "Q0699": "匹配当前状态：leadership-growth,mid-career",
+    "Q0546": "匹配当前状态：leadership-growth,mid-career",
+    "Q0619": "匹配当前状态：leadership-growth,mid-career",
+    "Q0801": "匹配当前状态：leadership-growth,mid-career",
+    "Q0333": "匹配当前状态：leadership-growth,mid-career",
+    "Q0623": "匹配当前状态：leadership-growth,mid-career",
+    "Q0440": "匹配当前状态：leadership-growth,mid-career",
+    "Q1223": "匹配当前状态：academic-stress,leadership-growth",
+    "Q0428": "匹配当前状态：leadership-growth,mid-career",
+    "Q0715": "匹配当前状态：leadership-growth,mid-career",
+    "Q0059": "匹配当前状态：entrepreneur-stage,leadership-growth,mid-career",
+    "Q0646": "匹配当前状态：leadership-growth,mid-career",
+    "Q0719": "匹配当前状态：leadership-growth,mid-career",
+    "Q0441": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q0652": "匹配当前状态：academic-stress,mid-career",
+    "Q0721": "匹配当前状态：leadership-growth,mid-career",
+    "Q0654": "匹配当前状态：academic-stress,mid-career",
+    "Q0629": "匹配当前状态：leadership-growth,mid-career",
+    "Q0817": "匹配当前状态：leadership-growth,mid-career",
+    "Q0984": "匹配当前状态：leadership-growth,mid-career",
+    "Q0750": "匹配当前状态：academic-stress,mid-career",
+    "Q0821": "匹配当前状态：leadership-growth,mid-career",
+    "Q0180": "匹配当前状态：entrepreneur-stage,leadership-growth,mid-career",
+    "Q0752": "匹配当前状态：academic-stress,mid-career",
+    "Q0380": "匹配当前状态：entrepreneur-stage,leadership-growth,mid-career",
+    "Q0848": "匹配当前状态：academic-stress,mid-career",
+    "Q0280": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q1135": "匹配当前状态：leadership-growth,mid-career",
+    "Q0480": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q1175": "匹配当前状态：academic-stress,entrepreneur-stage",
+    "Q0482": "匹配当前状态：entrepreneur-stage,leadership-growth",
+    "Q0324": "匹配当前状态：entrepreneur-stage,leadership-growth,mid-career",
+    "Q0577": "匹配当前状态：leadership-growth,mid-career",
+    "Q0439": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q0580": "匹配当前状态：leadership-growth,mid-career",
+    "Q1305": "匹配当前状态：leadership-growth,mid-career",
+    "Q0582": "匹配当前状态：leadership-growth,mid-career",
+    "Q1057": "匹配当前状态：academic-stress,leadership-growth",
+    "Q0677": "匹配当前状态：leadership-growth,mid-career",
+    "Q0128": "匹配当前状态：leadership-growth,mid-career",
+    "Q0680": "匹配当前状态：leadership-growth,mid-career",
+    "Q1077": "匹配当前状态：academic-stress,mid-career",
+    "Q0778": "匹配当前状态：leadership-growth,mid-career",
+    "Q0424": "匹配当前状态：entrepreneur-stage,leadership-growth,mid-career",
+    "Q0106": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q0452": "匹配当前状态：academic-stress,mid-career",
+    "Q0997": "匹配当前状态：academic-stress,entrepreneur-stage",
+    "Q1227": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q1300": "匹配当前状态：academic-stress,mid-career",
+    "Q0377": "匹配当前状态：entrepreneur-stage,mid-career",
+    "Q1420": "匹配当前状态：academic-stress,entrepreneur-stage",
+    "Q0207": "匹配当前状态：mid-career",
+    "Q1410": "匹配当前状态：academic-stress"
+  },
+  "coverage_report": {
+    "enneagram": {
+      "type1": 51,
+      "type2": 48,
+      "type3": 59,
+      "type4": 41,
+      "type5": 57,
+      "type6": 42,
+      "type7": 50,
+      "type8": 52,
+      "type9": 59
+    },
+    "mbti": {
+      "E": 31,
+      "I": 47,
+      "S": 8,
+      "N": 20,
+      "T": 74,
+      "F": 69,
+      "J": 64,
+      "P": 54
+    },
+    "holland": {
+      "R": 5,
+      "I": 11,
+      "A": 13,
+      "S": 27,
+      "E": 22,
+      "C": 23
+    },
+    "gallup": {
+      "executing": 56,
+      "influencing": 65,
+      "relationship_building": 66,
+      "strategic_thinking": 44
+    },
+    "gallup_top_themes": [
+      "command",
+      "achiever",
+      "empathy",
+      "adaptability",
+      "analytical",
+      "discipline",
+      "harmony",
+      "activator",
+      "relator",
+      "intellection"
+    ],
+    "reverse_count": 10,
+    "difficulty_dist": {
+      "1": 1,
+      "2": 20,
+      "3": 62,
+      "4": 12,
+      "5": 5
+    },
+    "category_dist": {
+      "action-habit": 8,
+      "conflict-choice": 17,
+      "decision-making": 8,
+      "emotion-self": 8,
+      "future-vision": 7,
+      "interpersonal-relationship": 8,
+      "learning-cognition": 8,
+      "motivation-value": 8,
+      "stress-response": 11,
+      "work-career": 17
+    },
+    "checks": {
+      "enneagram_all_types>=5": true,
+      "mbti_all_poles>=4": true,
+      "holland_all_types>=5": true,
+      "gallup_all_domains>=8": true,
+      "reverse>=10": true
+    },
+    "all_passed": true
+  }
+}

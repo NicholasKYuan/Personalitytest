@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User Profile for Personality Test",
+  "description": "用户填写的个人信息，用于驱动 AI 从 1500 题中筛选 100 题。字段尽量贴合星耀启程受众（K12 学生、本科生、硕博生、家长、创业者）。",
+  "type": "object",
+  "required": ["age", "role", "purpose"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "昵称/称呼（可选，仅用于报告中称呼）"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 12,
+      "maximum": 80,
+      "description": "年龄"
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["male", "female", "other", "prefer-not-to-say"]
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "student-junior-high", "student-senior-high", "student-undergrad",
+        "student-grad", "student-phd", "employed", "freelancer",
+        "entrepreneur", "parent", "job-seeker"
+      ],
+      "description": "当前身份角色"
+    },
+    "education_stage": {
+      "type": "string",
+      "enum": ["junior-high", "senior-high", "undergrad", "grad", "phd", "employed", "other"]
+    },
+    "purpose": {
+      "type": "string",
+      "enum": [
+        "career-planning", "study-direction", "study-abroad-planning",
+        "graduate-school-planning", "self-exploration", "relationship-insight",
+        "leadership-growth", "entrepreneur-fit", "academic-stress-relief",
+        "parent-understanding-child"
+      ],
+      "description": "本次测评的核心目的"
+    },
+    "current_state": {
+      "type": "string",
+      "enum": ["stable", "transition", "stress", "stuck", "growth-seeking"],
+      "description": "当下状态"
+    },
+    "decision_horizon": {
+      "type": "string",
+      "enum": ["immediate", "within-1-year", "1-3-years", "3-plus-years"],
+      "description": "决策时间窗口，用于筛选'前瞻类 vs 现状类'题目"
+    },
+    "birth_date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "出生年月日（YYYY-MM-DD），本阶段仅收集备用，后续阶段用于盲派八字解读"
+    },
+    "notes": {
+      "type": "string",
+      "description": "补充说明（可选，≤200字）"
+    }
+  }
+}

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星耀启程 · 测评系统测试报告</title>
+    <style>
+        /* ===== CSS 变量 ===== */
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --primary-light: #EEF2FF;
+            --secondary: #7C3AED;
+            --secondary-light: #F5F3FF;
+            --bg: #F9FAFB;
+            --surface: #FFFFFF;
+            --border: #E5E7EB;
+            --text: #111827;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            --radius: 8px;
+            --radius-lg: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font);
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        .report {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ===== 封面头部 ===== */
+        .report-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: #fff;
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+
+        .report-header::after {
+            content: "";
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+
+        .report-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-brand h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .report-badge {
+            display: inline-block;
+            padding: 0.2rem 0.75rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .report-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .report-meta-item {
+            font-size: 0.85rem;
+        }
+
+        .report-meta-item .label {
+            opacity: 0.75;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .report-meta-item .value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* ===== 评分卡片 ===== */
+        .score-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .score-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .score-card .score-value {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .score-card .score-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .score-card--pass .score-value { color: var(--success); }
+        .score-card--fail .score-value { color: var(--error); }
+        .score-card--total .score-value { color: var(--primary); }
+        .score-card--rate .score-value { color: var(--info); }
+
+        /* ===== 章节 ===== */
+        .section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.25rem;
+            background: var(--primary-light);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header .icon {
+            font-size: 1.1rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .section-body {
+            padding: 1.25rem;
+        }
+
+        /* ===== 环境信息表格 ===== */
+        .env-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .env-table td {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .env-table td:first-child {
+            color: var(--text-secondary);
+            width: 140px;
+            font-weight: 500;
+        }
+
+        .env-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ===== 测试结果表格 ===== */
+        .test-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .test-table th {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            background: var(--bg);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .test-table td {
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .test-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .test-table tr:hover td {
+            background: var(--primary-light);
+        }
+
+        /* ===== 状态标签 ===== */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tag--pass {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .tag--fail {
+            background: var(--error-light);
+            color: var(--error);
+        }
+
+        .tag--skip {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .tag--info {
+            background: var(--info-light);
+            color: var(--info);
+        }
+
+        /* ===== 问题卡片 ===== */
+        .issue-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+
+        .issue-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .issue-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.9rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .issue-header--critical {
+            background: var(--error-light);
+            color: var(--error);
+        }
+
+        .issue-header--major {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .issue-header--minor {
+            background: var(--info-light);
+            color: var(--info);
+        }
+
+        .issue-body {
+            padding: 0.75rem 0.9rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .issue-body .file-ref {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            background: var(--bg);
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.78rem;
+            color: var(--text);
+        }
+
+        /* ===== 建议列表 ===== */
+        .suggestion-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .suggestion-list li {
+            display: flex;
+            gap: 0.6rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            align-items: flex-start;
+        }
+
+        .suggestion-list li:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-list .priority {
+            flex-shrink: 0;
+            width: 3rem;
+            text-align: center;
+            padding: 0.1rem 0;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .priority--high {
+            background: var(--error-light);
+            color: var(--error);
+        }
+
+        .priority--medium {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .priority--low {
+            background: var(--info-light);
+            color: var(--info);
+        }
+
+        /* ===== 结论 ===== */
+        .conclusion {
+            background: linear-gradient(135deg, var(--success-light), var(--info-light));
+            border: 1px solid var(--success);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .conclusion h3 {
+            color: var(--success);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .conclusion p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== 页脚 ===== */
+        .report-footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ===== 打印适配 ===== */
+        @media print {
+            body { background: #fff; }
+            .report { max-width: 100%; padding: 0; }
+            .report-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .section { break-inside: avoid; }
+            .score-cards { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="report">
+
+    <!-- ==================== 封面头部 ==================== -->
+    <header class="report-header">
+        <div class="report-brand">
+            <h1>星耀启程</h1>
+            <span class="report-badge">测评系统测试报告</span>
+        </div>
+        <p class="report-subtitle">融合九型人格 · MBTI · 霍兰德 · 盖洛普 四体系人格测评系统</p>
+        <div class="report-meta">
+            <div class="report-meta-item">
+                <div class="label">报告编号</div>
+                <div class="value">TR-2026-001</div>
+            </div>
+            <div class="report-meta-item">
+                <div class="label">测试日期</div>
+                <div class="value">2026-08-11</div>
+            </div>
+            <div class="report-meta-item">
+                <div class="label">测试人</div>
+                <div class="value">砚（AI）</div>
+            </div>
+            <div class="report-meta-item">
+                <div class="label">版本</div>
+                <div class="value">v1.0.0</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== 评分卡片 ==================== -->
+    <div class="score-cards">
+        <div class="score-card score-card--total">
+            <div class="score-value">12</div>
+            <div class="score-label">总用例数</div>
+        </div>
+        <div class="score-card score-card--pass">
+            <div class="score-value">12</div>
+            <div class="score-label">通过</div>
+        </div>
+        <div class="score-card score-card--fail">
+            <div class="score-value">0</div>
+            <div class="score-label">失败</div>
+        </div>
+        <div class="score-card score-card--rate">
+            <div class="score-value">100%</div>
+            <div class="score-label">通过率</div>
+        </div>
+    </div>
+
+    <!-- ==================== 结论 ==================== -->
+    <div class="conclusion">
+        <h3>✅ 测试结论：通过</h3>
+        <p>星耀启程人格测评系统 v1.0.0 全部 12 项测试用例通过，核心功能（题库加载、个性化选题、四体系评分、深度分析）运行正常，边界情况处理正确，无阻塞性问题。系统已达到可用状态。</p>
+    </div>
+
+    <!-- ==================== 测试环境 ==================== -->
+    <section class="section">
+        <div class="section-header">
+            <span class="icon">🖥️</span>
+            <h2>测试环境</h2>
+        </div>
+        <div class="section-body">
+            <table class="env-table">
+                <tr>
+                    <td>操作系统</td>
+                    <td>Windows 11 Home China</td>
+                </tr>
+                <tr>
+                    <td>Python 版本</td>
+                    <td>3.13.14</td>
+                </tr>
+                <tr>
+                    <td>后端框架</td>
+                    <td>FastAPI + Uvicorn</td>
+                </tr>
+                <tr>
+                    <td>前端技术</td>
+                    <td>原生 HTML / CSS / JavaScript（无框架）</td>
+                </tr>
+                <tr>
+                    <td>AI 模型</td>
+                    <td>MiniMax-M3（OpenAI 兼容接口）</td>
+                </tr>
+                <tr>
+                    <td>题库规模</td>
+                    <td>1,500 道四体系融合题</td>
+                </tr>
+                <tr>
+                    <td>服务端口</td>
+                    <td>8000</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- ==================== 测试结果明细 ==================== -->
+    <section class="section">
+        <div class="section-header">
+            <span class="icon">📋</span>
+            <h2>测试结果明细</h2>
+        </div>
+        <div class="section-body" style="padding: 0;">
+            <table class="test-table">
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>测试用例</th>
+                        <th style="width:80px">结果</th>
+                        <th>验证要点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>健康检查</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>服务状态正常，题库加载 1500 题</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>创建会话 — 全字段</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>返回 100 题，score 字段正确剥离</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>创建会话 — 仅必填字段</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>仅传 age/role/purpose 即可正常选题</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>不同 profile 选题差异</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>两种极端 profile 题目重叠 &lt; 80 题</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>提交 — 无效 session_id</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>返回 404，提示"会话不存在"</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>分析 — 未提交答案</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>返回 400，提示"请先完成答题"</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>完整流程 + 简评中文</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>四体系结果正确，简评全中文输出</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>静态文件服务</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>HTML/CSS/JS 均可正常访问</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>提交 — 部分答案（50 题）</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>部分提交仍可计算结果（置信度降低）</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>创建会话 — 缺必填字段</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>返回 422 验证错误</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>题目含 scale 字段</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>返回题目均含 forced-choice / likert-4 标记</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>分数信息不泄露</td>
+                        <td><span class="tag tag--pass">✓ PASS</span></td>
+                        <td>前端收到的题目不含 score 和 gallup_themes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ==================== 问题与修复 ==================== -->
+    <section class="section">
+        <div class="section-header">
+            <span class="icon">🔧</span>
+            <h2>发现的问题与修复记录</h2>
+        </div>
+        <div class="section-body">
+
+            <div class="issue-card">
+                <div class="issue-header issue-header--major">
+                    <span>⚠️</span> 免费简评中盖洛普主题名为英文
+                </div>
+                <div class="issue-body">
+                    <p><strong>位置：</strong><span class="file-ref">backend/scorer.py:162</span></p>
+                    <p><strong>现象：</strong>免费简评中输出 "achiever、analytical、learner" 而非中文</p>
+                    <p><strong>修复：</strong>新增 <span class="file-ref">GALLUP_THEME_NAMES</span> 映射表，简评中主题名转为中文（成就、分析、学习）</p>
+                    <p><strong>状态：</strong><span class="tag tag--pass">已修复</span></p>
+                </div>
+            </div>
+
+            <div class="issue-card">
+                <div class="issue-header issue-header--major">
+                    <span>⚠️</span> AI 深度分析 max_tokens 不足
+                </div>
+                <div class="issue-body">
+                    <p><strong>位置：</strong><span class="file-ref">backend/ai_analyzer.py:163</span></p>
+                    <p><strong>现象：</strong>max_tokens=4096，中文 2000-3500 字可能超出（1 中文字 ≈ 1.5-2 token）</p>
+                    <p><strong>修复：</strong>max_tokens 提升至 8000</p>
+                    <p><strong>状态：</strong><span class="tag tag--pass">已修复</span></p>
+                </div>
+            </div>
+
+            <div class="issue-card">
+                <div class="issue-header issue-header--minor">
+                    <span>ℹ️</span> Likert 题与场景选择题无视觉区分
+                </div>
+                <div class="issue-body">
+                    <p><strong>位置：</strong><span class="file-ref">frontend/index.html / js/app.js</span></p>
+                    <p><strong>现象：</strong>两种题型的选项展示方式相同，用户无法感知题型差异</p>
+                    <p><strong>修复：</strong>题目卡片增加题型标签 — "程度选择"（Likert）或 "场景选择"（forced-choice）</p>
+                    <p><strong>状态：</strong><span class="tag tag--pass">已修复</span></p>
+                </div>
+            </div>
+
+            <div class="issue-card">
+                <div class="issue-header issue-header--minor">
+                    <span>ℹ️</span> 自动跳题间隔过短
+                </div>
+                <div class="issue-body">
+                    <p><strong>位置：</strong><span class="file-ref">frontend/js/app.js:394</span></p>
+                    <p><strong>现象：</strong>选中后 500ms 自动跳题，用户可能来不及确认</p>
+                    <p><strong>修复：</strong>调整为 800ms</p>
+                    <p><strong>状态：</strong><span class="tag tag--pass">已修复</span></p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== 改进建议 ==================== -->
+    <section class="section">
+        <div class="section-header">
+            <span class="icon">💡</span>
+            <h2>后续改进建议</h2>
+        </div>
+        <div class="section-body">
+            <ul class="suggestion-list">
+                <li>
+                    <span class="priority priority--high">高</span>
+                    <div>
+                        <strong>接入支付网关</strong> — 当前"解锁深度分析"按钮直接调 AI，需对接微信支付/支付宝实现真正的付费墙
+                    </div>
+                </li>
+                <li>
+                    <span class="priority priority--high">高</span>
+                    <div>
+                        <strong>轮换 API Key</strong> — Minimax API Key 曾在对话中暴露，建议立即在平台生成新 key 并更新 .env
+                    </div>
+                </li>
+                <li>
+                    <span class="priority priority--medium">中</span>
+                    <div>
+                        <strong>添加断点续答</strong> — 用 localStorage 保存答题进度，用户中途刷新不丢失已答题目
+                    </div>
+                </li>
+                <li>
+                    <span class="priority priority--medium">中</span>
+                    <div>
+                        <strong>MBTI 平局优化</strong> — 当 E=I / S=N 等平局时，当前固定选前者，建议改为根据 difficulty 加权或展示"倾向不明显"
+                    </div>
+                </li>
+                <li>
+                    <span class="priority priority--medium">中</span>
+                    <div>
+                        <strong>会话清理机制</strong> — sessions/ 目录会无限增长，建议添加定期清理（如 7 天过期自动删除）
+                    </div>
+                </li>
+                <li>
+                    <span class="priority priority--low">低</span>
+                    <div>
+                        <strong>添加 favicon</strong> — 消除浏览器 404 请求
+                    </div>
+                </li>
+                <li>
+                    <span class="priority priority--low">低</span>
+                    <div>
+                        <strong>部署上线</strong> — 建议使用 CloudStudio 或 Vercel 部署，获得公网可访问的正式地址
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="report-footer">
+        <p>星耀启程 &copy; 2026 — 发现你的独特光芒</p>
+        <p>本报告由 AI 自动生成 · 仅供内部参考</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

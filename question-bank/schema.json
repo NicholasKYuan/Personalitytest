@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "融合测评题目（Enneagram + MBTI + Holland + Gallup）",
+  "description": "每道题可同时映射多个体系的维度倾向，通过 options[].score 的多维 key 表达。一道题 = 一套多体系观测。",
+  "type": "object",
+  "required": [
+    "id",
+    "category",
+    "systems",
+    "stem",
+    "scale",
+    "options",
+    "applicable_states",
+    "difficulty"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^Q[0-9]{4}$",
+      "description": "题目唯一 ID，如 Q0001"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "interpersonal-relationship",
+        "decision-making",
+        "stress-response",
+        "motivation-value",
+        "learning-cognition",
+        "work-career",
+        "emotion-self",
+        "action-habit",
+        "future-vision",
+        "conflict-choice"
+      ],
+      "description": "主题类别（10 类之一）"
+    },
+    "systems": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "enneagram",
+          "mbti",
+          "holland",
+          "gallup"
+        ]
+      },
+      "minItems": 2,
+      "uniqueItems": true,
+      "description": "本题映射到的体系（至少 2 个，理想 3-4 个）"
+    },
+    "stem": {
+      "type": "string",
+      "description": "题干（简体中文，≤30 字）"
+    },
+    "scale": {
+      "type": "string",
+      "enum": [
+        "likert-4",
+        "likert-5",
+        "likert-7",
+        "forced-choice",
+        "ranking"
+      ],
+      "description": "作答量表类型"
+    },
+    "options": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "score"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "选项文本"
+          },
+          "score": {
+            "type": "object",
+            "description": "维度→分值映射。key 形如 enneagram.type1 / mbti.E / holland.S / gallup.executing；分值范围 -3 ~ +3",
+            "additionalProperties": {
+              "type": "number",
+              "minimum": -3,
+              "maximum": 3
+            },
+            "examples": [
+              {
+                "enneagram.type7": 2,
+                "mbti.E": 1,
+                "holland.E": 1,
+                "gallup.influencing": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "gallup_themes": {
+      "type": "array",
+      "description": "盖洛普 34 主题候选标注（可选，用于细化优势识别）",
+      "items": {
+        "type": "string",
+        "enum": [
+          "achiever",
+          "activator",
+          "adaptability",
+          "analytical",
+          "arranger",
+          "belief",
+          "command",
+          "communication",
+          "competition",
+          "connectedness",
+          "context",
+          "consistency",
+          "deliberative",
+          "developer",
+          "discipline",
+          "empathy",
+          "focus",
+          "futuristic",
+          "harmony",
+          "ideation",
+          "includer",
+          "individualization",
+          "input",
+          "intellection",
+          "learner",
+          "maximizer",
+          "positivity",
+          "relator",
+          "responsibility",
+          "restorative",
+          "self-assurance",
+          "significance",
+          "strategic",
+          "woo"
+        ]
+      }
+    },
+    "applicable_states": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "career-choice",
+          "career-transition",
+          "study-direction",
+          "study-abroad",
+          "graduate-school",
+          "academic-stress",
+          "self-exploration",
+          "relationship-conflict",
+          "leadership-growth",
+          "entrepreneur-stage",
+          "fresh-grad",
+          "mid-career",
+          "parenting-teen",
+          "life-transition"
+        ]
+      },
+      "description": "适用状态标签，用于筛选匹配"
+    },
+    "difficulty": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "认知难度，1=直观感受，5=需深度反思"
+    },
+    "reverse": {
+      "type": "boolean",
+      "default": false,
+      "description": "是否反向计分题（用于作答一致性检测）"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "ai-generated",
+        "classic-adapted",
+        "custom"
+      ],
+      "default": "ai-generated"
+    },
+    "notes": {
+      "type": "string",
+      "description": "出题意图/备注（可选）"
+    }
+  }
+}

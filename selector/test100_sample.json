@@ -1,0 +1,5803 @@
+{
+  "profile": {
+    "name": "测试用户",
+    "age": 22,
+    "gender": "female",
+    "role": "student-undergrad",
+    "education_stage": "undergrad",
+    "purpose": "career-planning",
+    "current_state": "transition",
+    "decision_horizon": "1-3-years",
+    "birth_date": "2004-03-15",
+    "notes": "大三，纠结考研还是就业"
+  },
+  "total_questions": 100,
+  "questions": [
+    {
+      "id": "Q0366",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "holland",
+        "mbti"
+      ],
+      "stem": "对考证和考级",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "热衷于考",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 2,
+            "holland.C": 1
+          }
+        },
+        {
+          "text": "看是否需要",
+          "score": {
+            "mbti.T": 1,
+            "enneagram.type6": 1
+          }
+        },
+        {
+          "text": "不感兴趣",
+          "score": {
+            "mbti.P": 1,
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "能免则免",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "study-direction",
+        "career-transition",
+        "graduate-school"
+      ],
+      "difficulty": 1,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0113",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "我更享受的工作是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "动手操作类",
+          "score": {
+            "holland.R": 2,
+            "mbti.S": 2,
+            "enneagram.type8": 1
+          }
+        },
+        {
+          "text": "动脑分析类",
+          "score": {
+            "holland.I": 2,
+            "mbti.N": 2,
+            "enneagram.type5": 1
+          }
+        },
+        {
+          "text": "与人打交道",
+          "score": {
+            "holland.S": 2,
+            "mbti.F": 2,
+            "enneagram.type2": 1
+          }
+        },
+        {
+          "text": "组织管理类",
+          "score": {
+            "holland.E": 2,
+            "mbti.J": 2,
+            "enneagram.type3": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "arranger"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "fresh-grad"
+      ],
+      "difficulty": 1,
+      "reverse": false
+    },
+    {
+      "id": "Q0077",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "你的节奏感更接近",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "稳定输出",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "holland.C": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "冲刺式爆发",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "跟着感觉",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "被动响应",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "fresh-grad",
+        "career-transition"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0142",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "选专业或换方向这种大事",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "看就业前景",
+          "score": {
+            "mbti.S": 2,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "跟随兴趣",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "听父母或老师建议",
+          "score": {
+            "enneagram.type6": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "看自己擅长什么",
+          "score": {
+            "enneagram.type5": 1,
+            "enneagram.type3": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "study-direction",
+        "study-abroad",
+        "graduate-school"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": [
+        "deliberative",
+        "connectedness"
+      ]
+    },
+    {
+      "id": "Q1176",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "什么让我空虚（动机）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "做出成绩",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "帮到别人",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "体验新鲜",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "安稳踏实",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "career-transition",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0349",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "独居的孤独感",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "经常有",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "偶尔有",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "很少有",
+          "score": {
+            "mbti.E": 1,
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "享受独居",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "life-transition",
+        "fresh-grad",
+        "career-transition"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0041",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "学一个新东西时，我更喜欢",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先搞清原理和底层逻辑",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 1,
+            "holland.I": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "直接上手做，做的过程中理解",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.S": 2,
+            "holland.R": 2,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "找一个懂的人讲给我听",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "看别人怎么做，模仿再改进",
+          "score": {
+            "enneagram.type3": 1,
+            "mbti.S": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "learner",
+        "input"
+      ],
+      "applicable_states": [
+        "study-direction",
+        "academic-stress",
+        "career-transition",
+        "fresh-grad"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q1101",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常因压力暴饮暴食（压力）②",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type9": 3,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "study-direction",
+        "life-transition"
+      ],
+      "difficulty": 2,
+      "reverse": true
+    },
+    {
+      "id": "Q1076",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对成功后的选择",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先做了再说",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "反复推演最坏情况",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1,
+            "holland.C": 1
+          }
+        },
+        {
+          "text": "看准了就下注",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "分散风险",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "analytical"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "career-transition",
+        "career-choice"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0056",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "你喜欢的工作节奏是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "稳定可预期",
+          "score": {
+            "enneagram.type6": 1,
+            "enneagram.type1": 1,
+            "mbti.S": 1,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "有起伏有挑战",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "自己掌控",
+          "score": {
+            "enneagram.type8": 1,
+            "enneagram.type5": 1,
+            "mbti.P": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "灵活不固定",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "career-transition",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q1461",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对利益冲突",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "直接指出问题",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2,
+            "holland.E": 1
+          }
+        },
+        {
+          "text": "私下沟通",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2,
+            "holland.S": 1
+          }
+        },
+        {
+          "text": "请第三方裁决",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "不掺和",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "study-direction",
+        "fresh-grad"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0201",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我处理多件事时",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "列优先级依次做",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2
+          }
+        },
+        {
+          "text": "看哪个急先做",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "哪个顺手做哪个",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "容易混乱",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-transition",
+        "fresh-grad",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": [
+        "discipline"
+      ]
+    },
+    {
+      "id": "Q0309",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "什么时候考虑买房",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "尽早买",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "mbti.S": 1
+          }
+        },
+        {
+          "text": "看情况",
+          "score": {
+            "mbti.T": 1,
+            "enneagram.type5": 1
+          }
+        },
+        {
+          "text": "不一定要买",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "租房挺好",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "life-transition",
+        "career-transition",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0005",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "新加入一个群体，你需要",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "一段时间观察，摸清规则",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "立刻融入，活跃气氛",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.E": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "找一个引荐人带你认识",
+          "score": {
+            "enneagram.type6": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "保持低调，先做自己的事",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.I": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "adaptability",
+        "woo"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "career-transition",
+        "study-abroad"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0312",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "十年后我会在哪里",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "在熟悉的城市",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.S": 1
+          }
+        },
+        {
+          "text": "在更大的城市",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "在国外",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.N": 1
+          }
+        },
+        {
+          "text": "不知道",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.P": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-abroad",
+        "life-transition"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0279",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "加班到很晚",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "为了项目",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "看是否紧急",
+          "score": {
+            "mbti.T": 1,
+            "enneagram.type6": 1
+          }
+        },
+        {
+          "text": "尽量避免",
+          "score": {
+            "enneagram.type9": 1,
+            "enneagram.type7": 1,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "看心情",
+          "score": {
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "career-transition",
+        "fresh-grad"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0412",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "10年后我希望自己在做什么",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "已经退休",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "还在拼搏",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "在做喜欢的事",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "未知",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.P": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 2,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0047",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "我的学习节奏偏好是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "固定时间持续",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "集中冲刺",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "有兴致就学",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "边做边学",
+          "score": {
+            "mbti.S": 2,
+            "mbti.P": 1,
+            "holland.R": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "study-direction",
+        "fresh-grad",
+        "career-transition"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0009",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "在一个人多的陌生场合，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "找个位置坐下，先观察",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "找机会和旁边的人搭话",
+          "score": {
+            "enneagram.type3": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "希望有人带你融入",
+          "score": {
+            "enneagram.type6": 2,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "想尽快离开",
+          "score": {
+            "enneagram.type4": 1,
+            "mbti.I": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "woo",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "career-transition",
+        "study-abroad"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0365",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "我经常买课但学不完",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "study-direction",
+        "fresh-grad",
+        "graduate-school"
+      ],
+      "difficulty": 2,
+      "reverse": true,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1481",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对不想帮的忙（冲突）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "按是非曲直",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "看情况灵活处理",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "按惯例处理",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "坚持自己底线",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "fresh-grad",
+        "graduate-school"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q1189",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对看不下去的书",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "学完立刻用",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "反复琢磨原理",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2,
+            "holland.I": 2
+          }
+        },
+        {
+          "text": "边讨论边学",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "先记牢再用",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "analytical"
+      ],
+      "applicable_states": [
+        "study-direction",
+        "fresh-grad",
+        "career-transition"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0051",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "理想的工作状态是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "目标明确，按部就班推进",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "holland.C": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "有挑战，能不断突破自己",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "holland.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "自由度高，能按自己节奏来",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "能帮到别人，有意义感",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 1,
+            "holland.S": 2,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "focus",
+        "significance"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "career-transition",
+        "fresh-grad",
+        "mid-career",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q1239",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对学过的内容（学习）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "挑最难的先攻克",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "挑最轻松的开始",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "从最基础的开始",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2,
+            "holland.I": 2
+          }
+        },
+        {
+          "text": "从最新奇的开始",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "career-choice",
+        "career-transition"
+      ],
+      "difficulty": 2,
+      "reverse": false
+    },
+    {
+      "id": "Q0281",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "和同龄人比较职业发展",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "经常比较",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "有时比较",
+          "score": {
+            "mbti.J": 1,
+            "enneagram.type6": 1
+          }
+        },
+        {
+          "text": "基本不比较",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "从来不比较",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "mid-career",
+        "life-transition"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1298",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "比起热闹我更喜欢安静",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type5": 3,
+            "mbti.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "study-abroad",
+        "graduate-school",
+        "fresh-grad"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q0086",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "未知对你而言是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "吸引大于恐惧",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.N": 2,
+            "holland.A": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "恐惧大于吸引",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.S": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "看是什么",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "尽量规避",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.S": 1,
+            "mbti.J": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "ideation",
+        "deliberative"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "entrepreneur-stage",
+        "study-abroad",
+        "life-transition"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0383",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "holland",
+        "mbti"
+      ],
+      "stem": "我对职业最看重的",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "收入和发展",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "holland.E": 1
+          }
+        },
+        {
+          "text": "意义和价值",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 2,
+            "holland.S": 1
+          }
+        },
+        {
+          "text": "兴趣匹配",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "稳定安全",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "holland.C": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "career-transition",
+        "life-transition"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0025",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "突发变故打乱计划，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "迅速调整新计划",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "先稳住情绪",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "找原因",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "接受现实慢慢来",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "adaptability",
+        "deliberative"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "career-transition",
+        "fresh-grad"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0465",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "学新东西时你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先了解整体框架",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "马上动手做",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type3": 1,
+            "mbti.P": 2,
+            "holland.R": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "看别人怎么做",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type6": 1,
+            "mbti.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "先问为什么",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 1,
+            "mbti.N": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "learner",
+        "strategic",
+        "activator",
+        "developer",
+        "context"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "study-direction",
+        "graduate-school",
+        "career-transition"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0784",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "你理想职业的关键词",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "创造",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type7": 1,
+            "mbti.N": 1,
+            "holland.A": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "影响",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.E": 1,
+            "holland.E": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "服务",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "holland.S": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "探索",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type7": 1,
+            "mbti.N": 1,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "ideation",
+        "significance",
+        "developer",
+        "learner"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "fresh-grad",
+        "study-direction"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0075",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "多任务并行时，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "并行切换自如",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "逐个专注完成",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "列优先级",
+          "score": {
+            "enneagram.type3": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "容易顾此失彼",
+          "score": {
+            "enneagram.type4": 1,
+            "enneagram.type9": 1,
+            "mbti.P": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "arranger",
+        "discipline"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "fresh-grad",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0211",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我希望的人生是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "多个不同身份的丰富",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "一个深入的领域",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type1": 1,
+            "mbti.N": 2
+          }
+        },
+        {
+          "text": "围绕几个重要的人",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type9": 1,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "平衡的家庭和工作",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type1": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": [
+        "connectedness"
+      ]
+    },
+    {
+      "id": "Q0353",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对自己造成的失败",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "复盘改进",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "较长时间难受",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "找客观原因",
+          "score": {
+            "enneagram.type3": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "翻篇继续",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "career-transition",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0011",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对一个重要选择，我通常会",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先列利弊清单，按权重打分",
+          "score": {
+            "mbti.T": 2,
+            "mbti.J": 2,
+            "holland.C": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "跟信任的人聊一遍，听不同意见",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "直觉告诉自己哪个对，就选哪个",
+          "score": {
+            "mbti.N": 2,
+            "enneagram.type4": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "看哪个能尽快出结果，先动起来",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.P": 2,
+            "gallup.executing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "analytical",
+        "activator"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "study-abroad",
+        "graduate-school",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0214",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对未来的不确定性",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "充满期待",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.N": 1
+          }
+        },
+        {
+          "text": "谨慎规划",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 2
+          }
+        },
+        {
+          "text": "顺其自然",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "比较焦虑",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type4": 1,
+            "mbti.F": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "life-transition",
+        "fresh-grad"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1134",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常觉得活着没什么意思",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type4": 3,
+            "mbti.I": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type4": 1,
+            "mbti.I": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy"
+      ],
+      "applicable_states": [
+        "graduate-school",
+        "study-direction",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q1314",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对内心矛盾",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "独自品味",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "找人分享",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "分析情绪来源",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "行动转移注意",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "study-direction",
+        "graduate-school",
+        "career-choice"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0303",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "执行与计划的差距",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "基本按计划",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2
+          }
+        },
+        {
+          "text": "执行一半",
+          "score": {
+            "mbti.P": 1,
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "经常偏离",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "不做计划",
+          "score": {
+            "mbti.P": 2,
+            "enneagram.type9": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-transition",
+        "fresh-grad",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0468",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "遇到陌生领域你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先找权威资料",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 1,
+            "mbti.J": 1,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "问懂的人",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "先做做看",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 2,
+            "holland.R": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "看自己有没有兴趣",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "mbti.N": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "input",
+        "learner",
+        "developer",
+        "activator",
+        "significance"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "study-direction",
+        "fresh-grad"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q1452",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "比起说赢我更想被听见（冲突）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type4": 3,
+            "mbti.I": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type4": 1,
+            "mbti.I": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy"
+      ],
+      "applicable_states": [
+        "graduate-school",
+        "mid-career",
+        "life-transition"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q1102",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对家庭压力",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先让自己平静",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2,
+            "holland.S": 1
+          }
+        },
+        {
+          "text": "直面问题源头",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "分析压力来源",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "按经验应对",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "fresh-grad",
+        "study-abroad"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0765",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "你更擅长的学习方式是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "深度阅读",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type1": 1,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "实践试错",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 2,
+            "holland.R": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "讨论交流",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.E": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "观看模仿",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type9": 1,
+            "mbti.N": 1,
+            "holland.A": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "intellection",
+        "activator",
+        "developer",
+        "input"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "fresh-grad",
+        "graduate-school"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0400",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "时间管理",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "有详细的待办清单",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2
+          }
+        },
+        {
+          "text": "心里大致安排",
+          "score": {
+            "mbti.J": 1,
+            "enneagram.type9": 1
+          }
+        },
+        {
+          "text": "想到什么做什么",
+          "score": {
+            "mbti.P": 2,
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "经常混乱",
+          "score": {
+            "mbti.P": 2,
+            "enneagram.type9": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-transition",
+        "mid-career",
+        "fresh-grad"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1148",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "什么让我空虚",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "把事情做对",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "被人喜欢",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "忠于自己",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "履行责任",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "study-direction",
+        "study-abroad",
+        "life-transition"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0403",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "我的执行力",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "想到就做",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "规划再做",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2
+          }
+        },
+        {
+          "text": "看心情",
+          "score": {
+            "mbti.P": 2,
+            "enneagram.type9": 1
+          }
+        },
+        {
+          "text": "经常拖延",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "fresh-grad",
+        "mid-career"
+      ],
+      "difficulty": 3,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0013",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "几个都不错的选项摆面前，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "选最稳的，落袋为安",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "选最有挑战的",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.N": 1,
+            "holland.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "选最符合长远目标的",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "选不后悔的那个",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 2,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "strategic",
+        "significance"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "graduate-school",
+        "study-abroad"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0495",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "开始新习惯前你会",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "查攻略",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 1,
+            "holland.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "立刻开干",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type3": 1,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "找同伴",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type6": 1,
+            "mbti.E": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "等到不得不做",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type4": 1,
+            "mbti.P": 2,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "activator",
+        "input",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "career-transition",
+        "life-transition"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0971",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "你更擅长的学习方式",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "看/听",
+          "score": {
+            "enneagram.type4": 1,
+            "enneagram.type7": 1,
+            "mbti.N": 1,
+            "holland.A": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "做/试",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 2,
+            "holland.R": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "讨论",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.E": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "记笔记",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type5": 1,
+            "mbti.S": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "input",
+        "developer",
+        "activator",
+        "discipline"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "fresh-grad",
+        "graduate-school"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q1338",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "比起热闹我更喜欢安静（情绪）②",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type5": 3,
+            "mbti.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.I": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "study-direction",
+        "study-abroad"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q1202",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "比起自己摸索我更喜欢听课（学习）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type2": 3,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "career-choice",
+        "career-transition"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q0501",
+      "category": "action-habit",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "养成习惯你靠",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "打卡监督",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "固定时间做",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type9": 1,
+            "mbti.S": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "跟别人一起",
+          "score": {
+            "enneagram.type2": 2,
+            "enneagram.type6": 1,
+            "mbti.E": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "感觉推动",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type7": 1,
+            "mbti.P": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "discipline",
+        "consistency",
+        "adaptability"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "life-transition",
+        "career-transition"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0744",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "做选择时你更看",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "过去经验",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type6": 1,
+            "mbti.S": 1,
+            "mbti.J": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "未来可能",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type3": 1,
+            "mbti.N": 1,
+            "mbti.P": 1,
+            "holland.A": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "他人选择",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "自身偏好",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "responsibility",
+        "ideation",
+        "relator",
+        "significance"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "study-abroad"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q1152",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "什么让我沮丧",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "做出成绩",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "帮到别人",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "体验新鲜",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "安稳踏实",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "mid-career",
+        "study-abroad"
+      ],
+      "difficulty": 3,
+      "reverse": false
+    },
+    {
+      "id": "Q0942",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "选择面前你更看",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "利弊",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "感受",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type7": 1,
+            "mbti.F": 2,
+            "holland.A": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "他人意见",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type6": 1,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "长远价值",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type3": 1,
+            "mbti.J": 1,
+            "mbti.N": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "analytical",
+        "ideation",
+        "relator",
+        "futuristic"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "study-abroad"
+      ],
+      "difficulty": 3
+    },
+    {
+      "id": "Q0168",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对一个全新领域，我",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先建立整体框架",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "直接开始做",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.P": 1,
+            "holland.R": 1
+          }
+        },
+        {
+          "text": "看别人怎么做的",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.S": 1
+          }
+        },
+        {
+          "text": "找老师带进门",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "study-direction",
+        "career-transition",
+        "fresh-grad"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": [
+        "developer",
+        "learner"
+      ]
+    },
+    {
+      "id": "Q1033",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常把决定权交给别人（决策）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type6": 3,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "career-choice",
+        "fresh-grad"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q1325",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对自己生气（情绪）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "说出来就好了",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "消化完再说",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "直接面对引发源",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "等情绪过去",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "life-transition",
+        "career-choice"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q1063",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常拖延到截止日期（决策）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type7": 3,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "career-choice",
+        "study-abroad"
+      ],
+      "difficulty": 3,
+      "reverse": true
+    },
+    {
+      "id": "Q0975",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常觉得朋友不够了解我（人际）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type4": 3,
+            "mbti.I": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type4": 1,
+            "mbti.I": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.E": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "career-choice",
+        "mid-career"
+      ],
+      "difficulty": 4,
+      "reverse": true
+    },
+    {
+      "id": "Q0254",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对完全未知的新环境",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "兴奋期待",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "谨慎观察",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.S": 1,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "逐步试探",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 2
+          }
+        },
+        {
+          "text": "焦虑退缩",
+          "score": {
+            "enneagram.type6": 1,
+            "enneagram.type4": 1,
+            "mbti.F": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-transition",
+        "life-transition",
+        "study-abroad"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0443",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "做人生大决定时",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "相信直觉",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type9": 1,
+            "mbti.N": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "理性分析",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "holland.C": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "跟家人朋友商量",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "想清楚就立刻做",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "strategic",
+        "analytical",
+        "activator"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "graduate-school",
+        "study-abroad"
+      ],
+      "difficulty": 4
+    },
+    {
+      "id": "Q0354",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对一群陌生人",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "兴奋主动",
+          "score": {
+            "mbti.E": 2,
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "观察再行动",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1
+          }
+        },
+        {
+          "text": "找个角落",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.I": 1
+          }
+        },
+        {
+          "text": "有点紧张",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.F": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "career-transition",
+        "study-abroad"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1455",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对被动的冲突",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "直接指出问题",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2,
+            "holland.E": 1
+          }
+        },
+        {
+          "text": "私下沟通",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2,
+            "holland.S": 1
+          }
+        },
+        {
+          "text": "请第三方裁决",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "不掺和",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "fresh-grad",
+        "mid-career"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q1327",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对自己害怕（情绪）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "让情绪自然流动",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "控制情绪表达",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "向信任的人敞开",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "把情绪变动力",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "graduate-school",
+        "career-transition",
+        "study-abroad"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0098",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "短期痛苦和长期收益冲突，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "忍短期换长期",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "先解决短期",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "看比例",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "找人分担",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 1,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "focus",
+        "deliberative"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0183",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "对于工作和生活平衡",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "工作优先",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "生活优先",
+          "score": {
+            "enneagram.type9": 2,
+            "enneagram.type2": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "灵活看阶段",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "不刻意区分",
+          "score": {
+            "enneagram.type8": 1,
+            "enneagram.type4": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "fresh-grad",
+        "career-transition"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0015",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "长远回报和当下收益冲突时，你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "愿意等为长远",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "先拿到手的要紧",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "看比例，算清楚",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "分一部分一部分来",
+          "score": {
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "focus",
+        "futuristic"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "graduate-school",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0368",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对一个全新领域的难题",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "找专家求教",
+          "score": {
+            "enneagram.type6": 1,
+            "enneagram.type2": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "自己查资料",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2
+          }
+        },
+        {
+          "text": "先放一放",
+          "score": {
+            "mbti.P": 1,
+            "enneagram.type9": 1
+          }
+        },
+        {
+          "text": "硬啃下去",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "graduate-school",
+        "study-direction"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0081",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "想象三年后的自己，我更希望",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "某领域被认可的专家",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type5": 1,
+            "mbti.J": 1,
+            "holland.I": 2,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "自由不设限的生活",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "带领一群人做成一件大事",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.E": 1,
+            "holland.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "和重要的人过安稳日子",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "significance"
+      ],
+      "applicable_states": [
+        "study-direction",
+        "career-choice",
+        "study-abroad",
+        "graduate-school",
+        "entrepreneur-stage"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0338",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "是否要读研究生",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "读，必须读",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2
+          }
+        },
+        {
+          "text": "看情况",
+          "score": {
+            "mbti.P": 2,
+            "enneagram.type7": 1
+          }
+        },
+        {
+          "text": "工作优先",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "不读",
+          "score": {
+            "mbti.P": 1,
+            "enneagram.type7": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "graduate-school",
+        "study-direction",
+        "career-transition"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0099",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "妥协的边界对你而言是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "核心原则不能让",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "不能伤害他人",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "不能丧失自主",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "看值不值",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.T": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "belief",
+        "self_assurance"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "relationship-conflict",
+        "life-transition"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q1217",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "比起理论我更喜欢案例（学习）②",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type7": 3,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command"
+      ],
+      "applicable_states": [
+        "graduate-school",
+        "study-abroad",
+        "life-transition"
+      ],
+      "difficulty": 4,
+      "reverse": true
+    },
+    {
+      "id": "Q0438",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "选专业/选方向时你",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "看未来就业前景",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.T": 1,
+            "holland.C": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "选自己真心喜欢的",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 2,
+            "mbti.N": 1,
+            "holland.A": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "问过来人",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.F": 1,
+            "holland.S": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "看哪个学起来轻松",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1,
+            "holland.A": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "strategic",
+        "futuristic",
+        "significance",
+        "activator"
+      ],
+      "applicable_states": [
+        "study-direction",
+        "graduate-school",
+        "career-choice"
+      ],
+      "difficulty": 4
+    },
+    {
+      "id": "Q0082",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "五年后你最希望拥有",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "专业深度",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2,
+            "holland.I": 2,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "广泛体验",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "影响力",
+          "score": {
+            "enneagram.type8": 1,
+            "enneagram.type3": 2,
+            "mbti.E": 2,
+            "holland.E": 2,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "稳定关系",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "learner",
+        "significance"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "entrepreneur-stage",
+        "life-transition"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q1055",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对收益慢选项",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "愿意为长远忍耐",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "先拿眼前的",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "算清楚再选",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        },
+        {
+          "text": "分开几步走",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1,
+            "holland.C": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "analytical"
+      ],
+      "applicable_states": [
+        "mid-career",
+        "study-abroad",
+        "life-transition"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q0408",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "如果50岁后职业出现危机",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "转行再起",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "提早规划",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2
+          }
+        },
+        {
+          "text": "顺其自然",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "积蓄应对",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.S": 1,
+            "mbti.T": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "mid-career",
+        "life-transition",
+        "career-transition"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0278",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "面对一份有面子但不开心的工作",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "坚持留下",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "权衡后离开",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.T": 2
+          }
+        },
+        {
+          "text": "看收入",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "坚决离开",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "career-transition",
+        "mid-career"
+      ],
+      "difficulty": 4,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0514",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "做人生选择时更看",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "当下感受",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type9": 1,
+            "mbti.F": 2,
+            "mbti.P": 1,
+            "holland.A": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "长期愿景",
+          "score": {
+            "enneagram.type1": 2,
+            "enneagram.type3": 1,
+            "mbti.J": 2,
+            "mbti.N": 1,
+            "holland.C": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "别人怎么看",
+          "score": {
+            "enneagram.type2": 1,
+            "enneagram.type3": 1,
+            "mbti.F": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "哪个回报多",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.T": 1,
+            "mbti.S": 1,
+            "holland.E": 2,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "futuristic",
+        "maximizer",
+        "ideation",
+        "significance"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "study-direction",
+        "study-abroad"
+      ],
+      "difficulty": 4
+    },
+    {
+      "id": "Q0584",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "mbti",
+        "holland",
+        "gallup"
+      ],
+      "stem": "选工作时你倾向",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "大公司平台",
+          "score": {
+            "enneagram.type6": 2,
+            "enneagram.type3": 1,
+            "mbti.S": 1,
+            "holland.C": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "小公司灵活",
+          "score": {
+            "enneagram.type7": 2,
+            "enneagram.type3": 1,
+            "mbti.P": 2,
+            "holland.E": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "创业团队",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "mbti.P": 2,
+            "holland.E": 2,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "外企/海外",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type9": 1,
+            "mbti.I": 1,
+            "holland.I": 1,
+            "gallup.relationship_building": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "adaptability",
+        "discipline",
+        "individualization"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "fresh-grad",
+        "study-abroad"
+      ],
+      "difficulty": 4
+    },
+    {
+      "id": "Q1427",
+      "category": "future-vision",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我常想象5年后的自己（未来）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "影响力越来越大",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "越来越像自己",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.I": 1,
+            "mbti.N": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "帮助了很多人",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "完成了所有目标",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "fresh-grad",
+        "graduate-school",
+        "study-abroad"
+      ],
+      "difficulty": 4,
+      "reverse": false
+    },
+    {
+      "id": "Q1265",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "比起挣更多我更想要自由（工作）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type7": 3,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type7": 1,
+            "mbti.P": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.J": 1,
+            "gallup.executing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command"
+      ],
+      "applicable_states": [
+        "life-transition",
+        "fresh-grad",
+        "study-abroad"
+      ],
+      "difficulty": 4,
+      "reverse": true
+    },
+    {
+      "id": "Q0116",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "如果抛开所有外部期待，我真正想做的事是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "创造点什么（作品/产品/想法）",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.N": 2,
+            "holland.A": 2,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "帮助某类具体的人",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "holland.S": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "在某个领域做到极致",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "探索未知（旅行/学习/体验）",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.N": 2,
+            "mbti.P": 2,
+            "holland.I": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "ideation",
+        "developer",
+        "achiever"
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "career-choice",
+        "life-transition"
+      ],
+      "difficulty": 5,
+      "reverse": false
+    },
+    {
+      "id": "Q1040",
+      "category": "decision-making",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "面对风险决定",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "先做了再说",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "反复推演最坏情况",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.J": 1,
+            "gallup.executing": 1,
+            "holland.C": 1
+          }
+        },
+        {
+          "text": "看准了就下注",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1,
+            "gallup.influencing": 2
+          }
+        },
+        {
+          "text": "分散风险",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.I": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "analytical"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "fresh-grad",
+        "graduate-school"
+      ],
+      "difficulty": 5,
+      "reverse": false
+    },
+    {
+      "id": "Q0980",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常主动缓和紧张气氛（人际）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type9": 3,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "career-choice",
+        "life-transition"
+      ],
+      "difficulty": 5,
+      "reverse": true
+    },
+    {
+      "id": "Q0217",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "我人生中最不愿意妥协的底线是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "真实",
+          "score": {
+            "enneagram.type4": 2,
+            "enneagram.type1": 1
+          }
+        },
+        {
+          "text": "善良",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2
+          }
+        },
+        {
+          "text": "自立",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type5": 1,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "公正",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.T": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "life-transition",
+        "relationship-conflict"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0347",
+      "category": "stress-response",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "如果突然失去主要经济来源",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "立刻行动",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type3": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "盘点资源",
+          "score": {
+            "enneagram.type6": 1,
+            "mbti.T": 2
+          }
+        },
+        {
+          "text": "求助他人",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "先熬一熬",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-transition",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0157",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "如果明天就能财务自由，我最想先做的是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "环游世界",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "做一直想做的事",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "帮家人或朋友",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "什么都不做先歇着",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "life-transition"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": [
+        "connectedness"
+      ]
+    },
+    {
+      "id": "Q0187",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "我曾经最难面对的情绪是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "失败",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type1": 1
+          }
+        },
+        {
+          "text": "失去",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 2
+          }
+        },
+        {
+          "text": "无意义感",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type4": 1,
+            "mbti.N": 2
+          }
+        },
+        {
+          "text": "失控",
+          "score": {
+            "enneagram.type8": 2,
+            "enneagram.type6": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0257",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "如果可以影响世界一件事",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "消除贫困",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2
+          }
+        },
+        {
+          "text": "保护环境",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.N": 2
+          }
+        },
+        {
+          "text": "推进教育",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.N": 1
+          }
+        },
+        {
+          "text": "减少疾病",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.T": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "career-choice",
+        "life-transition"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0287",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "我曾经最难放下的一个情绪",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "愤怒",
+          "score": {
+            "enneagram.type8": 2,
+            "mbti.T": 1
+          }
+        },
+        {
+          "text": "羞耻",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "恐惧",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.F": 1
+          }
+        },
+        {
+          "text": "内疚",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.T": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1460",
+      "category": "conflict-choice",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "面对价值观冲突（冲突）",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "把冲突变机会",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1,
+            "gallup.executing": 2
+          }
+        },
+        {
+          "text": "换个角度看",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "先修复关系",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2,
+            "gallup.relationship_building": 2
+          }
+        },
+        {
+          "text": "按原则办",
+          "score": {
+            "enneagram.type1": 2,
+            "mbti.J": 2,
+            "gallup.executing": 2
+          }
+        }
+      ],
+      "gallup_themes": [
+        "achiever",
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "parenting-teen",
+        "mid-career",
+        "fresh-grad"
+      ],
+      "difficulty": 5,
+      "reverse": false
+    },
+    {
+      "id": "Q0177",
+      "category": "work-career",
+      "systems": [
+        "enneagram",
+        "holland",
+        "mbti"
+      ],
+      "stem": "如果可以重新选择职业，我会",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "还是选现在这个",
+          "score": {
+            "enneagram.type6": 1,
+            "enneagram.type3": 1,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "选完全不同的",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2,
+            "holland.A": 1
+          }
+        },
+        {
+          "text": "选相关但不同方向",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2
+          }
+        },
+        {
+          "text": "不确定",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "career-choice",
+        "career-transition",
+        "life-transition"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0167",
+      "category": "learning-cognition",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "holland",
+        "mbti"
+      ],
+      "stem": "我真正掌握一个领域的方式是",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "长期沉浸式研究",
+          "score": {
+            "enneagram.type5": 2,
+            "mbti.N": 2,
+            "holland.I": 2
+          }
+        },
+        {
+          "text": "大量实战积累",
+          "score": {
+            "enneagram.type3": 2,
+            "enneagram.type8": 1,
+            "holland.R": 1
+          }
+        },
+        {
+          "text": "跟顶尖的人学习",
+          "score": {
+            "enneagram.type6": 1,
+            "enneagram.type3": 2,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "自己摸索试错",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.P": 2
+          }
+        }
+      ],
+      "applicable_states": [
+        "study-direction",
+        "career-choice",
+        "graduate-school"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": [
+        "developer"
+      ]
+    },
+    {
+      "id": "Q0990",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常羡慕别人有人依靠（人际）",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type2": 3,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "career-transition",
+        "life-transition"
+      ],
+      "difficulty": 5,
+      "reverse": true
+    },
+    {
+      "id": "Q0387",
+      "category": "emotion-self",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "我曾经最难处理的内在冲突",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "理想与现实的差距",
+          "score": {
+            "enneagram.type4": 2,
+            "mbti.N": 1
+          }
+        },
+        {
+          "text": "责任与自由的矛盾",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 1
+          }
+        },
+        {
+          "text": "独立与归属的挣扎",
+          "score": {
+            "enneagram.type5": 2,
+            "enneagram.type4": 1,
+            "mbti.I": 1
+          }
+        },
+        {
+          "text": "安全感与冒险的矛盾",
+          "score": {
+            "enneagram.type6": 2,
+            "mbti.P": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q0357",
+      "category": "motivation-value",
+      "systems": [
+        "enneagram",
+        "mbti"
+      ],
+      "stem": "我人生真正的价值是什么",
+      "scale": "forced-choice",
+      "options": [
+        {
+          "text": "对别人有影响",
+          "score": {
+            "enneagram.type2": 2,
+            "mbti.F": 2
+          }
+        },
+        {
+          "text": "做自己热爱的事",
+          "score": {
+            "enneagram.type7": 2,
+            "mbti.P": 2
+          }
+        },
+        {
+          "text": "留下物质遗产",
+          "score": {
+            "enneagram.type3": 2,
+            "mbti.J": 1
+          }
+        },
+        {
+          "text": "找到内在平静",
+          "score": {
+            "enneagram.type9": 2,
+            "mbti.F": 1
+          }
+        }
+      ],
+      "applicable_states": [
+        "self-exploration",
+        "life-transition",
+        "mid-career"
+      ],
+      "difficulty": 5,
+      "reverse": false,
+      "gallup_themes": []
+    },
+    {
+      "id": "Q1000",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常主动缓和紧张气氛（人际）②",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type9": 3,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "study-abroad",
+        "parenting-teen",
+        "graduate-school"
+      ],
+      "difficulty": 5,
+      "reverse": true
+    },
+    {
+      "id": "Q1010",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常羡慕别人有人依靠（人际）②",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type2": 3,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type2": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type5": 1,
+            "mbti.T": 1,
+            "gallup.strategic_thinking": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "empathy",
+        "analytical"
+      ],
+      "applicable_states": [
+        "study-abroad",
+        "study-direction",
+        "relationship-conflict"
+      ],
+      "difficulty": 5,
+      "reverse": true
+    },
+    {
+      "id": "Q1020",
+      "category": "interpersonal-relationship",
+      "systems": [
+        "enneagram",
+        "gallup",
+        "mbti"
+      ],
+      "stem": "我经常主动缓和紧张气氛（人际）③",
+      "scale": "likert-4",
+      "options": [
+        {
+          "text": "非常符合",
+          "score": {
+            "enneagram.type9": 3,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "比较符合",
+          "score": {
+            "enneagram.type9": 1,
+            "mbti.F": 1,
+            "gallup.relationship_building": 1
+          }
+        },
+        {
+          "text": "不太符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        },
+        {
+          "text": "完全不符合",
+          "score": {
+            "enneagram.type8": 1,
+            "mbti.T": 1,
+            "gallup.influencing": 1
+          }
+        }
+      ],
+      "gallup_themes": [
+        "command",
+        "empathy"
+      ],
+      "applicable_states": [
+        "study-direction",
+        "graduate-school"
+      ],
+      "difficulty": 5,
+      "reverse": true
+    }
+  ],
+  "selection_reasons": {
+    "Q0366": "匹配当前状态：career-transition,graduate-school,study-direction",
+    "Q0113": "匹配当前状态：career-choice,fresh-grad,study-direction",
+    "Q0077": "匹配当前状态：career-transition,fresh-grad,mid-career",
+    "Q0142": "匹配当前状态：graduate-school,study-abroad,study-direction",
+    "Q1176": "匹配当前状态：career-transition,life-transition,mid-career",
+    "Q0349": "匹配当前状态：career-transition,fresh-grad,life-transition",
+    "Q0041": "匹配当前状态：career-transition,fresh-grad,study-direction",
+    "Q1101": "匹配当前状态：career-transition,life-transition,study-direction",
+    "Q1076": "匹配当前状态：career-choice,career-transition,fresh-grad",
+    "Q0056": "匹配当前状态：career-choice,career-transition,mid-career",
+    "Q1461": "匹配当前状态：fresh-grad,life-transition,study-direction",
+    "Q0201": "匹配当前状态：career-transition,fresh-grad,mid-career",
+    "Q0309": "匹配当前状态：career-transition,life-transition,mid-career",
+    "Q0005": "匹配当前状态：career-transition,fresh-grad,study-abroad",
+    "Q0312": "匹配当前状态：career-choice,life-transition,study-abroad",
+    "Q0279": "匹配当前状态：career-transition,fresh-grad,mid-career",
+    "Q0412": "匹配当前状态：career-choice,life-transition,mid-career",
+    "Q0047": "匹配当前状态：career-transition,fresh-grad,study-direction",
+    "Q0009": "匹配当前状态：career-transition,fresh-grad,study-abroad",
+    "Q0365": "匹配当前状态：fresh-grad,graduate-school,study-direction",
+    "Q1481": "匹配当前状态：fresh-grad,graduate-school,mid-career",
+    "Q1189": "匹配当前状态：career-transition,fresh-grad,study-direction",
+    "Q0051": "匹配当前状态：career-choice,career-transition,fresh-grad,mid-career",
+    "Q1239": "匹配当前状态：career-choice,career-transition,fresh-grad",
+    "Q0281": "匹配当前状态：career-choice,life-transition,mid-career",
+    "Q1298": "匹配当前状态：fresh-grad,graduate-school,study-abroad",
+    "Q0086": "匹配当前状态：career-choice,life-transition,study-abroad",
+    "Q0383": "匹配当前状态：career-choice,career-transition,life-transition",
+    "Q0025": "匹配当前状态：career-transition,fresh-grad,life-transition",
+    "Q0465": "匹配当前状态：career-transition,fresh-grad,graduate-school,study-direction",
+    "Q0784": "匹配当前状态：career-choice,fresh-grad,study-direction",
+    "Q0075": "匹配当前状态：career-transition,fresh-grad,mid-career",
+    "Q0211": "匹配当前状态：career-choice,life-transition,mid-career",
+    "Q0353": "匹配当前状态：career-choice,career-transition,mid-career",
+    "Q0011": "匹配当前状态：career-choice,graduate-school,study-abroad,study-direction",
+    "Q0214": "匹配当前状态：career-choice,fresh-grad,life-transition",
+    "Q1134": "匹配当前状态：graduate-school,mid-career,study-direction",
+    "Q1314": "匹配当前状态：career-choice,graduate-school,study-direction",
+    "Q0303": "匹配当前状态：career-transition,fresh-grad,mid-career",
+    "Q0468": "匹配当前状态：career-transition,fresh-grad,study-direction",
+    "Q1452": "匹配当前状态：graduate-school,life-transition,mid-career",
+    "Q1102": "匹配当前状态：career-transition,fresh-grad,study-abroad",
+    "Q0765": "匹配当前状态：career-transition,fresh-grad,graduate-school",
+    "Q0400": "匹配当前状态：career-transition,fresh-grad,mid-career",
+    "Q1148": "匹配当前状态：life-transition,study-abroad,study-direction",
+    "Q0403": "匹配当前状态：career-choice,fresh-grad,mid-career",
+    "Q0013": "匹配当前状态：career-choice,graduate-school,study-abroad,study-direction",
+    "Q0495": "匹配当前状态：career-transition,fresh-grad,life-transition",
+    "Q0971": "匹配当前状态：career-transition,fresh-grad,graduate-school",
+    "Q1338": "匹配当前状态：career-transition,study-abroad,study-direction",
+    "Q1202": "匹配当前状态：career-choice,career-transition,mid-career",
+    "Q0501": "匹配当前状态：career-transition,fresh-grad,life-transition",
+    "Q0744": "匹配当前状态：career-choice,study-abroad,study-direction",
+    "Q1152": "匹配当前状态：life-transition,mid-career,study-abroad",
+    "Q0942": "匹配当前状态：career-choice,study-abroad,study-direction",
+    "Q0168": "匹配当前状态：career-transition,fresh-grad,study-direction",
+    "Q1033": "匹配当前状态：career-choice,fresh-grad,life-transition",
+    "Q1325": "匹配当前状态：career-choice,fresh-grad,life-transition",
+    "Q1063": "匹配当前状态：career-choice,fresh-grad,study-abroad",
+    "Q0975": "匹配当前状态：career-choice,career-transition,mid-career",
+    "Q0254": "匹配当前状态：career-transition,life-transition,study-abroad",
+    "Q0443": "匹配当前状态：career-choice,graduate-school,study-abroad,study-direction",
+    "Q0354": "匹配当前状态：career-transition,fresh-grad,study-abroad",
+    "Q1455": "匹配当前状态：fresh-grad,life-transition,mid-career",
+    "Q1327": "匹配当前状态：career-transition,graduate-school,study-abroad",
+    "Q0098": "匹配当前状态：career-choice,study-direction",
+    "Q0183": "匹配当前状态：career-transition,fresh-grad,mid-career",
+    "Q0015": "匹配当前状态：career-choice,graduate-school,study-direction",
+    "Q0368": "匹配当前状态：career-choice,graduate-school,study-direction",
+    "Q0081": "匹配当前状态：career-choice,graduate-school,study-abroad,study-direction",
+    "Q0338": "匹配当前状态：career-transition,graduate-school,study-direction",
+    "Q0099": "匹配当前状态：career-choice,life-transition",
+    "Q1217": "匹配当前状态：graduate-school,life-transition,study-abroad",
+    "Q0438": "匹配当前状态：career-choice,graduate-school,study-direction",
+    "Q0082": "匹配当前状态：career-choice,life-transition,study-direction",
+    "Q1055": "匹配当前状态：life-transition,mid-career,study-abroad",
+    "Q0408": "匹配当前状态：career-transition,life-transition,mid-career",
+    "Q0278": "匹配当前状态：career-choice,career-transition,mid-career",
+    "Q0514": "匹配当前状态：career-choice,study-abroad,study-direction",
+    "Q0584": "匹配当前状态：career-choice,fresh-grad,study-abroad",
+    "Q1427": "匹配当前状态：fresh-grad,graduate-school,study-abroad",
+    "Q1265": "匹配当前状态：fresh-grad,life-transition,study-abroad",
+    "Q0116": "匹配当前状态：career-choice,life-transition",
+    "Q1040": "匹配当前状态：career-transition,fresh-grad,graduate-school",
+    "Q0980": "匹配当前状态：career-choice,life-transition",
+    "Q0217": "匹配当前状态：career-choice,life-transition",
+    "Q0347": "匹配当前状态：career-transition,life-transition,mid-career",
+    "Q0157": "匹配当前状态：career-choice,life-transition",
+    "Q0187": "匹配当前状态：life-transition,mid-career",
+    "Q0257": "匹配当前状态：career-choice,life-transition",
+    "Q0287": "匹配当前状态：life-transition,mid-career",
+    "Q1460": "匹配当前状态：fresh-grad,mid-career",
+    "Q0177": "匹配当前状态：career-choice,career-transition,life-transition",
+    "Q0167": "匹配当前状态：career-choice,graduate-school,study-direction",
+    "Q0990": "匹配当前状态：career-transition,life-transition",
+    "Q0387": "匹配当前状态：life-transition,mid-career",
+    "Q0357": "匹配当前状态：life-transition,mid-career",
+    "Q1000": "匹配当前状态：graduate-school,study-abroad",
+    "Q1010": "匹配当前状态：study-abroad,study-direction",
+    "Q1020": "匹配当前状态：graduate-school,study-direction"
+  },
+  "coverage_report": {
+    "enneagram": {
+      "type1": 37,
+      "type2": 39,
+      "type3": 53,
+      "type4": 37,
+      "type5": 47,
+      "type6": 53,
+      "type7": 62,
+      "type8": 32,
+      "type9": 46
+    },
+    "mbti": {
+      "E": 20,
+      "I": 27,
+      "S": 17,
+      "N": 34,
+      "T": 44,
+      "F": 58,
+      "J": 60,
+      "P": 66
+    },
+    "holland": {
+      "R": 9,
+      "I": 14,
+      "A": 20,
+      "S": 19,
+      "E": 11,
+      "C": 18
+    },
+    "gallup": {
+      "executing": 40,
+      "influencing": 44,
+      "relationship_building": 53,
+      "strategic_thinking": 39
+    },
+    "gallup_top_themes": [
+      "command",
+      "empathy",
+      "achiever",
+      "analytical",
+      "discipline",
+      "adaptability",
+      "significance",
+      "activator",
+      "developer",
+      "learner"
+    ],
+    "reverse_count": 17,
+    "difficulty_dist": {
+      "1": 2,
+      "2": 21,
+      "3": 34,
+      "4": 25,
+      "5": 18
+    },
+    "category_dist": {
+      "action-habit": 8,
+      "conflict-choice": 8,
+      "decision-making": 14,
+      "emotion-self": 8,
+      "future-vision": 11,
+      "interpersonal-relationship": 8,
+      "learning-cognition": 15,
+      "motivation-value": 8,
+      "stress-response": 8,
+      "work-career": 12
+    },
+    "checks": {
+      "enneagram_all_types>=5": true,
+      "mbti_all_poles>=4": true,
+      "holland_all_types>=5": true,
+      "gallup_all_domains>=8": true,
+      "reverse>=10": true
+    },
+    "all_passed": true
+  }
+}

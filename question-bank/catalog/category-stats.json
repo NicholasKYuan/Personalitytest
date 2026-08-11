@@ -1,0 +1,132 @@
+{
+  "action-habit": {
+    "total": 146,
+    "forced_choice": 108,
+    "likert_4": 38,
+    "difficulty_dist": {
+      "1": 4,
+      "2": 39,
+      "3": 78,
+      "4": 17,
+      "5": 8
+    },
+    "reverse_count": 36
+  },
+  "conflict-choice": {
+    "total": 140,
+    "forced_choice": 105,
+    "likert_4": 35,
+    "difficulty_dist": {
+      "1": 4,
+      "2": 24,
+      "3": 80,
+      "4": 24,
+      "5": 8
+    },
+    "reverse_count": 33
+  },
+  "decision-making": {
+    "total": 157,
+    "forced_choice": 116,
+    "likert_4": 41,
+    "difficulty_dist": {
+      "1": 4,
+      "2": 29,
+      "3": 80,
+      "4": 34,
+      "5": 10
+    },
+    "reverse_count": 37
+  },
+  "emotion-self": {
+    "total": 146,
+    "forced_choice": 107,
+    "likert_4": 39,
+    "difficulty_dist": {
+      "1": 3,
+      "2": 34,
+      "3": 76,
+      "4": 24,
+      "5": 9
+    },
+    "reverse_count": 37
+  },
+  "future-vision": {
+    "total": 146,
+    "forced_choice": 110,
+    "likert_4": 36,
+    "difficulty_dist": {
+      "1": 3,
+      "2": 30,
+      "3": 58,
+      "4": 45,
+      "5": 10
+    },
+    "reverse_count": 33
+  },
+  "interpersonal-relationship": {
+    "total": 155,
+    "forced_choice": 119,
+    "likert_4": 36,
+    "difficulty_dist": {
+      "1": 4,
+      "2": 41,
+      "3": 89,
+      "4": 15,
+      "5": 6
+    },
+    "reverse_count": 33
+  },
+  "learning-cognition": {
+    "total": 154,
+    "forced_choice": 115,
+    "likert_4": 39,
+    "difficulty_dist": {
+      "1": 3,
+      "2": 41,
+      "3": 87,
+      "4": 15,
+      "5": 8
+    },
+    "reverse_count": 37
+  },
+  "motivation-value": {
+    "total": 155,
+    "forced_choice": 113,
+    "likert_4": 42,
+    "difficulty_dist": {
+      "1": 3,
+      "2": 28,
+      "3": 70,
+      "4": 43,
+      "5": 11
+    },
+    "reverse_count": 37
+  },
+  "stress-response": {
+    "total": 156,
+    "forced_choice": 114,
+    "likert_4": 42,
+    "difficulty_dist": {
+      "1": 3,
+      "2": 32,
+      "3": 94,
+      "4": 18,
+      "5": 9
+    },
+    "reverse_count": 39
+  },
+  "work-career": {
+    "total": 145,
+    "forced_choice": 115,
+    "likert_4": 30,
+    "difficulty_dist": {
+      "1": 5,
+      "2": 34,
+      "3": 81,
+      "4": 18,
+      "5": 7
+    },
+    "reverse_count": 29
+  }
+}
