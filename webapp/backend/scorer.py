@@ -3,8 +3,17 @@
 """
 scorer.py — 四体系评分逻辑
 接收100题答案，计算九型人格 / MBTI / 霍兰德 / 盖洛普结果。
+
+评分规范:
+1. 盖洛普主题按"选项领域得分加权"计分: 对每道已答题, 用户所选选项中
+   gallup.<domain> 的分值 v (v>0), 累加到该题 gallup_themes 中属于该
+   domain 的每个主题上; top_themes 取权重>0 的前5 (权重降序, 主题名升序)。
+2. 判型使用归一化分数: normalized[key] = raw[key] / max_attainable[key],
+   其中 max_attainable[key] = 本卷每道已答题各选项中该 key 最大分值之和,
+   消除题库维度覆盖不均带来的系统性偏移。raw 分数字段保持不变, 各体系
+   结果 dict 中新增 "normalized" 子字典 (保留3位小数)。
 """
-from collections import Counter, defaultdict
+from collections import defaultdict
 
 # 九型人格类型名称映射
 ENNEAGRAM_NAMES = {
@@ -43,6 +52,46 @@ GALLUP_THEME_NAMES = {
     "woo": "取悦",
 }
 
+# CliftonStrengths 官方 34 主题 -> 四领域映射
+GALLUP_DOMAIN_THEMES = {
+    "executing": [
+        "achiever", "arranger", "belief", "consistency", "deliberative",
+        "discipline", "focus", "responsibility", "restorative",
+    ],
+    "influencing": [
+        "activator", "command", "communication", "competition",
+        "maximizer", "self_assurance", "significance", "woo",
+    ],
+    "relationship_building": [
+        "adaptability", "connectedness", "developer", "empathy", "harmony",
+        "includer", "individualization", "positivity", "relator",
+    ],
+    "strategic_thinking": [
+        "analytical", "context", "futuristic", "ideation", "input",
+        "intellection", "learner", "strategic",
+    ],
+}
+
+GALLUP_THEME_TO_DOMAIN = {
+    theme: domain
+    for domain, themes in GALLUP_DOMAIN_THEMES.items()
+    for theme in themes
+}
+
+
+# 旧版/非官方主题名 -> 官方 34 主题名
+GALLUP_THEME_ALIASES = {
+    "compliance": "consistency",          # 2015 年前官方旧名
+    "individuality": "individualization",
+    "fixer": "restorative",
+}
+
+
+def _normalize_theme_name(theme):
+    """题库中主题名可能用连字符 (self-assurance) 或旧版别名, 统一归一为官方下划线形式。"""
+    t = theme.replace("-", "_")
+    return GALLUP_THEME_ALIASES.get(t, t)
+
 
 def score_answers(questions, answers):
     """
@@ -68,7 +117,8 @@ def score_answers(questions, answers):
     mbti_scores = defaultdict(int)       # E, I, S, N, T, F, J, P
     holland_scores = defaultdict(int)    # R, I, A, S, E, C
     gallup_domain_scores = defaultdict(int)  # executing, influencing, relationship_building, strategic_thinking
-    gallup_themes_counter = Counter()
+    gallup_theme_weights = defaultdict(int)  # 主题 -> 加权得分
+    max_attainable = defaultdict(int)    # 维度 key -> 本卷最大可得分
 
     for ans in answers:
         qid = ans["question_id"]
@@ -81,6 +131,18 @@ def score_answers(questions, answers):
 
         option = q["options"][opt_idx]
         score = option.get("score", {})
+
+        # 该题各维度的最大可得分 (跨所有选项取最大后累加)
+        q_dim_keys = set()
+        for opt in q["options"]:
+            q_dim_keys.update(opt.get("score", {}).keys())
+        for dim_key in q_dim_keys:
+            max_attainable[dim_key] += max(
+                opt.get("score", {}).get(dim_key, 0) for opt in q["options"]
+            )
+
+        # 该题的盖洛普主题 (归一化连字符)
+        q_themes = [_normalize_theme_name(t) for t in q.get("gallup_themes", [])]
 
         for dim_key, val in score.items():
             parts = dim_key.split(".")
@@ -96,63 +158,94 @@ def score_answers(questions, answers):
                 holland_scores[sub] += val
             elif system == "gallup":
                 gallup_domain_scores[sub] += val
+                # 盖洛普主题加权: 所选选项在该领域得分 v>0 时,
+                # 该题主题中属于该领域的每个主题累加 v
+                if val > 0:
+                    for theme in q_themes:
+                        if GALLUP_THEME_TO_DOMAIN.get(theme) == sub:
+                            gallup_theme_weights[theme] += val
 
-        # 统计盖洛普主题频次
-        for theme in q.get("gallup_themes", []):
-            gallup_themes_counter[theme] += 1
+    def _normalized_exact(prefix, sub_keys):
+        """按 raw / max_attainable 计算归一化分数 (未舍入, 用于判型比较)。"""
+        raw_map = {
+            "enneagram": enneagram_scores,
+            "mbti": mbti_scores,
+            "holland": holland_scores,
+            "gallup": gallup_domain_scores,
+        }[prefix]
+        result = {}
+        for sub in sub_keys:
+            cap = max_attainable.get(f"{prefix}.{sub}", 0)
+            result[sub] = raw_map.get(sub, 0) / cap if cap > 0 else 0.0
+        return result
 
-    # === 九型人格：取最高分为主型 ===
+    def _rounded(norm_map):
+        """展示用副本 (保留3位小数); 判型一律用未舍入值。"""
+        return {k: round(v, 3) for k, v in norm_map.items()}
+
+    # === 九型人格：归一化最高分为主型, 平手取型号小的 ===
     enneagram_result = {}
     for i in range(1, 10):
         enneagram_result[f"type{i}"] = enneagram_scores.get(f"type{i}", 0)
 
-    type_keys = [f"type{i}" for i in range(1, 10)]
-    main_type_key = max(type_keys, key=lambda k: enneagram_result[k])
-    main_type_num = int(main_type_key.replace("type", ""))
+    enneagram_exact = _normalized_exact("enneagram", [f"type{i}" for i in range(1, 10)])
+    main_type_num = min(range(1, 10), key=lambda i: (-enneagram_exact[f"type{i}"], i))
     main_type_name = ENNEAGRAM_NAMES[main_type_num]
+    enneagram_normalized = _rounded(enneagram_exact)
 
-    # === MBTI：四对取高者 ===
+    # === MBTI：四对按归一化取高者, >= 取前者 (E/S/T/J 优先) ===
+    mbti_exact = _normalized_exact("mbti", list("EISNTFJP"))
     mbti_pairs = [("E", "I"), ("S", "N"), ("T", "F"), ("J", "P")]
     mbti_type = ""
     for a, b in mbti_pairs:
-        if mbti_scores.get(a, 0) >= mbti_scores.get(b, 0):
+        if mbti_exact[a] >= mbti_exact[b]:
             mbti_type += a
         else:
             mbti_type += b
+    mbti_normalized = _rounded(mbti_exact)
 
     mbti_dimensions = {p: mbti_scores.get(p, 0) for p in "EISNTFJP"}
 
-    # === 霍兰德：取前3高分组成代码 ===
+    # === 霍兰德：归一化前3组成代码, 平手按字母序 ===
     holland_all = {t: holland_scores.get(t, 0) for t in "RIASEC"}
-    holland_sorted = sorted(holland_all.items(), key=lambda x: (-x[1], x[0]))
+    holland_exact = _normalized_exact("holland", list("RIASEC"))
+    holland_sorted = sorted(holland_exact.items(), key=lambda x: (-x[1], x[0]))
     holland_code = "".join(t for t, _ in holland_sorted[:3])
+    holland_normalized = _rounded(holland_exact)
 
-    # === 盖洛普：4领域分值排序 + top5主题 ===
-    gallup_domains = {
-        d: gallup_domain_scores.get(d, 0)
-        for d in ["executing", "influencing", "relationship_building", "strategic_thinking"]
-    }
-    top_domain = max(gallup_domains, key=gallup_domains.get)
-    top_themes = [t for t, _ in gallup_themes_counter.most_common(5)]
+    # === 盖洛普：主导领域按归一化判定 (平手按领域名字母序), 加权 top5 主题 ===
+    gallup_domain_keys = ["executing", "influencing", "relationship_building", "strategic_thinking"]
+    gallup_domains = {d: gallup_domain_scores.get(d, 0) for d in gallup_domain_keys}
+    gallup_exact = _normalized_exact("gallup", gallup_domain_keys)
+    top_domain = min(gallup_domain_keys, key=lambda d: (-gallup_exact[d], d))
+    gallup_normalized = _rounded(gallup_exact)
+    top_themes = [
+        t for t, w in sorted(gallup_theme_weights.items(), key=lambda x: (-x[1], x[0]))
+        if w > 0
+    ][:5]
 
     return {
         "enneagram": {
             "main_type": main_type_num,
             "type_name": main_type_name,
             "scores": enneagram_result,
+            "normalized": enneagram_normalized,
         },
         "mbti": {
             "type": mbti_type,
             "dimensions": mbti_dimensions,
+            "normalized": mbti_normalized,
         },
         "holland": {
             "code": holland_code,
             "scores": holland_all,
+            "normalized": holland_normalized,
         },
         "gallup": {
             "top_domain": top_domain,
             "domains": gallup_domains,
             "top_themes": top_themes,
+            "normalized": gallup_normalized,
         },
     }
 
@@ -161,7 +254,7 @@ def generate_free_summary(results, profile):
     """
     根据四体系结果生成免费简评。
     """
-    name = profile.get("name", "你")
+    name = profile.get("name") or "你"
     enneagram = results["enneagram"]
     mbti = results["mbti"]
     holland = results["holland"]

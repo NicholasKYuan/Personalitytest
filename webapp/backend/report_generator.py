@@ -219,12 +219,12 @@ def generate_report_html(results, profile, ai_sections):
     html = template_path.read_text(encoding="utf-8")
 
     # --- 基础信息 ---
-    name = profile.get("name", "用户")
+    name = profile.get("name") or "探索者"
     age = profile.get("age", "")
     role_cn = ROLE_CN.get(profile.get("role", ""), profile.get("role", ""))
     purpose_cn = PURPOSE_CN.get(profile.get("purpose", ""), profile.get("purpose", ""))
     report_date = datetime.now().strftime("%Y年%m月%d日")
-    birth_date = profile.get("birth_date", "")
+    birth_date = profile.get("birth_date") or ""
 
     # --- 九型人格 ---
     en = results.get("enneagram", {})
@@ -351,8 +351,12 @@ def generate_report_html(results, profile, ai_sections):
         replacements[f"{{{{GALLUP_SCORE_{key}}}}}"] = str(score)
         replacements[f"{{{{GALLUP_PCT_{key}}}}}"] = str(_pct(score, ga_max))
 
-    # 执行替换
+    # 执行替换 (兼容 None / 非字符串值, 避免 replace 类型错误导致 500)
     for placeholder, value in replacements.items():
+        if value is None:
+            value = ""
+        elif not isinstance(value, str):
+            value = str(value)
         html = html.replace(placeholder, value)
 
     # 处理条件块 {{IF_LIFECYCLE}} ... {{/IF_LIFECYCLE}}

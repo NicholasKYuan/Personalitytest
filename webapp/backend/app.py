@@ -107,6 +107,21 @@ def strip_scores(questions: list) -> list:
     return stripped
 
 
+def validate_session_id(session_id: str) -> str:
+    """
+    校验 session_id 必须是合法 UUID。
+    非法格式一律按 404 处理，杜绝 '../xxx' 之类的路径拼接穿越。
+    """
+    try:
+        canonical = str(uuid.UUID(str(session_id)))
+    except (ValueError, AttributeError, TypeError):
+        raise HTTPException(status_code=404, detail="会话不存在")
+    # 只接受规范小写连字符形式, 拒绝 {大括号}/urn:uuid:/无连字符等宽松写法
+    if canonical != session_id:
+        raise HTTPException(status_code=404, detail="会话不存在")
+    return session_id
+
+
 def save_session(session_id: str, data: dict):
     """保存会话到 JSON 文件。"""
     path = SESSION_DIR / f"{session_id}.json"
@@ -155,6 +170,7 @@ def create_session(req: ProfileRequest):
 @app.post("/api/submit")
 def submit_answers(req: SubmitRequest):
     """提交答案：计算四体系结果，返回免费结果。"""
+    validate_session_id(req.session_id)
     try:
         session = load_session(req.session_id)
     except FileNotFoundError:
@@ -162,8 +178,11 @@ def submit_answers(req: SubmitRequest):
 
     questions = session["questions"]
 
-    # 转换 answers 为 dict 列表
-    answers = [a.model_dump() for a in req.answers]
+    # 转换 answers 为 dict 列表, 并按 question_id 去重 (保留最后一次作答),
+    # 防止重复提交同一题成倍累加分值
+    answers = list({a.question_id: a.model_dump() for a in req.answers}.values())
+    if len(answers) > len(questions):
+        raise HTTPException(status_code=400, detail="答案数量超过题目数量")
 
     # 评分
     results = score_answers(questions, answers)
@@ -185,6 +204,7 @@ def submit_answers(req: SubmitRequest):
 @app.post("/api/analyze")
 def analyze(req: AnalyzeRequest):
     """深度分析：调用 Minimax M3 生成 AI 深度解读（付费功能）。"""
+    validate_session_id(req.session_id)
     try:
         session = load_session(req.session_id)
     except FileNotFoundError:
@@ -212,6 +232,7 @@ def analyze(req: AnalyzeRequest):
 @app.get("/api/report/{session_id}")
 def get_report(session_id: str):
     """生成可下载的 HTML 报告文件。"""
+    validate_session_id(session_id)
     try:
         session = load_session(session_id)
     except FileNotFoundError:
