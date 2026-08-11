@@ -10,7 +10,7 @@ selector.py — 从融合题库为用户筛选 120 题
 输出:
     test120.json  {profile, questions[120], coverage_report, selection_reasons}
 """
-import json, argparse, random, re
+import json, argparse, hashlib, random, re
 from collections import Counter, defaultdict
 
 # purpose/current_state/role → applicable_states 映射
@@ -146,7 +146,14 @@ def _is_near_duplicate(stem1, stem2):
 
 
 def select(profile, bank, seed=None):
-    rng = random.Random(seed if seed is not None else hash(json.dumps(profile, sort_keys=True)))
+    if seed is None:
+        # 不用内置 hash(): 其带进程级哈希盐, 重启后同 profile 出题不同。
+        # 用 md5 派生稳定 seed, 保证跨进程确定性。
+        digest = hashlib.md5(
+            json.dumps(profile, sort_keys=True, ensure_ascii=False).encode()
+        ).hexdigest()
+        seed = int(digest, 16)
+    rng = random.Random(seed)
     ts = target_states(profile)
 
     # Step 1: 打分

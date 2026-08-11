@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星耀启程 · 人格测评（在线演示版）</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%2780%27 font-size=%2780%27>&#127775;</text></svg>">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部标题区 -->
+        <header class="app-header">
+            <div class="header-brand">
+                <h1 class="app-title">星耀启程</h1>
+                <span class="header-badge">人格测评</span>
+            </div>
+            <p class="app-subtitle">融合九型人格 · MBTI · 霍兰德 · 盖洛普四体系</p>
+        </header>
+
+        <!-- 演示横幅 -->
+        <div class="demo-banner">在线演示版 · 全部计算在浏览器本地完成，答案不会上传</div>
+
+        <main class="app-main">
+
+            <!-- ===================== Step 1: 个人信息填写 ===================== -->
+            <section id="step-profile" class="step step--active">
+                <div class="card">
+                    <h2 class="card-title">个人信息</h2>
+                    <p class="card-desc">请填写以下信息，系统将为您智能匹配最适合的测评题目</p>
+
+                    <form id="profile-form" novalidate>
+                        <!-- 昵称 -->
+                        <div class="form-group">
+                            <label class="form-label" for="field-name">
+                                昵称
+                                <span class="form-label-hint">（可选，将用于报告中称呼）</span>
+                            </label>
+                            <input type="text" id="field-name" class="form-input"
+                                   placeholder="请输入你的昵称" maxlength="20" autocomplete="off">
+                        </div>
+
+                        <!-- 年龄 -->
+                        <div class="form-group">
+                            <label class="form-label" for="field-age">
+                                年龄 <span class="form-required">*</span>
+                            </label>
+                            <input type="number" id="field-age" class="form-input"
+                                   placeholder="12-80" min="12" max="80" required autocomplete="off">
+                            <span class="form-error" id="error-age"></span>
+                        </div>
+
+                        <!-- 性别 -->
+                        <div class="form-group">
+                            <label class="form-label" for="field-gender">
+                                性别
+                                <span class="form-label-hint">（可选）</span>
+                            </label>
+                            <select id="field-gender" class="form-input">
+                                <option value="">请选择</option>
+                                <option value="male">男</option>
+                                <option value="female">女</option>
+                                <option value="other">其他</option>
+                                <option value="prefer-not-to-say">不愿透露</option>
+                            </select>
+                        </div>
+
+                        <!-- 当前身份 -->
+                        <div class="form-group">
+                            <label class="form-label" for="field-role">
+                                当前身份 <span class="form-required">*</span>
+                            </label>
+                            <select id="field-role" class="form-input" required>
+                                <option value="">请选择</option>
+                                <option value="student-junior-high">初中生</option>
+                                <option value="student-senior-high">高中生</option>
+                                <option value="student-undergrad">本科生</option>
+                                <option value="student-grad">硕士生</option>
+                                <option value="student-phd">博士生</option>
+                                <option value="employed">在职人士</option>
+                                <option value="freelancer">自由职业者</option>
+                                <option value="entrepreneur">创业者</option>
+                                <option value="parent">家长</option>
+                                <option value="job-seeker">求职者</option>
+                            </select>
+                            <span class="form-error" id="error-role"></span>
+                        </div>
+
+                        <!-- 测评目的 -->
+                        <div class="form-group">
+                            <label class="form-label" for="field-purpose">
+                                测评目的 <span class="form-required">*</span>
+                            </label>
+                            <select id="field-purpose" class="form-input" required>
+                                <option value="">请选择</option>
+                                <option value="career-planning">职业规划</option>
+                                <option value="study-direction">学习方向选择</option>
+                                <option value="study-abroad-planning">留学规划</option>
+                                <option value="graduate-school-planning">考研/保研规划</option>
+                                <option value="self-exploration">自我探索</option>
+                                <option value="relationship-insight">人际关系洞察</option>
+                                <option value="leadership-growth">领导力成长</option>
+                                <option value="entrepreneur-fit">创业适配评估</option>
+                                <option value="academic-stress-relief">学业压力舒缓</option>
+                                <option value="parent-understanding-child">了解孩子</option>
+                            </select>
+                            <span class="form-error" id="error-purpose"></span>
+                        </div>
+
+                        <!-- 当前状态 -->
+                        <div class="form-group">
+                            <label class="form-label" for="field-current-state">
+                                当前状态
+                                <span class="form-label-hint">（可选）</span>
+                            </label>
+                            <select id="field-current-state" class="form-input">
+                                <option value="">请选择</option>
+                                <option value="stable">稳定期 — 生活工作平稳有序</option>
+                                <option value="transition">过渡期 — 正在经历变化</option>
+                                <option value="stress">压力期 — 感到较大压力</option>
+                                <option value="stuck">迷茫期 — 方向不太清晰</option>
+                                <option value="growth-seeking">成长期 — 渴望突破和提升</option>
+                            </select>
+                        </div>
+
+                        <!-- 决策时间窗口 -->
+                        <div class="form-group">
+                            <label class="form-label" for="field-decision-horizon">
+                                决策时间窗口
+                                <span class="form-label-hint">（可选）</span>
+                            </label>
+                            <select id="field-decision-horizon" class="form-input">
+                                <option value="">请选择</option>
+                                <option value="immediate">即刻 — 马上要做决定</option>
+                                <option value="within-1-year">1年内</option>
+                                <option value="1-3-years">1-3年</option>
+                                <option value="3-plus-years">3年以上</option>
+                            </select>
+                        </div>
+
+                        <!-- 出生年月日 -->
+                        <div class="form-group">
+                            <label class="form-label" for="field-birth-date">
+                                出生年月日
+                                <span class="form-label-hint">（可选，用于传统易学结合解读）</span>
+                            </label>
+                            <input type="date" id="field-birth-date" class="form-input"
+                                   min="1940-01-01" max="2014-12-31" autocomplete="off">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg btn-full" id="btn-start">
+                            开始测评
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ===================== Step 2: 答题页 ===================== -->
+            <section id="step-quiz" class="step">
+                <!-- 进度条 -->
+                <div class="quiz-progress" id="quiz-progress">
+                    <div class="progress-info">
+                        <span class="progress-label" id="progress-text">第 1 / 120 题</span>
+                        <span class="progress-percent" id="progress-percent">1%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- 题目卡片 -->
+                <div class="card question-card" id="question-card">
+                    <div class="question-loading" id="question-loading">
+                        <div class="spinner"></div>
+                        <p>正在为您生成测评题目...</p>
+                    </div>
+
+                    <div class="question-body" id="question-body" style="display:none;">
+                        <div class="question-meta">
+                            <div class="question-category" id="question-category"></div>
+                            <span class="question-scale-badge" id="question-scale" style="display:none;"></span>
+                        </div>
+                        <h3 class="question-stem" id="question-stem"></h3>
+                        <p class="question-hint">相信你的第一直觉，没有对错之分</p>
+                        <div class="options-grid" id="options-grid">
+                            <!-- 动态生成选项按钮 -->
+                        </div>
+                        <div class="question-nav">
+                            <button class="btn btn-secondary" id="btn-prev" disabled>
+                                ← 上一题
+                            </button>
+                            <button class="btn btn-primary" id="btn-submit-quiz" style="display:none;">
+                                提交答案
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================== Step 3: 结果页 ===================== -->
+            <section id="step-results" class="step">
+                <div class="results-loading" id="results-loading">
+                    <div class="spinner spinner-lg"></div>
+                    <p>正在分析你的测评结果...</p>
+                </div>
+
+                <div class="results-content" id="results-content" style="display:none;">
+                    <h2 class="results-title">你的测评结果</h2>
+
+                    <!-- 免费区：四体系卡片 -->
+                    <div class="results-grid" id="results-grid">
+                        <!-- 九型人格 -->
+                        <div class="result-card result-card--enneagram">
+                            <div class="result-card-header">
+                                <span class="result-card-icon">🎭</span>
+                                <h3>九型人格</h3>
+                            </div>
+                            <div class="result-card-body" id="result-enneagram">
+                                <div class="result-type">
+                                    <span class="type-number" id="enneagram-number"></span>
+                                    <span class="type-name" id="enneagram-name"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MBTI -->
+                        <div class="result-card result-card--mbti">
+                            <div class="result-card-header">
+                                <span class="result-card-icon">🧩</span>
+                                <h3>MBTI</h3>
+                            </div>
+                            <div class="result-card-body" id="result-mbti">
+                                <div class="result-type-code" id="mbti-type"></div>
+                            </div>
+                        </div>
+
+                        <!-- 霍兰德 -->
+                        <div class="result-card result-card--holland">
+                            <div class="result-card-header">
+                                <span class="result-card-icon">🧭</span>
+                                <h3>霍兰德</h3>
+                            </div>
+                            <div class="result-card-body" id="result-holland">
+                                <div class="result-type-code" id="holland-code"></div>
+                            </div>
+                        </div>
+
+                        <!-- 盖洛普 -->
+                        <div class="result-card result-card--gallup">
+                            <div class="result-card-header">
+                                <span class="result-card-icon">🏆</span>
+                                <h3>盖洛普优势</h3>
+                            </div>
+                            <div class="result-card-body" id="result-gallup">
+                                <div class="gallup-domain" id="gallup-domain"></div>
+                                <div class="gallup-themes" id="gallup-themes"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 免费简述 -->
+                    <div class="free-summary card" id="free-summary-section">
+                        <h3 class="summary-title">简要解读</h3>
+                        <p class="summary-text" id="free-summary-text"></p>
+                    </div>
+
+                    <!-- 演示版说明卡片（在线版无 AI 深度解读） -->
+                    <div class="paid-section" id="paid-section">
+                        <div class="demo-card" id="demo-card">
+                            <div class="demo-card-icon">💡</div>
+                            <h3>AI 深度解读（演示版说明）</h3>
+                            <p>
+                                当前为 GitHub Pages 在线演示版，没有后端服务：选题、评分与报告
+                                全部在你的浏览器本地完成，答案不会上传到任何服务器。
+                            </p>
+                            <p>
+                                AI 深度分析（四体系交叉解读、传统易学结合解读）依赖大模型接口，
+                                需要部署完整版（FastAPI 后端）才能使用。部署方法见仓库
+                                <code>README.md</code> 中 webapp 一节的说明。
+                            </p>
+                        </div>
+
+                        <!-- 下载报告区 -->
+                        <div class="download-section" id="download-section">
+                            <button class="btn btn-primary btn-lg btn-full" id="btn-download-report">
+                                下载图文报告
+                            </button>
+                            <p class="download-hint">在浏览器本地生成可分享的完整 HTML 报告，含图表与四体系得分</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- 底部 -->
+        <footer class="app-footer">
+            <p>星耀启程 &copy; 2026 &mdash; 发现你的独特光芒</p>
+        </footer>
+    </div>
+
+    <script src="./js/engine.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
