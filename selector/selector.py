@@ -139,8 +139,8 @@ def _is_near_duplicate(stem1, stem2):
     n1, n2 = _normalize_stem(stem1), _normalize_stem(stem2)
     if n1 == n2:
         return True
-    # 包含关系
-    if len(n1) > 4 and len(n2) > 4 and (n1 in n2 or n2 in n1):
+    # 包含关系（长度门槛 >=2，避免"独处"被"独处时你更倾向"漏检）
+    if len(n1) >= 2 and len(n2) >= 2 and (n1 in n2 or n2 in n1):
         return True
     return False
 
@@ -163,10 +163,17 @@ def select(profile, bank, seed=None):
     selected_ids = set()
     for c in CATEGORIES:
         pool = by_cat.get(c, [])
-        take = pool[:10]
-        for s, it in take:
+        taken = 0
+        for s, it in pool:
+            if taken >= 10:
+                break
+            # 去重检查：不和已选题重复
+            is_dup = any(_is_near_duplicate(sel['stem'], it['stem']) for sel in selected)
+            if is_dup:
+                continue
             selected.append(it)
             selected_ids.add(it['id'])
+            taken += 1
 
     # 剩余 20 题：全局分数最高且未选，限制每类不超过 14 题
     cat_count = Counter(it['category'] for it in selected)
@@ -269,7 +276,13 @@ def select(profile, bank, seed=None):
     if rev_count < MIN_REVERSE:
         cands = [it for it in bank if it.get('reverse') and it['id'] not in selected_ids]
         cands.sort(key=lambda it: -state_match_score(it, ts))
-        for c in cands[:MIN_REVERSE - rev_count]:
+        for c in cands:
+            if sum(1 for it in selected if it.get('reverse')) >= MIN_REVERSE:
+                break
+            # 去重检查
+            is_dup = any(_is_near_duplicate(sel['stem'], c['stem']) for sel in selected)
+            if is_dup:
+                continue
             worst = min((it for it in selected if not it.get('reverse')),
                         key=lambda it: state_match_score(it, ts), default=None)
             if worst is None:
@@ -278,6 +291,37 @@ def select(profile, bank, seed=None):
             selected_ids.discard(worst['id'])
             selected.append(c)
             selected_ids.add(c['id'])
+
+    # Step 4.5: 最终去重保障 — 清除所有步骤可能引入的残留重复
+    final_dedup = 0
+    i = 0
+    while i < len(selected):
+        j = i + 1
+        while j < len(selected):
+            if _is_near_duplicate(selected[i]['stem'], selected[j]['stem']):
+                # 保留 state_match_score 更高的
+                if state_match_score(selected[i], ts) >= state_match_score(selected[j], ts):
+                    worse = selected[j]
+                else:
+                    worse = selected[i]
+                selected_ids.discard(worse['id'])
+                selected.remove(worse)
+                final_dedup += 1
+                # 找替代题
+                replacement = None
+                for s, it in sorted(scored, key=lambda x: -x[0]):
+                    if it['id'] not in selected_ids and it['id'] != worse['id']:
+                        is_dup = any(_is_near_duplicate(sel['stem'], it['stem']) for sel in selected)
+                        if not is_dup:
+                            replacement = it
+                            break
+                if replacement:
+                    selected.append(replacement)
+                    selected_ids.add(replacement['id'])
+                # 不递增 j
+            else:
+                j += 1
+        i += 1
 
     # Step 5: 排序 —— 类别交错 + 难度递增
     by_cat2 = defaultdict(list)

@@ -6,6 +6,7 @@ report_generator.py — 填充详细报告模板，生成可下载的 HTML 报�
 """
 import json
 import math
+import re
 from pathlib import Path
 from datetime import datetime
 
@@ -100,7 +101,6 @@ def _radar_points(results):
     cx, cy = 150, 150
     radius = 120
     angles = [-90, -90 + 72, -90 + 144, -90 + 216, -90 + 288]
-    import math
     points = []
     for i, angle in enumerate(angles):
         rad = math.radians(angle)
@@ -116,7 +116,6 @@ def _markdown_to_html(md):
     """简易 Markdown 转 HTML"""
     if not md:
         return ""
-    import re
     # 转义
     md = md.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
@@ -180,9 +179,8 @@ def _markdown_to_html(md):
         if in_ol:
             html_parts.append("</ol>")
             in_ol = False
-        # 加粗
-        text = stripped.replace("**", "</strong>", 1) if "**" in stripped else stripped
-        text = text.replace("**", "<strong>", 1) if "**" in text else text
+        # 加粗：先开<strong>再闭</strong>，支持一行多组
+        text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', stripped)
         html_parts.append(f"<p>{text}</p>")
 
     if in_ul:
@@ -363,7 +361,6 @@ def generate_report_html(results, profile, ai_sections):
         html = html.replace("{{/IF_LIFECYCLE}}", "")
     else:
         # 移除生命周期块
-        import re
         html = re.sub(
             r'<!--\s*\{\{IF_LIFECYCLE\}\}\s-->.*?<!--\s*\{\{/IF_LIFECYCLE\}\}\s-->',
             '', html, flags=re.DOTALL
