@@ -133,34 +133,35 @@ Page({
     const h = this.data.posterH
     const ctx = wx.createCanvasContext('posterCanvas', this)
 
-    // 背景渐变（星空）
+    // 背景渐变（暖光）
     const grad = ctx.createLinearGradient(0, 0, 0, h)
-    grad.addColorStop(0, '#1A1A2E')
-    grad.addColorStop(0.5, '#16213E')
-    grad.addColorStop(1, '#0F3460')
+    grad.addColorStop(0, '#FFF3E8')
+    grad.addColorStop(0.4, '#FAF7F2')
+    grad.addColorStop(1, '#F5F0FF')
     ctx.setFillStyle(grad)
     ctx.fillRect(0, 0, w, h)
 
-    // 星空点缀
+    // 星光点缀（彩虹色）
+    const starColors = ['245,158,11', '139,92,246', '242,84,91', '59,158,216']
     for (let i = 0; i < 60; i++) {
       const x = Math.random() * w
       const y = Math.random() * h
       const r = Math.random() * 1.6 + 0.6
       ctx.beginPath()
       ctx.arc(x, y, r, 0, Math.PI * 2)
-      ctx.setFillStyle(`rgba(255,255,255,${(Math.random() * 0.5 + 0.3).toFixed(2)})`)
+      ctx.setFillStyle(`rgba(${starColors[i % 4]},${(Math.random() * 0.4 + 0.25).toFixed(2)})`)
       ctx.fill()
     }
 
     // 标题
     ctx.setTextAlign('center')
-    ctx.setFillStyle('#FFFFFF')
+    ctx.setFillStyle('#2B2622')
     ctx.setFontSize(44)
     ctx.fillText('星耀启程 · 人格画像', w / 2, 130)
 
     // 姓名
     const name = (storage.getProfile() && storage.getProfile().name) || ''
-    ctx.setFillStyle('rgba(255,255,255,0.85)')
+    ctx.setFillStyle('#6E665E')
     ctx.setFontSize(34)
     ctx.fillText(`${name ? name + '，' : ''}这是你的人格画像`, w / 2, 210)
 
@@ -172,29 +173,29 @@ Page({
     const gap = 22
     badges.forEach((b, i) => {
       const y = startY + i * (cardH + gap)
-      // 圆角卡片
-      ctx.setFillStyle('rgba(255,255,255,0.10)')
+      // 圆角白卡
+      ctx.setFillStyle('#FFFFFF')
       this.roundRectPath(ctx, (w - cardW) / 2, y, cardW, cardH, 18)
       ctx.fill()
       // 序号圆点
       ctx.beginPath()
       ctx.arc(w / 2 - 150, y + cardH / 2, 14, 0, Math.PI * 2)
-      ctx.setFillStyle('#E94560')
+      ctx.setFillStyle('#F2545B')
       ctx.fill()
       ctx.setFillStyle('#FFFFFF')
       ctx.setFontSize(22)
       ctx.fillText(String(i + 1), w / 2 - 150, y + cardH / 2 + 8)
       // 类型文字
       ctx.setFontSize(28)
-      ctx.fillStyle = '#FFFFFF'
+      ctx.fillStyle = '#2B2622'
       ctx.fillText(b, w / 2, y + cardH / 2 + 10)
     })
 
     // 底部 slogan
-    ctx.setFillStyle('#F8A5B5')
+    ctx.setFillStyle('#F2545B')
     ctx.setFontSize(32)
     ctx.fillText('发现你的独特光芒', w / 2, h - 160)
-    ctx.setFillStyle('rgba(255,255,255,0.5)')
+    ctx.setFillStyle('#A89F95')
     ctx.setFontSize(22)
     ctx.fillText('微信扫一扫 · 开启你的人格测评', w / 2, h - 110)
 

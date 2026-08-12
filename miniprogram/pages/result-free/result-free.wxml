@@ -1,6 +1,11 @@
 <view class="page result-free-page">
   <!-- 结果头部 -->
   <view class="rf-header fade-in">
+    <view class="rf-logo">
+      <view class="logo-wrap logo-wrap--md">
+        <image src="/assets/logo.jpg" mode="aspectFit" />
+      </view>
+    </view>
     <view class="rf-title">你的人格画像</view>
     <view class="rf-subtitle">四体系融合测评结果</view>
   </view>
@@ -39,8 +44,8 @@
   <!-- 模糊预览区（付费引导） -->
   <view class="paid-preview glass-card fade-in">
     <view class="pp-head">
-      <view class="pp-title">深度报告预览</view>
-      <view class="pp-badge" wx:if="{{!paid}}">需解锁</view>
+      <view class="pp-title">🔒 深度报告预览</view>
+      <view class="pp-badge" wx:if="{{!paid}}">完整版专属</view>
     </view>
     <view class="pp-item" wx:for="{{previews}}" wx:key="title">
       <view class="pp-item-title">{{item.title}}</view>

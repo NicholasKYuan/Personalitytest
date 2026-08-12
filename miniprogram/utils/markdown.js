@@ -47,7 +47,7 @@ function render(md) {
       continue
     }
     if (inCode) {
-      html += `<p style="margin:6px 0;color:rgba(255,255,255,0.85);">${inline(t)}</p>`
+      html += `<p style="margin:6px 0;color:#6E665E;">${inline(t)}</p>`
       continue
     }
 
@@ -59,7 +59,7 @@ function render(md) {
 
     // 分割线
     if (/^(-{3,}|\*{3,}|_{3,})$/.test(t)) {
-      html += '<hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;"/>'
+      html += '<hr style="border:none;border-top:1px solid #F0EAE2;margin:16px 0;"/>'
       continue
     }
 
@@ -67,21 +67,21 @@ function render(md) {
     const h = t.match(/^(#{1,4})\s+(.+)/)
     if (h) {
       const level = h[1].length
-      html += `<h${level} style="color:#fff;font-weight:700;line-height:1.5;margin:18px 0 8px;">${inline(h[2])}</h${level}>`
+      html += `<h${level} style="color:#2B2622;font-weight:700;line-height:1.5;margin:18px 0 8px;">${inline(h[2])}</h${level}>`
       continue
     }
 
     // 引用
     const bq = t.match(/^>\s?(.*)/)
     if (bq) {
-      html += `<p style="margin:8px 0;padding:8px 14px;border-left:3px solid #E94560;background:rgba(255,255,255,0.06);border-radius:0 10px 10px 0;color:rgba(255,255,255,0.85);">${inline(bq[1])}</p>`
+      html += `<p style="margin:8px 0;padding:8px 14px;border-left:3px solid #F2545B;background:rgba(242,84,91,0.06);border-radius:0 10px 10px 0;color:#6E665E;">${inline(bq[1])}</p>`
       continue
     }
 
     // 无序列表
     const ul = t.match(/^[-*+]\s+(.+)/)
     if (ul) {
-      html += `<p style="margin:6px 0 6px 4px;color:rgba(255,255,255,0.85);"><span style="color:#E94560;">·</span> ${inline(ul[1])}</p>`
+      html += `<p style="margin:6px 0 6px 4px;color:#6E665E;"><span style="color:#F2545B;">·</span> ${inline(ul[1])}</p>`
       continue
     }
 
@@ -90,12 +90,12 @@ function render(md) {
     if (ol) {
       olCounter += 1
       const num = ol[1] !== '0' ? ol[1] : String(olCounter)
-      html += `<p style="margin:6px 0 6px 4px;color:rgba(255,255,255,0.85);"><span style="color:#E94560;">${num}.</span> ${inline(ol[2])}</p>`
+      html += `<p style="margin:6px 0 6px 4px;color:#6E665E;"><span style="color:#F2545B;">${num}.</span> ${inline(ol[2])}</p>`
       continue
     }
 
     // 普通段落
-    html += `<p style="margin:8px 0;color:rgba(255,255,255,0.85);line-height:1.8;">${inline(t)}</p>`
+    html += `<p style="margin:8px 0;color:#6E665E;line-height:1.8;">${inline(t)}</p>`
   }
 
   return html

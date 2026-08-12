@@ -8,13 +8,12 @@
     "pages/result-full/result-full"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#1A1A2E",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FAF7F2",
     "navigationBarTitleText": "星耀启程",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#1A1A2E"
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#FAF7F2"
   },
   "style": "v2",
-  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json"
 }

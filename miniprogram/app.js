@@ -11,7 +11,11 @@ App({
   },
 
   onLaunch() {
-    this.silentLogin()
+    try {
+      this.silentLogin()
+    } catch (e) {
+      console.warn('[app] 启动异常:', e)
+    }
   },
 
   /**

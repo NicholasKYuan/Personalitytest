@@ -11,6 +11,11 @@
   <block wx:else>
     <!-- 报告头 -->
     <view class="report-header fade-in">
+      <view class="rh-logo">
+        <view class="logo-wrap logo-wrap--sm">
+          <image src="/assets/logo.jpg" mode="aspectFit" />
+        </view>
+      </view>
       <view class="rh-greet">{{greet}}</view>
       <view class="rh-badges">
         <view class="rh-badge" wx:for="{{typeBadges}}" wx:key="*this">{{item}}</view>
@@ -29,6 +34,12 @@
 
     <!-- 结尾 -->
     <view class="report-end fade-in">
+      <view class="end-logo">
+        <view class="logo-wrap logo-wrap--xs">
+          <image src="/assets/logo.jpg" mode="aspectFit" />
+        </view>
+      </view>
+      <view class="end-brand">星耀启程 · 发现你的独特光芒</view>
       <view class="end-line"></view>
       <view class="end-text">以上内容由 AI 根据你的测评结果生成，仅供自我探索与职业参考，不构成任何专业诊断。</view>
     </view>

@@ -15,37 +15,19 @@
   margin-bottom: 28rpx;
 }
 
-.logo-circle {
-  width: 132rpx;
-  height: 132rpx;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #E94560, #7C3AED);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 64rpx;
-  font-weight: 800;
-  color: #fff;
-  box-shadow: 0 16rpx 56rpx rgba(233, 69, 96, 0.45), inset 0 0 24rpx rgba(255, 255, 255, 0.18);
-}
-
 .hero-title {
   font-size: 56rpx;
   font-weight: 800;
-  letter-spacing: 8rpx;
-  color: #fff;
-  text-shadow: 0 4rpx 30rpx rgba(124, 58, 237, 0.6);
+  letter-spacing: 6rpx;
+  color: var(--text-main);
 }
 
 .hero-slogan {
   margin-top: 16rpx;
   font-size: 34rpx;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--brand-coral);
   letter-spacing: 4rpx;
-  background: linear-gradient(90deg, #F59E0B, #E94560);
-  -webkit-background-clip: text;
-  color: transparent;
 }
 
 .hero-desc {
@@ -56,7 +38,7 @@
   padding: 0 24rpx;
 }
 
-/* ---------- 体系标签 ---------- */
+/* ---------- 体系标签（彩虹四色徽章） ---------- */
 .system-tags {
   display: flex;
   flex-wrap: wrap;
@@ -67,11 +49,36 @@
 .system-tag {
   padding: 12rpx 26rpx;
   border-radius: 999rpx;
-  background: rgba(233, 69, 96, 0.16);
-  border: 1rpx solid rgba(233, 69, 96, 0.4);
-  color: #F8A5B5;
   font-size: 26rpx;
   font-weight: 500;
+}
+
+/* 九型人格 → 珊瑚红 */
+.system-tag--0 {
+  color: var(--rainbow-red);
+  background: rgba(242, 84, 91, 0.10);
+  border: 1rpx solid rgba(242, 84, 91, 0.30);
+}
+
+/* MBTI → 紫罗兰 */
+.system-tag--1 {
+  color: var(--rainbow-violet);
+  background: rgba(139, 92, 246, 0.10);
+  border: 1rpx solid rgba(139, 92, 246, 0.30);
+}
+
+/* 霍兰德 → 蓝 */
+.system-tag--2 {
+  color: var(--rainbow-blue);
+  background: rgba(59, 158, 216, 0.10);
+  border: 1rpx solid rgba(59, 158, 216, 0.30);
+}
+
+/* 盖洛普 → 绿 */
+.system-tag--3 {
+  color: var(--rainbow-green);
+  background: rgba(52, 199, 123, 0.10);
+  border: 1rpx solid rgba(52, 199, 123, 0.30);
 }
 
 /* ---------- 卖点 ---------- */
@@ -86,7 +93,7 @@
 }
 
 .feature-item + .feature-item {
-  border-top: 1rpx solid rgba(255, 255, 255, 0.08);
+  border-top: 1rpx solid var(--border-light);
 }
 
 .feature-dot {
@@ -94,7 +101,7 @@
   height: 14rpx;
   border-radius: 50%;
   margin-right: 20rpx;
-  background: linear-gradient(135deg, #E94560, #7C3AED);
+  background: var(--brand-gradient);
   flex-shrink: 0;
 }
 
@@ -112,7 +119,7 @@
 .review-text {
   font-size: 28rpx;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--text-sub);
 }
 
 .review-author {
@@ -136,9 +143,10 @@
 }
 
 .stat-num {
-  font-size: 38rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: 40rpx;
+  font-weight: 800;
+  color: var(--brand-coral);
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-label {
@@ -150,7 +158,7 @@
 .stat-divider {
   width: 1rpx;
   height: 72rpx;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--border-light);
 }
 
 /* ---------- 底部 ---------- */
@@ -167,7 +175,24 @@
 
 .footer-history {
   margin-top: 16rpx;
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.55);
-  text-decoration: underline;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--brand-coral);
+}
+
+/* ---------- 阶梯入场 ---------- */
+.index-page .section:nth-of-type(3) {
+  animation-delay: 0.1s;
+}
+
+.index-page .section:nth-of-type(4) {
+  animation-delay: 0.2s;
+}
+
+.stats-section.fade-in {
+  animation-delay: 0.3s;
+}
+
+.index-page .footer.fade-in {
+  animation-delay: 0.4s;
 }

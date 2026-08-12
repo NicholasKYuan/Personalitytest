@@ -1,4 +1,11 @@
 <view class="page pay-page">
+  <!-- 顶部 logo -->
+  <view class="pay-logo fade-in">
+    <view class="logo-wrap logo-wrap--md">
+      <image src="/assets/logo.jpg" mode="aspectFit" />
+    </view>
+  </view>
+
   <!-- 顶部价格卡片 -->
   <view class="price-card glass-card fade-in">
     <view class="pc-badge">限时优惠</view>

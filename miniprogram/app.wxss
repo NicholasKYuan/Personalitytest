@@ -1,32 +1,61 @@
 /* ============================================================
-   星耀启程 · 全局样式
-   设计风格：深蓝 → 紫色渐变（星空感），卡片 + 毛玻璃
-   主色：#1A1A2E / #16213E / #0F3460 / #E94560
+   星耀启程 · 全局样式（v2.0 暖光星语）
+   基调：暖米白底 + 深墨文字 + 纯白悬浮卡片
+   品牌主渐变：珊瑚红 #F2545B → 紫罗兰 #8B5CF6
    ============================================================ */
 
 page {
-  /* 主题变量 */
-  --bg-deep: #1A1A2E;
-  --bg-mid: #16213E;
-  --bg-accent: #0F3460;
-  --accent: #E94560;
-  --accent-glow: #F25C7A;
-  --purple: #7C3AED;
-  --gold: #F59E0B;
-  --blue: #3B82F6;
-  --green: #10B981;
-  --violet: #8B5CF6;
+  /* ---- 品牌主色 ---- */
+  --brand-coral: #F2545B;
+  --brand-coral-deep: #E03E52;
+  --brand-violet: #8B5CF6;
+  --brand-gradient: linear-gradient(135deg, #F2545B 0%, #8B5CF6 100%);
 
-  --text-main: #FFFFFF;
-  --text-sub: rgba(255, 255, 255, 0.74);
-  --text-muted: rgba(255, 255, 255, 0.46);
+  /* ---- 彩虹辅助色（四体系主题色） ---- */
+  --rainbow-red: #F2545B;
+  --rainbow-orange: #F59E0B;
+  --rainbow-green: #34C77B;
+  --rainbow-blue: #3B9ED8;
+  --rainbow-violet: #8B5CF6;
+  --rainbow-purple: #C65CF0;
 
-  --card-bg: rgba(255, 255, 255, 0.07);
-  --card-border: rgba(255, 255, 255, 0.12);
+  /* ---- 背景 ---- */
+  --bg-page: #FAF7F2;
+  --bg-glow-top: #FFF3E8;
+  --bg-glow-violet: #F3EFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-soft: #FFF9F4;
+
+  /* ---- 文字 ---- */
+  --text-main: #2B2622;
+  --text-sub: #6E665E;
+  --text-muted: #A89F95;
+  --text-onbrand: #FFFFFF;
+
+  /* ---- 线条与分割 ---- */
+  --border-light: #F0EAE2;
+  --border-card: #F3EEE7;
+  --border-focus: #F2545B;
+
+  /* ---- 功能色 ---- */
+  --color-success: #34C77B;
+  --color-warning: #F59E0B;
+  --color-error: #F2545B;
+  --color-info: #3B9ED8;
+
+  /* ---- 星光点缀 ---- */
+  --star-gold: rgba(245, 158, 11, 0.55);
+  --star-violet: rgba(139, 92, 246, 0.45);
+  --star-coral: rgba(242, 84, 91, 0.45);
+
+  /* ---- 阴影 ---- */
+  --shadow-card: 0 4rpx 24rpx rgba(43, 38, 34, 0.06);
+  --shadow-card-lg: 0 12rpx 40rpx rgba(43, 38, 34, 0.10);
+  --shadow-brand: 0 10rpx 32rpx rgba(242, 84, 91, 0.28);
+  --shadow-logo: 0 8rpx 28rpx rgba(43, 38, 34, 0.10);
 
   min-height: 100vh;
-  background: linear-gradient(180deg, #1A1A2E 0%, #16213E 52%, #0F3460 100%);
-  background-attachment: fixed;
+  background: linear-gradient(180deg, var(--bg-glow-top) 0%, var(--bg-page) 28%, var(--bg-page) 100%);
   color: var(--text-main);
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
     'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
@@ -41,14 +70,27 @@ page {
   min-height: 100vh;
 }
 
-/* ---------- 毛玻璃卡片 ---------- */
+/* ---------- 卡片（原 glass-card，重定义为白卡，类名保留） ---------- */
 .glass-card {
-  background: var(--card-bg);
-  border: 1rpx solid var(--card-border);
-  border-radius: 28rpx;
-  backdrop-filter: blur(24rpx);
-  -webkit-backdrop-filter: blur(24rpx);
+  background: var(--bg-card);
+  border: 1rpx solid var(--border-card);
+  border-radius: 32rpx;
+  box-shadow: var(--shadow-card);
   box-sizing: border-box;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 32rpx;
+  border: 1rpx solid var(--border-card);
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+}
+
+/* 品牌强调卡片（付费转化等） */
+.card--brand {
+  background: linear-gradient(160deg, #FFF1F0 0%, #F5F0FF 100%);
+  border: 1rpx solid rgba(242, 84, 91, 0.18);
 }
 
 /* ---------- 标题 ---------- */
@@ -56,7 +98,20 @@ page {
   font-size: 34rpx;
   font-weight: 700;
   color: var(--text-main);
-  margin: 40rpx 0 24rpx;
+  margin: 48rpx 0 24rpx;
+  padding-left: 20rpx;
+  position: relative;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8rpx;
+  bottom: 8rpx;
+  width: 8rpx;
+  border-radius: 4rpx;
+  background: var(--brand-gradient);
 }
 
 .section-title-sm {
@@ -73,38 +128,51 @@ page {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #E94560 0%, #7C3AED 100%);
-  color: #fff;
+  background: var(--brand-gradient);
+  color: var(--text-onbrand);
   font-size: 34rpx;
   font-weight: 600;
-  border-radius: 48rpx;
+  border-radius: 999rpx;
   padding: 26rpx 0;
   line-height: 1.4;
   border: none;
-  box-shadow: 0 12rpx 40rpx rgba(233, 69, 96, 0.35);
+  box-shadow: var(--shadow-brand);
+}
+
+.btn-primary:active {
+  opacity: 0.88;
+  transform: scale(0.98);
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, #E94560 0%, #7C3AED 100%);
-  color: #fff;
+  background: var(--brand-gradient);
+  color: var(--text-onbrand);
   font-size: 34rpx;
   font-weight: 600;
-  border-radius: 48rpx;
+  border-radius: 999rpx;
   padding: 26rpx 0;
   line-height: 1.4;
   border: none;
-  box-shadow: 0 12rpx 40rpx rgba(233, 69, 96, 0.35);
+  box-shadow: var(--shadow-brand);
 }
 
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
   color: var(--text-main);
   font-size: 30rpx;
   font-weight: 500;
-  border-radius: 44rpx;
+  border-radius: 999rpx;
   padding: 22rpx 0;
   line-height: 1.4;
-  border: 1rpx solid var(--card-border);
+  border: 2rpx solid var(--border-light);
+  box-shadow: var(--shadow-card);
+}
+
+.btn-text {
+  color: var(--brand-coral);
+  font-size: 28rpx;
+  font-weight: 500;
+  background: transparent;
 }
 
 /* 微信 button 默认样式清除 */
@@ -113,11 +181,13 @@ button::after {
 }
 
 button[disabled] {
-  opacity: 0.6;
-  color: #fff !important;
+  background: #EFEAE3 !important;
+  color: var(--text-muted) !important;
+  box-shadow: none;
+  opacity: 1;
 }
 
-/* ---------- 星空装饰 ---------- */
+/* ---------- 星光装饰（浅色系微光） ---------- */
 .bg-stars {
   position: absolute;
   top: 0;
@@ -131,13 +201,51 @@ button[disabled] {
 .star {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--star-gold);
   animation: twinkle 3s ease-in-out infinite;
+}
+
+.star:nth-child(3n + 1) {
+  background: var(--star-violet);
+}
+
+.star:nth-child(3n + 2) {
+  background: var(--star-coral);
 }
 
 @keyframes twinkle {
   0%, 100% { opacity: 0.25; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.25); }
+  50% { opacity: 0.7; transform: scale(1.25); }
+}
+
+/* ---------- Logo 容器（白底圆角矩形，logo 与容器融为一体） ---------- */
+.logo-wrap {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 36rpx;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-logo);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-wrap image {
+  width: 88%;
+  height: 88%;
+}
+
+.logo-wrap--hero {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 36rpx;
+}
+
+.logo-wrap--sm {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 24rpx;
 }
 
 /* ---------- 入场动画 ---------- */

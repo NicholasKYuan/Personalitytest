@@ -18,6 +18,10 @@ const MILESTONE_MSGS = {
   80: '已完成 2/3，马上就能看到你的专属结果了'
 }
 
+/* 分类徽章四色轮换（彩虹四体系色），按题目类别确定，保证同类题同色 */
+const BADGE_CLASSES = ['badge--enneagram', 'badge--mbti', 'badge--holland', 'badge--gallup']
+const CATEGORY_KEYS = Object.keys(labels.CATEGORY_LABELS)
+
 Page({
   data: {
     currentIndex: 0,
@@ -75,6 +79,9 @@ Page({
     const currentAnswer = this.answers[q.id]
     const answeredCount = Object.keys(this.answers).length
 
+    const catIdx = CATEGORY_KEYS.indexOf(q.category)
+    const badgeClass = BADGE_CLASSES[(catIdx >= 0 ? catIdx : this.currentIndex) % BADGE_CLASSES.length]
+
     this.setData({
       currentIndex: this.currentIndex,
       question: {
@@ -84,6 +91,7 @@ Page({
       options: q.options.map((o, i) => ({ ...o, index: i })),
       categoryLabel: labels.CATEGORY_LABELS[q.category] || q.category || '综合',
       scaleLabel: labels.SCALE_LABELS[q.scale] || '',
+      badgeClass,
       selectedIndex: typeof currentAnswer === 'number' ? currentAnswer : -1,
       progressText: `第 ${this.currentIndex + 1} / ${this.total} 题`,
       progressPct: Math.max(

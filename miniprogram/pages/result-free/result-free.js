@@ -9,10 +9,10 @@ const labels = require('../../utils/labels')
 
 /* 四体系 Tab 与雷达配色 */
 const TABS = [
-  { key: 'enneagram', label: '九型人格', color: '#E94560' },
+  { key: 'enneagram', label: '九型人格', color: '#F2545B' },
   { key: 'mbti', label: 'MBTI', color: '#8B5CF6' },
-  { key: 'holland', label: '霍兰德', color: '#3B82F6' },
-  { key: 'gallup', label: '盖洛普', color: '#10B981' }
+  { key: 'holland', label: '霍兰德', color: '#3B9ED8' },
+  { key: 'gallup', label: '盖洛普', color: '#34C77B' }
 ]
 
 /** 免费报告预览片段（模糊区） */
@@ -136,7 +136,7 @@ Page({
     cards.push({
       key: 'enneagram',
       title: '九型人格',
-      color: '#E94560',
+      color: '#F2545B',
       type: `${enNum}号 · ${en.type_name || labels.ENNEAGRAM_NAMES[enNum] || ''}`,
       desc: labels.ENNEAGRAM_DESC[enNum] || ''
     })
@@ -162,7 +162,7 @@ Page({
     cards.push({
       key: 'holland',
       title: '霍兰德',
-      color: '#3B82F6',
+      color: '#3B9ED8',
       type: code || '—',
       desc: hoNames || ''
     })
@@ -173,7 +173,7 @@ Page({
     cards.push({
       key: 'gallup',
       title: '盖洛普',
-      color: '#10B981',
+      color: '#34C77B',
       type: labels.GALLUP_DOMAINS[ga.top_domain] || ga.top_domain || '—',
       desc: [labels.GALLUP_DOMAIN_DESC[ga.top_domain], themes.length ? `优势：${themes.join('、')}` : '']
         .filter(Boolean)

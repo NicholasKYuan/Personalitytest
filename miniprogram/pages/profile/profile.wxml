@@ -1,6 +1,11 @@
 <view class="page profile-page">
   <view class="profile-header fade-in">
-    <view class="ph-title">关于你</view>
+    <view class="ph-head-row">
+      <view class="logo-wrap logo-wrap--sm">
+        <image src="/assets/logo.jpg" mode="aspectFit" />
+      </view>
+      <view class="ph-title">关于你</view>
+    </view>
     <view class="ph-desc">请填写以下信息，系统将为你智能匹配最适合的测评题目。所有信息仅用于生成个性化报告，不会公开。</view>
   </view>
 

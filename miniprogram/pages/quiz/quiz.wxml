@@ -13,7 +13,7 @@
   <!-- 题目卡片 -->
   <view class="question-card glass-card fade-in" wx:if="{{question}}">
     <view class="question-meta">
-      <text class="badge-category">{{categoryLabel}}</text>
+      <text class="badge-category {{badgeClass}}">{{categoryLabel}}</text>
       <text class="badge-scale">{{scaleLabel}}</text>
     </view>
     <view class="question-stem">{{question.stem}}</view>

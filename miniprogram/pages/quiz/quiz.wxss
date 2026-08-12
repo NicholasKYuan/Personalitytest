@@ -18,9 +18,24 @@
 }
 
 .progress-label {
+  position: relative;
+  padding-left: 24rpx;
   font-size: 28rpx;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-main);
+}
+
+/* 进度数字左侧小星光点 */
+.progress-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: var(--brand-gradient);
 }
 
 .progress-percent {
@@ -32,15 +47,15 @@
 .progress-track {
   width: 100%;
   height: 12rpx;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 8rpx;
+  background: #EFE9E0;
+  border-radius: 999rpx;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #E94560, #7C3AED);
-  border-radius: 8rpx;
+  background: var(--brand-gradient);
+  border-radius: 999rpx;
   transition: width 0.4s ease;
 }
 
@@ -62,9 +77,37 @@
   border-radius: 999rpx;
   font-size: 24rpx;
   font-weight: 600;
-  color: #F8A5B5;
-  background: rgba(233, 69, 96, 0.16);
-  border: 1rpx solid rgba(233, 69, 96, 0.4);
+  color: var(--rainbow-red);
+  background: rgba(242, 84, 91, 0.10);
+  border: 1rpx solid rgba(242, 84, 91, 0.30);
+}
+
+/* 九型 → 红 */
+.badge--enneagram {
+  color: var(--rainbow-red);
+  background: rgba(242, 84, 91, 0.10);
+  border-color: rgba(242, 84, 91, 0.30);
+}
+
+/* MBTI → 紫 */
+.badge--mbti {
+  color: var(--rainbow-violet);
+  background: rgba(139, 92, 246, 0.10);
+  border-color: rgba(139, 92, 246, 0.30);
+}
+
+/* 霍兰德 → 蓝 */
+.badge--holland {
+  color: var(--rainbow-blue);
+  background: rgba(59, 158, 216, 0.10);
+  border-color: rgba(59, 158, 216, 0.30);
+}
+
+/* 盖洛普 → 绿 */
+.badge--gallup {
+  color: var(--rainbow-green);
+  background: rgba(52, 199, 123, 0.10);
+  border-color: rgba(52, 199, 123, 0.30);
 }
 
 .badge-scale {
@@ -72,16 +115,16 @@
   border-radius: 999rpx;
   font-size: 24rpx;
   font-weight: 500;
-  color: #C4B5FD;
-  background: rgba(124, 58, 237, 0.18);
-  border: 1rpx solid rgba(124, 58, 237, 0.4);
+  color: var(--rainbow-violet);
+  background: rgba(139, 92, 246, 0.10);
+  border: 1rpx solid rgba(139, 92, 246, 0.30);
 }
 
 .question-stem {
   font-size: 40rpx;
   font-weight: 700;
   line-height: 1.65;
-  color: #fff;
+  color: var(--text-main);
   margin-bottom: 16rpx;
 }
 
@@ -102,17 +145,18 @@
 .option-item {
   display: flex;
   align-items: center;
-  padding: 30rpx 26rpx;
-  background: rgba(255, 255, 255, 0.06);
-  border: 2rpx solid rgba(255, 255, 255, 0.12);
-  border-radius: 20rpx;
+  padding: 30rpx 28rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--border-light);
+  border-radius: 24rpx;
+  box-shadow: var(--shadow-card);
   transition: all 0.15s ease;
 }
 
 .option-item--selected {
-  border-color: #E94560;
-  background: rgba(233, 69, 96, 0.14);
-  box-shadow: 0 0 0 4rpx rgba(233, 69, 96, 0.12);
+  border-color: var(--brand-coral);
+  background: #FFF5F4;
+  box-shadow: 0 6rpx 20rpx rgba(242, 84, 91, 0.14);
 }
 
 .option-mark {
@@ -120,28 +164,25 @@
   height: 44rpx;
   margin-right: 20rpx;
   border-radius: 50%;
-  border: 2rpx solid rgba(255, 255, 255, 0.25);
+  border: 2rpx solid #E3DCD2;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 26rpx;
-  color: #fff;
+  color: var(--text-muted);
   flex-shrink: 0;
 }
 
 .option-item--selected .option-mark {
-  background: #E94560;
-  border-color: #E94560;
+  background: var(--brand-coral);
+  border-color: var(--brand-coral);
+  color: #fff;
 }
 
 .option-text {
   font-size: 30rpx;
   line-height: 1.55;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.option-item--selected .option-text {
-  color: #fff;
+  color: var(--text-main);
 }
 
 /* ---------- 底部导航 ---------- */
@@ -154,29 +195,32 @@
 
 .btn-prev {
   padding: 22rpx 44rpx;
-  border-radius: 44rpx;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1rpx solid rgba(255, 255, 255, 0.16);
+  border-radius: 999rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--border-light);
+  box-shadow: var(--shadow-card);
   color: var(--text-main);
-  font-size: 28rpx;
+  font-size: 30rpx;
+  font-weight: 500;
   text-align: center;
   flex-shrink: 0;
 }
 
 .btn-prev--disabled {
-  opacity: 0.35;
+  color: var(--text-muted);
+  box-shadow: none;
 }
 
 .btn-submit {
   flex: 1;
   padding: 22rpx 0;
-  border-radius: 44rpx;
-  background: linear-gradient(135deg, #E94560, #7C3AED);
-  color: #fff;
+  border-radius: 999rpx;
+  background: var(--brand-gradient);
+  color: var(--text-onbrand);
   font-size: 30rpx;
   font-weight: 600;
   text-align: center;
-  box-shadow: 0 10rpx 32rpx rgba(233, 69, 96, 0.35);
+  box-shadow: var(--shadow-brand);
 }
 
 .swipe-hint {

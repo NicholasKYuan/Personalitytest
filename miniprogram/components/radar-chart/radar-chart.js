@@ -12,7 +12,7 @@
 Component({
   properties: {
     items: { type: Array, value: [] },
-    color: { type: String, value: '#E94560' },
+    color: { type: String, value: '#F2545B' },
     maxValue: { type: Number, value: 0 },
     size: { type: Number, value: 320 }
   },
@@ -41,7 +41,7 @@ Component({
 
   methods: {
     hexToRgba(hex, alpha) {
-      let h = String(hex || '#E94560').replace('#', '')
+      let h = String(hex || '#F2545B').replace('#', '')
       if (h.length === 3) h = h.split('').map((c) => c + c).join('')
       const r = parseInt(h.substr(0, 2), 16)
       const g = parseInt(h.substr(2, 2), 16)
@@ -108,7 +108,7 @@ Component({
           else ctx.lineTo(x, y)
         }
         ctx.closePath()
-        ctx.strokeStyle = 'rgba(255,255,255,0.12)'
+        ctx.strokeStyle = 'rgba(43,38,34,0.10)'
         ctx.lineWidth = 1
         ctx.stroke()
       }
@@ -119,7 +119,7 @@ Component({
         ctx.beginPath()
         ctx.moveTo(cx, cy)
         ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a))
-        ctx.strokeStyle = 'rgba(255,255,255,0.14)'
+        ctx.strokeStyle = 'rgba(43,38,34,0.12)'
         ctx.lineWidth = 1
         ctx.stroke()
       }
@@ -157,7 +157,7 @@ Component({
       ctx.font = '11px sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
-      ctx.fillStyle = `rgba(255,255,255,${(0.55 + 0.45 * progress).toFixed(2)})`
+      ctx.fillStyle = `rgba(110,102,94,${(0.55 + 0.45 * progress).toFixed(2)})`
       for (let i = 0; i < n; i++) {
         const a = start + i * step
         const lx = cx + (radius + 16) * Math.cos(a)

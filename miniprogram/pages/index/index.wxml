@@ -14,7 +14,9 @@
   <!-- 品牌头部 -->
   <view class="hero fade-in">
     <view class="hero-logo">
-      <view class="logo-circle">星</view>
+      <view class="logo-wrap logo-wrap--hero">
+        <image src="/assets/logo.jpg" mode="aspectFit" />
+      </view>
     </view>
     <view class="hero-title">星耀启程</view>
     <view class="hero-slogan">发现你的独特光芒</view>
@@ -25,7 +27,7 @@
   <view class="section fade-in">
     <view class="section-title">四体系融合人格测评</view>
     <view class="system-tags">
-      <view class="system-tag" wx:for="{{systems}}" wx:key="*this">{{item}}</view>
+      <view class="system-tag system-tag--{{index}}" wx:for="{{systems}}" wx:key="*this">{{item}}</view>
     </view>
     <view class="feature-list glass-card">
       <view class="feature-item" wx:for="{{features}}" wx:key="title">
