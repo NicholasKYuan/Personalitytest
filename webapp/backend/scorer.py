@@ -71,6 +71,7 @@ def score_answers(questions, answers):
     gallup_themes_counter = Counter()
 
     # 统计每个维度在出卷中出现的题数（所有选项的 score key 的并集）
+    enneagram_dim_count = defaultdict(int)  # 每个九型类型出现在多少题中
     mbti_dim_count = defaultdict(int)      # 每个MBTI极出现在多少题中
     holland_dim_count = defaultdict(int)   # 每个Holland类型出现在多少题中
     gallup_dim_count = defaultdict(int)    # 每个Gallup领域出现在多少题中
@@ -84,7 +85,9 @@ def score_answers(questions, answers):
                 if len(parts) == 2:
                     q_dims.add((parts[0], parts[1]))
         for system, sub in q_dims:
-            if system == "mbti":
+            if system == "enneagram":
+                enneagram_dim_count[sub] += 1
+            elif system == "mbti":
                 mbti_dim_count[sub] += 1
             elif system == "holland":
                 holland_dim_count[sub] += 1
@@ -118,17 +121,25 @@ def score_answers(questions, answers):
             elif system == "gallup":
                 gallup_domain_scores[sub] += val
 
-        # 统计盖洛普主题频次
-        for theme in q.get("gallup_themes", []):
-            gallup_themes_counter[theme] += 1
+        # 统计盖洛普主题频次 —— 仅统计用户选中选项含 gallup 分数的题
+        selected_has_gallup = any(k.startswith("gallup.") for k in score)
+        if selected_has_gallup:
+            for theme in q.get("gallup_themes", []):
+                gallup_themes_counter[theme] += 1
 
-    # === 九型人格：取最高分为主型 ===
+    # === 九型人格：归一化后取最高分为主型 ===
+    # 归一化：得分 / 该类型在出卷中的题数，消除题库分布不均导致的偏差
     enneagram_result = {}
+    enneagram_normalized = {}
     for i in range(1, 10):
-        enneagram_result[f"type{i}"] = enneagram_scores.get(f"type{i}", 0)
+        key = f"type{i}"
+        raw = enneagram_scores.get(key, 0)
+        count = enneagram_dim_count.get(key, 0)
+        enneagram_result[key] = raw
+        enneagram_normalized[key] = raw / count if count > 0 else 0.0
 
     type_keys = [f"type{i}" for i in range(1, 10)]
-    main_type_key = max(type_keys, key=lambda k: enneagram_result[k])
+    main_type_key = max(type_keys, key=lambda k: enneagram_normalized[k])
     main_type_num = int(main_type_key.replace("type", ""))
     main_type_name = ENNEAGRAM_NAMES[main_type_num]
 
