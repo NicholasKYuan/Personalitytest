@@ -236,7 +236,7 @@ const mockApi = {
       out_trade_no: 'SXMOCK' + Date.now(),
       // paySign 固定为 MOCK_SIGN：前端据此识别「模拟支付」模式，走模拟成功流程
       pay_params: {
-        appId: 'wx7e7815dfe8498fc6',
+        appId: 'wx95a916e6c9b3d382',
         timeStamp: String(Math.floor(Date.now() / 1000)),
         nonceStr: 'mock_nonce',
         package: 'prepay_id=mock_' + sessionId,

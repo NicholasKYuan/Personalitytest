@@ -113,9 +113,22 @@
 }
 
 .sec-title {
-  font-size: 32rpx;
+  position: relative;
+  padding-left: 20rpx;
+  font-size: 34rpx;
   font-weight: 700;
   color: var(--text-main);
+}
+
+.sec-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8rpx;
+  bottom: 8rpx;
+  width: 8rpx;
+  border-radius: 4rpx;
+  background: var(--brand-gradient);
 }
 
 .sec-body {
@@ -152,7 +165,7 @@
 
 .end-brand {
   font-size: 24rpx;
-  color: var(--text-sub);
+  color: var(--text-muted);
   margin-bottom: 12rpx;
 }
 

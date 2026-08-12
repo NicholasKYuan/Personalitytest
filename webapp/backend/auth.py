@@ -16,7 +16,7 @@ import httpx
 
 from db import get_db, now, dumps, loads
 
-WX_APPID = os.getenv("WX_APPID", "wx7e7815dfe8498fc6")
+WX_APPID = os.getenv("WX_APPID", "wx95a916e6c9b3d382")
 WX_SECRET = os.getenv("WX_SECRET", "")
 CODEX2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session"
 TOKEN_TTL = 7 * 24 * 3600  # 7 天

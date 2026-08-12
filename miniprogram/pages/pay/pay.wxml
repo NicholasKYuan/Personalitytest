@@ -1,10 +1,11 @@
 <view class="page pay-page">
-  <!-- 顶部 logo -->
+  <!-- 顶部 logo + 标题 -->
   <view class="pay-logo fade-in">
     <view class="logo-wrap logo-wrap--md">
       <image src="/assets/logo.jpg" mode="aspectFit" />
     </view>
   </view>
+  <view class="pay-title fade-in">解锁你的完整人格报告</view>
 
   <!-- 顶部价格卡片 -->
   <view class="price-card glass-card fade-in">
@@ -32,7 +33,7 @@
   <!-- 权益说明 -->
   <view class="benefit-card glass-card fade-in">
     <view class="bn-item" wx:for="{{benefits}}" wx:key="*this">
-      <view class="bn-dot"></view>
+      <view class="bn-dot">✓</view>
       <view class="bn-text">{{item}}</view>
     </view>
   </view>

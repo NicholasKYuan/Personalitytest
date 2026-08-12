@@ -108,7 +108,7 @@ Component({
           else ctx.lineTo(x, y)
         }
         ctx.closePath()
-        ctx.strokeStyle = 'rgba(43,38,34,0.10)'
+        ctx.strokeStyle = '#EFE9E0'
         ctx.lineWidth = 1
         ctx.stroke()
       }
@@ -119,7 +119,7 @@ Component({
         ctx.beginPath()
         ctx.moveTo(cx, cy)
         ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a))
-        ctx.strokeStyle = 'rgba(43,38,34,0.12)'
+        ctx.strokeStyle = '#EFE9E0'
         ctx.lineWidth = 1
         ctx.stroke()
       }
@@ -135,7 +135,7 @@ Component({
         else ctx.lineTo(x, y)
       }
       ctx.closePath()
-      ctx.fillStyle = this.hexToRgba(color, 0.28)
+      ctx.fillStyle = this.hexToRgba(color, 0.18)
       ctx.fill()
       ctx.strokeStyle = color
       ctx.lineWidth = 2

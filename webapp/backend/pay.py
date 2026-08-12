@@ -29,7 +29,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 log = logging.getLogger("pay")
 
-WX_APPID = os.getenv("WX_APPID", "wx7e7815dfe8498fc6")
+WX_APPID = os.getenv("WX_APPID", "wx95a916e6c9b3d382")
 MCH_ID = os.getenv("MCH_ID", "")
 MCH_SERIAL_NO = os.getenv("MCH_SERIAL_NO", "")
 MCH_PRIVATE_KEY_PATH = os.getenv("MCH_PRIVATE_KEY_PATH", "./certs/apiclient_key.pem")
