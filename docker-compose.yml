@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    container_name: personality-api
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist database & sessions to a data volume
+      - app-data:/data
+    env_file:
+      - .env.production
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Store SQLite in the persistent volume
+      - DATABASE_URL=sqlite:////data/app.db
+      - SESSION_DIR=/data/sessions
+
+volumes:
+  app-data:
