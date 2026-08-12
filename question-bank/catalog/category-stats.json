@@ -1,152 +1,152 @@
 {
   "action-habit": {
-    "total": 151,
+    "total": 193,
     "scale": {
-      "forced-choice": 99,
-      "likert-4": 52
+      "forced-choice": 115,
+      "likert-4": 78
     },
     "difficulty": {
-      "1": 9,
-      "2": 51,
-      "3": 74,
+      "1": 20,
+      "2": 78,
+      "3": 78,
       "4": 11,
       "5": 6
     },
-    "reverse": 33
+    "reverse": 37
   },
   "conflict-choice": {
-    "total": 140,
+    "total": 164,
     "scale": {
-      "forced-choice": 98,
-      "likert-4": 42
+      "forced-choice": 110,
+      "likert-4": 54
     },
     "difficulty": {
       "1": 4,
-      "2": 22,
-      "3": 81,
-      "4": 26,
+      "2": 30,
+      "3": 92,
+      "4": 31,
       "5": 7
     },
     "reverse": 29
   },
   "decision-making": {
-    "total": 157,
+    "total": 186,
     "scale": {
-      "forced-choice": 107,
-      "likert-4": 50
-    },
-    "difficulty": {
-      "1": 5,
-      "2": 32,
-      "3": 79,
-      "4": 33,
-      "5": 8
-    },
-    "reverse": 33
-  },
-  "emotion-self": {
-    "total": 147,
-    "scale": {
-      "forced-choice": 98,
-      "likert-4": 49
-    },
-    "difficulty": {
-      "1": 5,
-      "2": 41,
-      "3": 74,
-      "4": 20,
-      "5": 7
-    },
-    "reverse": 36
-  },
-  "future-vision": {
-    "total": 148,
-    "scale": {
-      "forced-choice": 103,
-      "likert-4": 45
-    },
-    "difficulty": {
-      "1": 3,
-      "2": 33,
-      "3": 61,
-      "4": 44,
-      "5": 7
-    },
-    "reverse": 29
-  },
-  "interpersonal-relationship": {
-    "total": 154,
-    "scale": {
-      "forced-choice": 111,
-      "likert-4": 43
+      "forced-choice": 125,
+      "likert-4": 61
     },
     "difficulty": {
       "1": 8,
-      "2": 45,
+      "2": 43,
       "3": 89,
-      "4": 9,
-      "5": 3
+      "4": 38,
+      "5": 8
     },
-    "reverse": 29
+    "reverse": 35
   },
-  "learning-cognition": {
-    "total": 152,
+  "emotion-self": {
+    "total": 224,
     "scale": {
-      "forced-choice": 109,
-      "likert-4": 43
+      "forced-choice": 126,
+      "likert-4": 98
     },
     "difficulty": {
-      "1": 6,
-      "2": 43,
-      "3": 83,
+      "1": 11,
+      "2": 76,
+      "3": 106,
+      "4": 24,
+      "5": 7
+    },
+    "reverse": 50
+  },
+  "future-vision": {
+    "total": 175,
+    "scale": {
+      "forced-choice": 114,
+      "likert-4": 61
+    },
+    "difficulty": {
+      "1": 3,
+      "2": 37,
+      "3": 79,
+      "4": 49,
+      "5": 7
+    },
+    "reverse": 31
+  },
+  "interpersonal-relationship": {
+    "total": 227,
+    "scale": {
+      "forced-choice": 145,
+      "likert-4": 82
+    },
+    "difficulty": {
+      "1": 13,
+      "2": 83,
+      "3": 115,
+      "4": 13,
+      "5": 3
+    },
+    "reverse": 34
+  },
+  "learning-cognition": {
+    "total": 202,
+    "scale": {
+      "forced-choice": 129,
+      "likert-4": 73
+    },
+    "difficulty": {
+      "1": 9,
+      "2": 76,
+      "3": 97,
       "4": 13,
       "5": 7
     },
     "reverse": 32
   },
   "motivation-value": {
-    "total": 159,
+    "total": 220,
     "scale": {
-      "forced-choice": 106,
-      "likert-4": 53
+      "forced-choice": 128,
+      "likert-4": 92
     },
     "difficulty": {
       "1": 3,
-      "2": 25,
-      "3": 76,
-      "4": 46,
+      "2": 32,
+      "3": 120,
+      "4": 56,
       "5": 9
     },
-    "reverse": 34
+    "reverse": 37
   },
   "stress-response": {
-    "total": 158,
+    "total": 202,
     "scale": {
-      "forced-choice": 105,
-      "likert-4": 53
+      "forced-choice": 123,
+      "likert-4": 79
+    },
+    "difficulty": {
+      "1": 10,
+      "2": 56,
+      "3": 114,
+      "4": 16,
+      "5": 6
+    },
+    "reverse": 54
+  },
+  "work-career": {
+    "total": 207,
+    "scale": {
+      "forced-choice": 128,
+      "likert-4": 79
     },
     "difficulty": {
       "1": 6,
-      "2": 37,
-      "3": 94,
-      "4": 15,
-      "5": 6
-    },
-    "reverse": 43
-  },
-  "work-career": {
-    "total": 150,
-    "scale": {
-      "forced-choice": 104,
-      "likert-4": 46
-    },
-    "difficulty": {
-      "1": 5,
-      "2": 30,
-      "3": 91,
-      "4": 20,
+      "2": 44,
+      "3": 125,
+      "4": 28,
       "5": 4
     },
-    "reverse": 28
+    "reverse": 34
   }
 }
