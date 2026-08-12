@@ -20,6 +20,17 @@
     <view class="pc-subtitle">解锁你的完整人格深度报告（一次性付费，永久查看）</view>
   </view>
 
+  <!-- 兑换密钥 -->
+  <view class="redeem-card glass-card fade-in">
+    <view class="rd-title">有兑换码？</view>
+    <view class="rd-input-row">
+      <input class="rd-input" type="text" placeholder="输入兑换码" placeholder-class="rd-placeholder"
+        value="{{redeemInput}}" bindinput="onRedeemInput" confirm-type="done" />
+      <button class="rd-btn" bindtap="onRedeem" disabled="{{redeeming}}">{{redeeming ? '兑换中...' : '兑换'}}</button>
+    </view>
+    <view class="rd-hint">合作方赠送的兑换码可免费解锁完整报告</view>
+  </view>
+
   <!-- 六大章节价值清单 -->
   <view class="section-title">完整报告包含</view>
   <view class="chapter-card glass-card fade-in" wx:for="{{chapters}}" wx:key="title">

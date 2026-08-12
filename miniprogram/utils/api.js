@@ -140,6 +140,17 @@ function getReportDetail(sessionId) {
   return request('POST', '/api/report/detail', { session_id: sessionId })
 }
 
+/** POST /api/redeem/verify — 兑换密钥替代付费解锁报告 */
+function redeemCode(sessionId, code) {
+  if (isMock()) {
+    // mock 模式：任何非空码都成功
+    return new Promise((resolve) => {
+      setTimeout(() => resolve({ paid: true, redeemed: true }), 600)
+    })
+  }
+  return request('POST', '/api/redeem/verify', { session_id: sessionId, code })
+}
+
 /** GET /api/health — 健康检查 */
 function getHealth() {
   if (isMock()) return Promise.resolve({ status: 'ok', bank_size: 2000, mock: true })
@@ -155,5 +166,6 @@ module.exports = {
   createOrder,
   getReportStatus,
   getReportDetail,
+  redeemCode,
   getHealth
 }

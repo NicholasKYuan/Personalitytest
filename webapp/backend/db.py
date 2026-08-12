@@ -57,6 +57,19 @@ CREATE TABLE IF NOT EXISTS orders (
 );
 CREATE INDEX IF NOT EXISTS idx_orders_session    ON orders(session_id);
 CREATE INDEX IF NOT EXISTS idx_orders_openid_st  ON orders(openid, status);
+
+CREATE TABLE IF NOT EXISTS redeem_codes (
+    code             TEXT PRIMARY KEY,
+    batch_label      TEXT    DEFAULT '',
+    status           TEXT    DEFAULT 'unused',   -- unused | used | disabled
+    created_at       REAL    DEFAULT 0,
+    expires_at       REAL    DEFAULT 0,           -- 0 = 永不过期
+    used_at          REAL    DEFAULT 0,
+    used_by_openid   TEXT    DEFAULT '',
+    used_session_id  TEXT    DEFAULT '',
+    created_by       TEXT    DEFAULT ''
+);
+CREATE INDEX IF NOT EXISTS idx_redeem_status ON redeem_codes(status);
 """
 
 _lock = threading.Lock()

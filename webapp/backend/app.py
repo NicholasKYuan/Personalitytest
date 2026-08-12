@@ -25,6 +25,7 @@ import json
 import time
 import random
 import uuid
+import string as _string
 from pathlib import Path
 from typing import Optional, List
 
@@ -125,6 +126,18 @@ class OrderRequest(BaseModel):
 
 class StatusRequest(BaseModel):
     session_id: str
+
+
+class RedeemRequest(BaseModel):
+    session_id: str
+    code: str
+
+
+class RedeemGenRequest(BaseModel):
+    count: int = 1
+    batch_label: str = ""
+    expires_days: int = 0          # 0 = 永不过期
+    admin_secret: str = ""
 
 
 # ============================================================
@@ -507,6 +520,150 @@ def mock_notify(req: OrderRequest):
         )
     report_service.start_report_generation(req.session_id)
     return {"code": 0, "message": "模拟支付成功", "data": {"paid": True}}
+
+
+# ============================================================
+# 兑换密钥系统
+# ============================================================
+_REDEEM_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"  # 去除易混淆字符 O/0/I/1
+
+
+def _gen_redeem_code() -> str:
+    """生成格式 XY-XXXX-XXXX-XXXX 的兑换码。"""
+    part = lambda: "".join(random.choices(_REDEEM_CHARS, k=4))
+    return f"XY-{part()}-{part()}-{part()}"
+
+
+@app.post("/api/admin/redeem/generate")
+def admin_redeem_generate(req: RedeemGenRequest):
+    """管理员批量生成兑换密钥。
+
+    需要 ADMIN_SECRET 环境变量匹配。每个密钥可替代一次付费解锁报告。
+    """
+    expected = os.getenv("ADMIN_SECRET", "")
+    if not expected or req.admin_secret != expected:
+        raise HTTPException(status_code=403, detail="管理员密钥错误")
+    if req.count < 1 or req.count > 500:
+        raise HTTPException(status_code=400, detail="生成数量需在 1-500 之间")
+
+    expires_at = 0
+    if req.expires_days > 0:
+        expires_at = int(time.time()) + req.expires_days * 86400
+
+    codes = []
+    with database.get_db() as db:
+        for _ in range(req.count):
+            # 确保唯一
+            while True:
+                code = _gen_redeem_code()
+                exists = db.execute("SELECT 1 FROM redeem_codes WHERE code=?", (code,)).fetchone()
+                if not exists:
+                    break
+            db.execute(
+                "INSERT INTO redeem_codes (code, batch_label, status, created_at, expires_at, created_by) "
+                "VALUES (?,?,?,?,?,?)",
+                (code, req.batch_label, "unused", database.now(), expires_at, "admin"),
+            )
+            codes.append(code)
+
+    return {"code": 0, "message": f"已生成 {len(codes)} 个兑换密钥", "data": {
+        "codes": codes, "batch_label": req.batch_label,
+        "expires_at": expires_at, "count": len(codes),
+    }}
+
+
+@app.get("/api/admin/redeem/list")
+def admin_redeem_list(admin_secret: str = Query(...), status: str = Query("")):
+    """管理员查询兑换密钥列表。"""
+    expected = os.getenv("ADMIN_SECRET", "")
+    if not expected or admin_secret != expected:
+        raise HTTPException(status_code=403, detail="管理员密钥错误")
+
+    with database.get_db() as db:
+        if status:
+            rows = db.execute(
+                "SELECT * FROM redeem_codes WHERE status=? ORDER BY created_at DESC", (status,)
+            ).fetchall()
+        else:
+            rows = db.execute(
+                "SELECT * FROM redeem_codes ORDER BY created_at DESC"
+            ).fetchall()
+
+    def _fmt(row):
+        return {
+            "code": row["code"],
+            "batch_label": row["batch_label"],
+            "status": row["status"],
+            "created_at": row["created_at"],
+            "expires_at": row["expires_at"],
+            "used_at": row["used_at"],
+            "used_by_openid": row["used_by_openid"],
+            "used_session_id": row["used_session_id"],
+        }
+    return {"code": 0, "data": [_fmt(r) for r in rows]}
+
+
+@app.post("/api/redeem/verify")
+def redeem_verify(req: RedeemRequest, request: Request):
+    """用户输入兑换密钥，替代付费解锁报告。
+
+    成功后创建一笔 amount_fen=0 的 paid 订单，复用现有支付流程触发 AI 报告生成。
+    """
+    openid = _require_openid(request)
+    try:
+        session = load_session(req.session_id)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="会话不存在")
+    _owns_session(openid, session)
+
+    code = req.code.strip().upper()
+
+    # 先检查兑换码状态（优先于会话状态检查，确保错误信息准确）
+    with database.get_db() as db:
+        row = db.execute("SELECT * FROM redeem_codes WHERE code=?", (code,)).fetchone()
+        if row is None:
+            raise HTTPException(status_code=404, detail="兑换码不存在")
+        if row["status"] == "disabled":
+            raise HTTPException(status_code=403, detail="该兑换码已被停用")
+        if row["status"] == "used":
+            raise HTTPException(status_code=409, detail="该兑换码已被使用")
+        if row["expires_at"] and row["expires_at"] < time.time():
+            raise HTTPException(status_code=403, detail="该兑换码已过期")
+
+        # 幂等：已有 paid 订单则跳过
+        existing = db.execute(
+            "SELECT status FROM orders WHERE session_id=? AND openid=? ORDER BY id DESC LIMIT 1",
+            (req.session_id, openid),
+        ).fetchone()
+        if existing and existing["status"] == "paid":
+            return {"code": 0, "message": "该会话已解锁", "data": {"paid": True, "redeemed": True}}
+
+    # 再检查会话状态
+    if session.get("status") not in ("answered", "ready", "failed"):
+        raise HTTPException(status_code=400, detail="请先完成答题再兑换报告")
+
+    with database.get_db() as db:
+        # 创建 paid 订单（amount_fen=0，标记为兑换）
+        out_trade_no = _out_trade_no()
+        db.execute(
+            "INSERT INTO orders (out_trade_no, session_id, openid, amount_fen, status, "
+            "transaction_id, notify_raw, created_at, paid_at) "
+            "VALUES (?,?,?,?,?,?,?,?,?)",
+            (out_trade_no, req.session_id, openid, 0, "paid",
+             f"REDEEM-{code}", json.dumps({"redeem_code": code}), database.now(), database.now()),
+        )
+
+        # 标记兑换码已使用
+        db.execute(
+            "UPDATE redeem_codes SET status='used', used_at=?, used_by_openid=?, used_session_id=? "
+            "WHERE code=? AND status='unused'",
+            (database.now(), openid, req.session_id, code),
+        )
+
+    # 触发 AI 报告生成（与支付回调流程一致）
+    report_service.start_report_generation(req.session_id)
+
+    return {"code": 0, "message": "兑换成功，正在生成报告", "data": {"paid": True, "redeemed": True}}
 
 
 @app.post("/api/report/detail")

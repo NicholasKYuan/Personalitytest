@@ -31,7 +31,9 @@ Page({
     paying: false,
     paid: false,
     price: config.PRICE_CN,
-    originalPrice: config.PRICE_ORIGINAL_CN
+    originalPrice: config.PRICE_ORIGINAL_CN,
+    redeemInput: '',
+    redeeming: false
   },
 
   onLoad(options) {
@@ -180,6 +182,34 @@ Page({
       clearTimeout(this.pollTimer)
       this.pollTimer = null
     }
+  },
+
+  /* ============================================================
+     兑换密钥
+     ============================================================ */
+  onRedeemInput(e) {
+    this.setData({ redeemInput: e.detail.value })
+  },
+
+  onRedeem() {
+    const code = (this.data.redeemInput || '').trim()
+    if (!code) {
+      wx.showToast({ title: '请输入兑换码', icon: 'none' })
+      return
+    }
+    this.setData({ redeeming: true })
+    api
+      .redeemCode(this.sessionId, code)
+      .then((data) => {
+        if (data && data.paid) {
+          this.markPaid()
+          this.startPolling()
+        }
+      })
+      .catch((err) => {
+        this.setData({ redeeming: false })
+        wx.showToast({ title: (err && err.message) || '兑换失败，请检查兑换码', icon: 'none' })
+      })
   },
 
   /* ============================================================
