@@ -201,8 +201,7 @@ Page({
   },
 
   /* ---------- 付费引导 ---------- */
-  onUnlock(e) {
-    const key = e && e.currentTarget && e.currentTarget.dataset.key
+  onUnlock() {
     if (this.data.paid || (this.submitData && this.submitData.paid)) {
       // 已支付 → 直接进完整报告
       wx.redirectTo({ url: '/pages/result-full/result-full' })
