@@ -152,7 +152,7 @@ def select(profile, bank, seed=None):
     # Step 1: 打分
     scored = [(state_match_score(it, ts), it) for it in bank]
 
-    # Step 2: 类别配额 —— 每类先取分数最高的前 10 题
+    # Step 2: 类别配额 —— 每类先取分数最高的前 12 题（10类×12=120）
     by_cat = defaultdict(list)
     for s, it in scored:
         by_cat[it['category']].append((s, it))
@@ -165,7 +165,7 @@ def select(profile, bank, seed=None):
         pool = by_cat.get(c, [])
         taken = 0
         for s, it in pool:
-            if taken >= 10:
+            if taken >= 12:
                 break
             # 去重检查：不和已选题重复
             is_dup = any(_is_near_duplicate(sel['stem'], it['stem']) for sel in selected)
@@ -175,7 +175,7 @@ def select(profile, bank, seed=None):
             selected_ids.add(it['id'])
             taken += 1
 
-    # 剩余 20 题：全局分数最高且未选，限制每类不超过 14 题
+    # 剩余题：全局分数最高且未选，限制每类不超过 14 题
     cat_count = Counter(it['category'] for it in selected)
     remaining = sorted(scored, key=lambda x: -x[0])
     for s, it in remaining:
@@ -202,10 +202,13 @@ def select(profile, bank, seed=None):
                 better_idx = j if state_match_score(selected[i], ts) < state_match_score(selected[j], ts) else i
                 selected_ids.discard(worse['id'])
                 selected.remove(worse)
-                # 找替代题
+                # 找替代题（检查类别不超限）
                 replacement = None
+                cat_count_now = Counter(sel['category'] for sel in selected)
                 for s, it in sorted(scored, key=lambda x: -x[0]):
                     if it['id'] not in selected_ids and it['id'] != worse['id']:
+                        if cat_count_now.get(it['category'], 0) >= 15:
+                            continue
                         # 检查替代题不和已有题重复
                         is_dup = False
                         for sel in selected:
@@ -271,6 +274,42 @@ def select(profile, bank, seed=None):
     try_fix(ho_ok, lambda it: any(k.startswith('holland.') for o in it['options'] for k in o['score']))
     try_fix(ga_ok, lambda it: any(k.startswith('gallup.') for o in it['options'] for k in o['score']))
 
+    # Step 3.5: 霍兰德覆盖专项补足 —— 确保至少 25 题含 Holland 分数
+    MIN_HOLLAND_QUESTIONS = 25
+    def holland_question_count(sel):
+        return sum(1 for it in sel if any(k.startswith('holland.') for o in it['options'] for k in o['score']))
+    
+    while holland_question_count(selected) < MIN_HOLLAND_QUESTIONS:
+        # 找含 Holland 分数且未选入的题
+        holland_cands = [
+            it for it in bank
+            if it['id'] not in selected_ids
+            and any(k.startswith('holland.') for o in it['options'] for k in o['score'])
+        ]
+        holland_cands.sort(key=lambda it: -state_match_score(it, ts))
+        if not holland_cands:
+            break
+        # 找不含 Holland 分数且可替换的题（从类别最多的中选）
+        cat_count_now = Counter(it['category'] for it in selected)
+        replaceable = [
+            it for it in selected
+            if not any(k.startswith('holland.') for o in it['options'] for k in o['score'])
+            and cat_count_now[it['category']] > 8
+        ]
+        if not replaceable:
+            break
+        worst = min(replaceable, key=lambda it: state_match_score(it, ts))
+        best_holland = holland_cands[0]
+        # 去重检查
+        is_dup = any(_is_near_duplicate(sel['stem'], best_holland['stem']) for sel in selected)
+        if is_dup:
+            holland_cands.pop(0)
+            continue
+        selected.remove(worst)
+        selected_ids.discard(worst['id'])
+        selected.append(best_holland)
+        selected_ids.add(best_holland['id'])
+
     # Step 4: reverse 题补足
     rev_count = sum(1 for it in selected if it.get('reverse'))
     if rev_count < MIN_REVERSE:
@@ -307,10 +346,13 @@ def select(profile, bank, seed=None):
                 selected_ids.discard(worse['id'])
                 selected.remove(worse)
                 final_dedup += 1
-                # 找替代题
+                # 找替代题（检查类别不超限）
                 replacement = None
+                cat_count_now = Counter(sel['category'] for sel in selected)
                 for s, it in sorted(scored, key=lambda x: -x[0]):
                     if it['id'] not in selected_ids and it['id'] != worse['id']:
+                        if cat_count_now.get(it['category'], 0) >= 15:
+                            continue
                         is_dup = any(_is_near_duplicate(sel['stem'], it['stem']) for sel in selected)
                         if not is_dup:
                             replacement = it
@@ -323,7 +365,118 @@ def select(profile, bank, seed=None):
                 j += 1
         i += 1
 
-    # Step 5: 排序 —— 类别交错 + 难度递增
+    # Step 4.7: 类别均衡 —— 每类限制在 8~15 题之间
+    CAT_MIN = 8
+    CAT_MAX = 15
+    while True:
+        cat_counts = Counter(it['category'] for it in selected)
+        over_cats = [c for c, n in cat_counts.items() if n > CAT_MAX]
+        under_cats = [c for c in CATEGORIES if cat_counts.get(c, 0) < CAT_MIN]
+        if not over_cats or not under_cats:
+            break
+        swapped = False
+        for over_cat in over_cats:
+            over_qs = sorted(
+                [it for it in selected if it['category'] == over_cat],
+                key=lambda it: state_match_score(it, ts)
+            )
+            for q_over in over_qs:
+                if cat_counts.get(over_cat, 0) <= CAT_MAX:
+                    break
+                found_replacement = False
+                for under_cat in under_cats:
+                    if cat_counts.get(under_cat, 0) >= CAT_MIN:
+                        continue
+                    cands = [
+                        it for it in bank
+                        if it['id'] not in selected_ids
+                        and it['category'] == under_cat
+                    ]
+                    cands.sort(key=lambda it: -state_match_score(it, ts))
+                    for c in cands:
+                        is_dup = any(_is_near_duplicate(sel['stem'], c['stem']) for sel in selected)
+                        if not is_dup:
+                            selected.remove(q_over)
+                            selected_ids.discard(q_over['id'])
+                            selected.append(c)
+                            selected_ids.add(c['id'])
+                            cat_counts[over_cat] -= 1
+                            cat_counts[under_cat] = cat_counts.get(under_cat, 0) + 1
+                            swapped = True
+                            found_replacement = True
+                            break
+                    if found_replacement:
+                        break
+        if not swapped:
+            break
+
+    # Step 5: 难度分布校准 —— 向目标 {2:36, 3:54, 4:24, 5:6} 靠拢
+    DIFF_TARGET = {2: 36, 3: 54, 4: 24, 5: 6}  # 难度1不进卷
+
+    # 5a: 替换难度1的题（同时检查类别不超限）
+    diff1_qs = [it for it in selected if it.get('difficulty', 0) == 1]
+    for q1 in diff1_qs:
+        cands = [
+            it for it in bank
+            if it['id'] not in selected_ids
+            and it.get('difficulty', 0) in (2, 3)
+        ]
+        cands.sort(key=lambda it: (-state_match_score(it, ts), it.get('difficulty', 0)))
+        cat_count_now = Counter(sel['category'] for sel in selected)
+        for c in cands:
+            if cat_count_now.get(c['category'], 0) >= 15:
+                continue
+            is_dup = any(_is_near_duplicate(sel['stem'], c['stem']) for sel in selected)
+            if not is_dup:
+                selected.remove(q1)
+                selected_ids.discard(q1['id'])
+                selected.append(c)
+                selected_ids.add(c['id'])
+                break
+
+    # 5b: 校准难度2-5的分布（同时检查类别不超限）
+    for _ in range(3):
+        diff_dist = Counter(it.get('difficulty', 0) for it in selected)
+        for d in [2, 3, 4, 5]:
+            current = diff_dist.get(d, 0)
+            target = DIFF_TARGET[d]
+            if current <= target:
+                continue
+            over_qs = sorted(
+                [it for it in selected if it.get('difficulty', 0) == d],
+                key=lambda it: state_match_score(it, ts)
+            )
+            for q_over in over_qs:
+                if diff_dist.get(d, 0) <= target:
+                    break
+                found_replacement = False
+                for d_under in [2, 3, 4, 5]:
+                    if diff_dist.get(d_under, 0) >= DIFF_TARGET[d_under]:
+                        continue
+                    cands = [
+                        it for it in bank
+                        if it['id'] not in selected_ids
+                        and it.get('difficulty', 0) == d_under
+                    ]
+                    cands.sort(key=lambda it: -state_match_score(it, ts))
+                    cat_count_now = Counter(sel['category'] for sel in selected)
+                    for c in cands:
+                        if cat_count_now.get(c['category'], 0) >= 15:
+                            continue
+                        is_dup = any(_is_near_duplicate(sel['stem'], c['stem']) for sel in selected)
+                        if not is_dup:
+                            selected.remove(q_over)
+                            selected_ids.discard(q_over['id'])
+                            selected.append(c)
+                            selected_ids.add(c['id'])
+                            diff_dist[d] -= 1
+                            diff_dist[d_under] = diff_dist.get(d_under, 0) + 1
+                            found_replacement = True
+                            break
+                    if found_replacement:
+                        break
+
+    # Step 6: 排序 —— 类别交错 + 难度递增
     by_cat2 = defaultdict(list)
     for it in selected:
         by_cat2[it['category']].append(it)
