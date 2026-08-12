@@ -1,0 +1,65 @@
+<view class="page result-free-page">
+  <!-- 结果头部 -->
+  <view class="rf-header fade-in">
+    <view class="rf-title">你的人格画像</view>
+    <view class="rf-subtitle">四体系融合测评结果</view>
+  </view>
+
+  <!-- 雷达图（可切换体系） -->
+  <view class="radar-card glass-card fade-in">
+    <view class="radar-tabs">
+      <view
+        class="radar-tab {{activeTab === item.key ? 'radar-tab--active' : ''}}"
+        wx:for="{{tabs}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="onTabTap">{{item.label}}</view>
+    </view>
+    <radar-chart wx:if="{{radarItems.length}}" items="{{radarItems}}" color="{{radarColor}}" size="{{radarSize}}" />
+  </view>
+
+  <!-- 四体系结果卡片 -->
+  <view class="cards-grid">
+    <view class="result-card glass-card fade-in" wx:for="{{cards}}" wx:key="key">
+      <view class="rc-header">
+        <view class="rc-title">{{item.title}}</view>
+      </view>
+      <view class="rc-type" style="color: {{item.color}};">{{item.type}}</view>
+      <view class="rc-desc">{{item.desc}}</view>
+      <view class="rc-cta" data-key="{{item.key}}" bindtap="onUnlock">查看深度解读</view>
+    </view>
+  </view>
+
+  <!-- 免费简述 -->
+  <view class="free-summary glass-card fade-in">
+    <view class="fs-title">免费解读</view>
+    <view class="fs-text">{{freeSummary}}</view>
+  </view>
+
+  <!-- 模糊预览区（付费引导） -->
+  <view class="paid-preview glass-card fade-in">
+    <view class="pp-head">
+      <view class="pp-title">深度报告预览</view>
+      <view class="pp-badge" wx:if="{{!paid}}">需解锁</view>
+    </view>
+    <view class="pp-item" wx:for="{{previews}}" wx:key="title">
+      <view class="pp-item-title">{{item.title}}</view>
+      <view class="pp-item-text {{paid ? '' : 'blurred'}}">{{item.text}}</view>
+    </view>
+  </view>
+
+  <!-- 付费转化区 -->
+  <view class="cta-card glass-card fade-in">
+    <view class="cta-quote">上面只是冰山一角。你的完整报告包含四体系深度解读、交叉协同分析、AI 个性化发展建议和职业方向推荐，共 9000+ 字。解锁后，你将真正理解自己的人格全貌。</view>
+    <view class="cta-value">
+      <view class="cv-item" wx:for="{{values}}" wx:key="*this">
+        <view class="cv-dot"></view>
+        <view class="cv-text">{{item}}</view>
+      </view>
+    </view>
+    <button class="btn-accent btn-block" bindtap="onUnlock">{{paid ? '查看完整深度报告' : '解锁完整深度报告 29.9 元'}}</button>
+    <view class="cta-trust">{{paid ? '报告已解锁，点击查看你的完整人格画像' : '已有 8,200+ 人解锁了深度报告'}}</view>
+  </view>
+
+  <button class="share-btn" open-type="share">分享给好友，TA 也能免费测评</button>
+</view>

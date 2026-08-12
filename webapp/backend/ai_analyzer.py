@@ -153,6 +153,10 @@ def generate_detailed_analysis(results, profile):
             "sections": [{"title": "...", "content": "..."}, ...]
         }
     """
+    # AI_MOCK=1：返回固定章节，便于无 API Key / 联调时走通完整流程
+    if os.getenv("AI_MOCK", "0") == "1":
+        return _mock_sections(results, profile)
+
     user_prompt = _build_user_prompt(results, profile)
 
     try:
@@ -189,6 +193,22 @@ def generate_detailed_analysis(results, profile):
         "detailed_analysis": content,
         "sections": sections,
     }
+
+
+def _mock_sections(results, profile):
+    """AI_MOCK 模式下的固定章节（结构对齐真实输出，供联调/测试）。"""
+    en = results.get("enneagram", {})
+    mb = results.get("mbti", {})
+    ho = results.get("holland", {})
+    ga = results.get("gallup", {})
+    sections = [
+        {"title": "九型人格深度解读", "content": f"## {en.get('main_type')}号 {en.get('type_name')}\n\n你的九型主型为 **{en.get('main_type')}号 {en.get('type_name')}**（MOCK）。"},
+        {"title": "MBTI深度分析", "content": f"## {mb.get('type')}\n\n你的 MBTI 类型为 **{mb.get('type')}**（MOCK）。"},
+        {"title": "霍兰德职业方向", "content": f"## {ho.get('code')}\n\n你的霍兰德代码为 **{ho.get('code')}**（MOCK）。"},
+        {"title": "盖洛普优势发挥", "content": f"## {ga.get('top_domain')}\n\n主导领域 **{ga.get('top_domain')}**（MOCK）。"},
+        {"title": "四体系综合交叉解读", "content": "## 综合视角\n\n四体系综合解读（MOCK）。"},
+    ]
+    return {"detailed_analysis": "", "sections": sections}
 
 
 def _split_sections(markdown_text):

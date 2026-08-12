@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/profile/profile",
+    "pages/quiz/quiz",
+    "pages/result-free/result-free",
+    "pages/pay/pay",
+    "pages/result-full/result-full"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1A1A2E",
+    "navigationBarTitleText": "星耀启程",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#1A1A2E"
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

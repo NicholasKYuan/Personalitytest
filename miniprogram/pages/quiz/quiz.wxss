@@ -1,0 +1,187 @@
+.quiz-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ---------- 进度条 ---------- */
+.progress-section {
+  margin-bottom: 32rpx;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.progress-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.progress-percent {
+  font-size: 26rpx;
+  color: var(--text-sub);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-track {
+  width: 100%;
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #E94560, #7C3AED);
+  border-radius: 8rpx;
+  transition: width 0.4s ease;
+}
+
+/* ---------- 题目卡片 ---------- */
+.question-card {
+  padding: 40rpx 32rpx;
+  flex: 1;
+}
+
+.question-meta {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 24rpx;
+}
+
+.badge-category {
+  padding: 8rpx 22rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #F8A5B5;
+  background: rgba(233, 69, 96, 0.16);
+  border: 1rpx solid rgba(233, 69, 96, 0.4);
+}
+
+.badge-scale {
+  padding: 8rpx 22rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #C4B5FD;
+  background: rgba(124, 58, 237, 0.18);
+  border: 1rpx solid rgba(124, 58, 237, 0.4);
+}
+
+.question-stem {
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 1.65;
+  color: #fff;
+  margin-bottom: 16rpx;
+}
+
+.question-hint {
+  font-size: 24rpx;
+  color: var(--text-muted);
+  margin-bottom: 36rpx;
+  letter-spacing: 2rpx;
+}
+
+/* ---------- 选项 ---------- */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 22rpx;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 26rpx;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2rpx solid rgba(255, 255, 255, 0.12);
+  border-radius: 20rpx;
+  transition: all 0.15s ease;
+}
+
+.option-item--selected {
+  border-color: #E94560;
+  background: rgba(233, 69, 96, 0.14);
+  box-shadow: 0 0 0 4rpx rgba(233, 69, 96, 0.12);
+}
+
+.option-mark {
+  width: 44rpx;
+  height: 44rpx;
+  margin-right: 20rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.option-item--selected .option-mark {
+  background: #E94560;
+  border-color: #E94560;
+}
+
+.option-text {
+  font-size: 30rpx;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.option-item--selected .option-text {
+  color: #fff;
+}
+
+/* ---------- 底部导航 ---------- */
+.bottom-nav {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin-top: 36rpx;
+}
+
+.btn-prev {
+  padding: 22rpx 44rpx;
+  border-radius: 44rpx;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1rpx solid rgba(255, 255, 255, 0.16);
+  color: var(--text-main);
+  font-size: 28rpx;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.btn-prev--disabled {
+  opacity: 0.35;
+}
+
+.btn-submit {
+  flex: 1;
+  padding: 22rpx 0;
+  border-radius: 44rpx;
+  background: linear-gradient(135deg, #E94560, #7C3AED);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 10rpx 32rpx rgba(233, 69, 96, 0.35);
+}
+
+.swipe-hint {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--text-muted);
+}

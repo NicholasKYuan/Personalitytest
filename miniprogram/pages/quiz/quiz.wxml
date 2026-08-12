@@ -1,0 +1,41 @@
+<view class="page quiz-page" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+  <!-- 进度条 -->
+  <view class="progress-section">
+    <view class="progress-info">
+      <text class="progress-label">{{progressText}}</text>
+      <text class="progress-percent">{{progressPct}}%</text>
+    </view>
+    <view class="progress-track">
+      <view class="progress-fill" style="width: {{progressPct}}%;"></view>
+    </view>
+  </view>
+
+  <!-- 题目卡片 -->
+  <view class="question-card glass-card fade-in" wx:if="{{question}}">
+    <view class="question-meta">
+      <text class="badge-category">{{categoryLabel}}</text>
+      <text class="badge-scale">{{scaleLabel}}</text>
+    </view>
+    <view class="question-stem">{{question.stem}}</view>
+    <view class="question-hint">相信你的第一直觉，没有对错之分</view>
+
+    <view class="options">
+      <view
+        wx:for="{{options}}"
+        wx:key="index"
+        class="option-item {{selectedIndex === index ? 'option-item--selected' : ''}}"
+        data-index="{{index}}"
+        bindtap="onOptionTap">
+        <view class="option-mark">{{selectedIndex === index ? '✓' : ''}}</view>
+        <view class="option-text">{{item.text}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航 -->
+  <view class="bottom-nav">
+    <view class="btn-prev {{currentIndex === 0 ? 'btn-prev--disabled' : ''}}" bindtap="onPrev">上一题</view>
+    <view class="btn-submit" wx:if="{{showSubmit}}" bindtap="onSubmitTap">提交答案，查看结果</view>
+    <view class="swipe-hint" wx:else>左右滑动切换题目</view>
+  </view>
+</view>

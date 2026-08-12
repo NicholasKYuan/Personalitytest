@@ -12,6 +12,8 @@ build/
 
 # 会话数据（用户隐私）
 webapp/backend/sessions/*.json
+webapp/backend/app.db*
+webapp/backend/certs/
 
 # 测试产物
 test_report.html

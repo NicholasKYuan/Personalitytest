@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "你的人格画像",
+  "usingComponents": {
+    "radar-chart": "/components/radar-chart/radar-chart"
+  }
+}

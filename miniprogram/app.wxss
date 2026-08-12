@@ -1,0 +1,160 @@
+/* ============================================================
+   星耀启程 · 全局样式
+   设计风格：深蓝 → 紫色渐变（星空感），卡片 + 毛玻璃
+   主色：#1A1A2E / #16213E / #0F3460 / #E94560
+   ============================================================ */
+
+page {
+  /* 主题变量 */
+  --bg-deep: #1A1A2E;
+  --bg-mid: #16213E;
+  --bg-accent: #0F3460;
+  --accent: #E94560;
+  --accent-glow: #F25C7A;
+  --purple: #7C3AED;
+  --gold: #F59E0B;
+  --blue: #3B82F6;
+  --green: #10B981;
+  --violet: #8B5CF6;
+
+  --text-main: #FFFFFF;
+  --text-sub: rgba(255, 255, 255, 0.74);
+  --text-muted: rgba(255, 255, 255, 0.46);
+
+  --card-bg: rgba(255, 255, 255, 0.07);
+  --card-border: rgba(255, 255, 255, 0.12);
+
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1A1A2E 0%, #16213E 52%, #0F3460 100%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+/* ---------- 页面通用容器 ---------- */
+.page {
+  padding: 32rpx 32rpx 80rpx;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+/* ---------- 毛玻璃卡片 ---------- */
+.glass-card {
+  background: var(--card-bg);
+  border: 1rpx solid var(--card-border);
+  border-radius: 28rpx;
+  backdrop-filter: blur(24rpx);
+  -webkit-backdrop-filter: blur(24rpx);
+  box-sizing: border-box;
+}
+
+/* ---------- 标题 ---------- */
+.section-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 40rpx 0 24rpx;
+}
+
+.section-title-sm {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 16rpx;
+}
+
+/* ---------- 按钮 ---------- */
+.btn-block {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #E94560 0%, #7C3AED 100%);
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 600;
+  border-radius: 48rpx;
+  padding: 26rpx 0;
+  line-height: 1.4;
+  border: none;
+  box-shadow: 0 12rpx 40rpx rgba(233, 69, 96, 0.35);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #E94560 0%, #7C3AED 100%);
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 600;
+  border-radius: 48rpx;
+  padding: 26rpx 0;
+  line-height: 1.4;
+  border: none;
+  box-shadow: 0 12rpx 40rpx rgba(233, 69, 96, 0.35);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  font-size: 30rpx;
+  font-weight: 500;
+  border-radius: 44rpx;
+  padding: 22rpx 0;
+  line-height: 1.4;
+  border: 1rpx solid var(--card-border);
+}
+
+/* 微信 button 默认样式清除 */
+button::after {
+  border: none;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  color: #fff !important;
+}
+
+/* ---------- 星空装饰 ---------- */
+.bg-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 900rpx;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.25); }
+}
+
+/* ---------- 入场动画 ---------- */
+.fade-in {
+  animation: fadeSlideIn 0.5s ease both;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(24rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 通用文本 ---------- */
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-sub {
+  color: var(--text-sub);
+}

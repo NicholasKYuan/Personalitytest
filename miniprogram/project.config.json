@@ -1,0 +1,26 @@
+{
+  "appid": "wx7a0e273595082f84",
+  "compileType": "miniprogram",
+  "projectname": "xingyao-personality-miniprogram",
+  "miniprogramRoot": "./",
+  "libVersion": "3.4.6",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "coverView": true,
+    "ignoreUploadUnusedFiles": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

@@ -1,0 +1,49 @@
+<view class="page pay-page">
+  <!-- 顶部价格卡片 -->
+  <view class="price-card glass-card fade-in">
+    <view class="pc-badge">限时优惠</view>
+    <view class="pc-price-row">
+      <view class="pc-price">
+        <text class="pc-currency">¥</text>
+        <text class="pc-amount">29.9</text>
+      </view>
+      <view class="pc-original">原价 ¥49.9</view>
+    </view>
+    <view class="pc-subtitle">解锁你的完整人格深度报告（一次性付费，永久查看）</view>
+  </view>
+
+  <!-- 六大章节价值清单 -->
+  <view class="section-title">完整报告包含</view>
+  <view class="chapter-card glass-card fade-in" wx:for="{{chapters}}" wx:key="title">
+    <view class="ch-head">
+      <view class="ch-title">{{item.title}}</view>
+      <view class="ch-words">{{item.words}}</view>
+    </view>
+    <view class="ch-preview blurred">{{item.preview}}</view>
+  </view>
+
+  <!-- 权益说明 -->
+  <view class="benefit-card glass-card fade-in">
+    <view class="bn-item" wx:for="{{benefits}}" wx:key="*this">
+      <view class="bn-dot"></view>
+      <view class="bn-text">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 底部支付栏 -->
+  <view class="pay-bar">
+    <view class="pb-info">
+      <view class="pb-total">
+        <text class="pb-currency">¥</text>
+        <text class="pb-amount">29.9</text>
+      </view>
+      <view class="pb-original">¥49.9</view>
+    </view>
+    <button class="pb-btn" bindtap="onPay" loading="{{paying}}" disabled="{{paying || paid}}">
+      {{paid ? '已解锁 · 查看报告' : (paying ? '正在支付...' : '微信支付 29.9 元')}}
+    </button>
+  </view>
+
+  <!-- 信任背书 -->
+  <view class="trust-line">支付安全由微信支付保障 · 未支付可随时关闭</view>
+</view>

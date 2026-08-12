@@ -1,0 +1,76 @@
+<view class="page profile-page">
+  <view class="profile-header fade-in">
+    <view class="ph-title">关于你</view>
+    <view class="ph-desc">请填写以下信息，系统将为你智能匹配最适合的测评题目。所有信息仅用于生成个性化报告，不会公开。</view>
+  </view>
+
+  <!-- 昵称（可选） -->
+  <view class="form-card glass-card fade-in">
+    <view class="form-row">
+      <view class="form-label">昵称<text class="form-optional">（可选）</text></view>
+      <input class="form-input" type="text" placeholder="用于报告中称呼你" maxlength="20" value="{{name}}" bindinput="onNameInput" placeholder-class="ph" />
+    </view>
+
+    <!-- 年龄（必填） -->
+    <view class="form-row">
+      <view class="form-label">年龄<text class="form-required"> *</text></view>
+      <input class="form-input" type="number" placeholder="12 - 80 岁" maxlength="2" value="{{age}}" bindinput="onAgeInput" placeholder-class="ph" />
+      <view class="form-error" wx:if="{{errors.age}}">{{errors.age}}</view>
+    </view>
+
+    <!-- 性别（可选） -->
+    <view class="form-row">
+      <view class="form-label">性别<text class="form-optional">（可选）</text></view>
+      <picker mode="selector" range="{{genders}}" range-key="label" value="{{genderIndex}}" bindchange="onGenderChange">
+        <view class="form-picker {{genderIndex === 0 ? 'form-picker--placeholder' : ''}}">{{genders[genderIndex].label || '请选择'}}</view>
+      </picker>
+    </view>
+
+    <!-- 当前身份（必填） -->
+    <view class="form-row">
+      <view class="form-label">当前身份<text class="form-required"> *</text></view>
+      <picker mode="selector" range="{{roles}}" range-key="label" value="{{roleIndex}}" bindchange="onRoleChange">
+        <view class="form-picker {{roleIndex === 0 ? 'form-picker--placeholder' : ''}}">{{roles[roleIndex].label || '请选择你的当前身份'}}</view>
+      </picker>
+      <view class="form-error" wx:if="{{errors.role}}">{{errors.role}}</view>
+    </view>
+
+    <!-- 测评目的（必填） -->
+    <view class="form-row">
+      <view class="form-label">测评目的<text class="form-required"> *</text></view>
+      <picker mode="selector" range="{{purposes}}" range-key="label" value="{{purposeIndex}}" bindchange="onPurposeChange">
+        <view class="form-picker {{purposeIndex === 0 ? 'form-picker--placeholder' : ''}}">{{purposes[purposeIndex].label || '请选择本次测评的目的'}}</view>
+      </picker>
+      <view class="form-error" wx:if="{{errors.purpose}}">{{errors.purpose}}</view>
+    </view>
+
+    <!-- 当前状态（可选） -->
+    <view class="form-row">
+      <view class="form-label">当前状态<text class="form-optional">（可选）</text></view>
+      <picker mode="selector" range="{{states}}" range-key="label" value="{{stateIndex}}" bindchange="onStateChange">
+        <view class="form-picker {{stateIndex === 0 ? 'form-picker--placeholder' : ''}}">{{states[stateIndex].label || '请选择（可选）'}}</view>
+      </picker>
+    </view>
+
+    <!-- 决策时间窗口（可选） -->
+    <view class="form-row">
+      <view class="form-label">决策时间窗口<text class="form-optional">（可选）</text></view>
+      <picker mode="selector" range="{{horizons}}" range-key="label" value="{{horizonIndex}}" bindchange="onHorizonChange">
+        <view class="form-picker {{horizonIndex === 0 ? 'form-picker--placeholder' : ''}}">{{horizons[horizonIndex].label || '请选择（可选）'}}</view>
+      </picker>
+    </view>
+
+    <!-- 出生年月日（可选） -->
+    <view class="form-row">
+      <view class="form-label">出生年月日<text class="form-optional">（可选，用于传统易学结合解读）</text></view>
+      <picker mode="date" start="1940-01-01" end="2020-12-31" value="{{birthDate}}" bindchange="onBirthChange">
+        <view class="form-picker {{birthDate ? '' : 'form-picker--placeholder'}}">{{birthDate || '请选择（可选）'}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="profile-footer">
+    <button class="btn-primary btn-block" bindtap="onSubmit" disabled="{{submitting}}">{{submitting ? '生成中...' : '生成我的专属题目'}}</button>
+    <view class="privacy-tip">你的信息将被严格保密，仅用于生成测评报告</view>
+  </view>
+</view>

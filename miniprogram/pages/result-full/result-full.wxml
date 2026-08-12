@@ -1,0 +1,51 @@
+<view class="page report-page">
+  <!-- 加载中：AI 生成报告 -->
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-ring"></view>
+    <view class="loading-title">AI 正在生成深度分析报告</view>
+    <view class="loading-sub">正在整合你的四体系测评结果…</view>
+    <view class="loading-tip">通常需要 1-3 分钟，请稍候</view>
+  </view>
+
+  <!-- 报告正文 -->
+  <block wx:else>
+    <!-- 报告头 -->
+    <view class="report-header fade-in">
+      <view class="rh-greet">{{greet}}</view>
+      <view class="rh-badges">
+        <view class="rh-badge" wx:for="{{typeBadges}}" wx:key="*this">{{item}}</view>
+      </view>
+      <view class="rh-meta" wx:if="{{generatedAt}}">生成于 {{generatedAt}}</view>
+    </view>
+
+    <!-- 六大章节 -->
+    <view class="section-card glass-card fade-in" wx:for="{{sections}}" wx:key="title" wx:for-item="sec">
+      <view class="sec-head">
+        <view class="sec-index">{{sec.index}}</view>
+        <view class="sec-title">{{sec.title}}</view>
+      </view>
+      <rich-text class="sec-body" nodes="{{sec.html}}"></rich-text>
+    </view>
+
+    <!-- 结尾 -->
+    <view class="report-end fade-in">
+      <view class="end-line"></view>
+      <view class="end-text">以上内容由 AI 根据你的测评结果生成，仅供自我探索与职业参考，不构成任何专业诊断。</view>
+    </view>
+  </block>
+
+  <!-- 分享海报画布（离屏渲染） -->
+  <canvas
+    wx:if="{{!loading}}"
+    canvas-id="posterCanvas"
+    class="poster-canvas"
+    style="width:{{posterW}}px;height:{{posterH}}px;position:fixed;left:9999px;top:0;"
+  ></canvas>
+
+  <!-- 底部操作栏 -->
+  <view class="action-bar" wx:if="{{!loading}}">
+    <button class="ab-btn" bindtap="onPoster">生成海报</button>
+    <button class="ab-btn" open-type="share">转发好友</button>
+    <button class="ab-btn ab-btn--ghost" bindtap="onSaveReport">保存报告</button>
+  </view>
+</view>

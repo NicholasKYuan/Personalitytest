@@ -1,0 +1,3 @@
+<view class="radar-chart">
+  <canvas type="2d" id="radarCanvas" class="radar-canvas" style="width:{{size}}px;height:{{size}}px;"></canvas>
+</view>

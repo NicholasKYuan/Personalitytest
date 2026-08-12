@@ -1,0 +1,205 @@
+.pay-page {
+  padding-bottom: 220rpx;
+}
+
+/* ---------- 顶部价格卡 ---------- */
+.price-card {
+  padding: 40rpx 32rpx;
+  margin-bottom: 32rpx;
+  text-align: center;
+  background: linear-gradient(160deg, rgba(233, 69, 96, 0.18), rgba(124, 58, 237, 0.18));
+  border-color: rgba(233, 69, 96, 0.35);
+  position: relative;
+}
+
+.pc-badge {
+  display: inline-block;
+  padding: 6rpx 22rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #E94560, #F59E0B);
+  margin-bottom: 20rpx;
+}
+
+.pc-price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.pc-price {
+  display: flex;
+  align-items: baseline;
+}
+
+.pc-currency {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.pc-amount {
+  font-size: 96rpx;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 6rpx 30rpx rgba(233, 69, 96, 0.5);
+}
+
+.pc-original {
+  font-size: 28rpx;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.pc-subtitle {
+  font-size: 24rpx;
+  color: var(--text-sub);
+}
+
+/* ---------- 章节价值清单 ---------- */
+.chapter-card {
+  padding: 26rpx 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.ch-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.ch-title {
+  font-size: 29rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ch-words {
+  font-size: 22rpx;
+  color: #F8A5B5;
+  background: rgba(233, 69, 96, 0.14);
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+  flex-shrink: 0;
+}
+
+.ch-preview {
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ch-preview.blurred {
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+  user-select: none;
+}
+
+/* ---------- 权益说明 ---------- */
+.benefit-card {
+  padding: 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.bn-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 14rpx;
+}
+
+.bn-item:last-child {
+  margin-bottom: 0;
+}
+
+.bn-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E94560, #7C3AED);
+  margin-top: 14rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.bn-text {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---------- 底部固定支付栏 ---------- */
+.pay-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+  background: rgba(26, 26, 46, 0.96);
+  backdrop-filter: blur(24rpx);
+  -webkit-backdrop-filter: blur(24rpx);
+  border-top: 1rpx solid rgba(255, 255, 255, 0.1);
+}
+
+.pb-info {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+  flex-shrink: 0;
+}
+
+.pb-total {
+  display: flex;
+  align-items: baseline;
+}
+
+.pb-currency {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #F8A5B5;
+}
+
+.pb-amount {
+  font-size: 52rpx;
+  font-weight: 800;
+  color: #fff;
+}
+
+.pb-original {
+  font-size: 24rpx;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.pb-btn {
+  flex: 1;
+  background: linear-gradient(135deg, #E94560 0%, #7C3AED 100%);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 48rpx;
+  padding: 24rpx 0;
+  line-height: 1.4;
+  border: none;
+  box-shadow: 0 12rpx 40rpx rgba(233, 69, 96, 0.35);
+  margin: 0;
+}
+
+.pb-btn[disabled] {
+  opacity: 0.6;
+  color: #fff !important;
+}
+
+.trust-line {
+  margin-top: 24rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: var(--text-muted);
+}
