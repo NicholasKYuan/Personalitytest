@@ -23,10 +23,100 @@
       <view class="rh-meta" wx:if="{{generatedAt}}">生成于 {{generatedAt}}</view>
     </view>
 
+    <!-- ===== 可视化数据区 ===== -->
+
+    <!-- 四体系人格快照 -->
+    <view class="snapshot-grid" wx:if="{{snapshotCards.length}}">
+      <view class="snapshot-card fade-in" wx:for="{{snapshotCards}}" wx:key="key"
+            style="border-top-color: {{item.color}};">
+        <view class="sc-icon">{{item.icon}}</view>
+        <view class="sc-title">{{item.title}}</view>
+        <view class="sc-type" style="color: {{item.color}};">{{item.type}}</view>
+        <view class="sc-desc">{{item.desc}}</view>
+      </view>
+    </view>
+
+    <!-- MBTI 维度进度条 -->
+    <view class="viz-card glass-card fade-in" wx:if="{{mbtiBars.length}}">
+      <view class="viz-head">
+        <view class="viz-icon">🧩</view>
+        <view class="viz-title">MBTI 认知维度</view>
+      </view>
+      <view class="mbti-bars">
+        <view class="mbti-bar" wx:for="{{mbtiBars}}" wx:key="left">
+          <view class="mbti-label">
+            <text class="mbti-letter {{item.left === item.dominant ? 'mbti-letter--active' : ''}}">{{item.left}}</text>
+            <text class="mbti-vs">{{item.leftPct}}%</text>
+          </view>
+          <view class="mbti-track">
+            <view class="mbti-fill mbti-fill--left" style="width: {{item.leftPct}}%;"></view>
+            <view class="mbti-divider"></view>
+            <view class="mbti-fill mbti-fill--right" style="width: {{item.rightPct}}%;"></view>
+          </view>
+          <view class="mbti-label">
+            <text class="mbti-vs">{{item.rightPct}}%</text>
+            <text class="mbti-letter {{item.right === item.dominant ? 'mbti-letter--active' : ''}}">{{item.right}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 霍兰德六型条形图 -->
+    <view class="viz-card glass-card fade-in" wx:if="{{hollandBars.length}}">
+      <view class="viz-head">
+        <view class="viz-icon">🎯</view>
+        <view class="viz-title">霍兰德职业兴趣</view>
+      </view>
+      <view class="holland-bars">
+        <view class="holland-bar" wx:for="{{hollandBars}}" wx:key="code">
+          <view class="hb-label">
+            <text class="hb-code">{{item.code}}</text>
+            <text class="hb-name">{{item.name}}</text>
+          </view>
+          <view class="hb-track">
+            <view class="hb-fill" style="width: {{item.pct}}%;"></view>
+          </view>
+          <view class="hb-score">{{item.score}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 盖洛普四领域条形图 -->
+    <view class="viz-card glass-card fade-in" wx:if="{{gallupBars.length}}">
+      <view class="viz-head">
+        <view class="viz-icon">💪</view>
+        <view class="viz-title">盖洛普优势领域</view>
+      </view>
+      <view class="gallup-bars">
+        <view class="gallup-bar" wx:for="{{gallupBars}}" wx:key="key">
+          <view class="gb-label">
+            <view class="gb-dot" style="background: {{item.color}};"></view>
+            <text class="gb-name">{{item.name}}</text>
+          </view>
+          <view class="gb-track">
+            <view class="gb-fill" style="width: {{item.pct}}%; background: {{item.color}};"></view>
+          </view>
+          <view class="gb-score">{{item.score}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== AI 深度分析章节 ===== -->
+
+    <!-- 章节分割线 -->
+    <view class="section-divider fade-in">
+      <view class="sd-line"></view>
+      <view class="sd-text">AI 深度分析</view>
+      <view class="sd-line"></view>
+    </view>
+
     <!-- 六大章节 -->
     <view class="section-card glass-card fade-in" wx:for="{{sections}}" wx:key="title" wx:for-item="sec">
       <view class="sec-head">
-        <view class="sec-index">{{sec.index}}</view>
+        <view class="sec-icon-wrap">
+          <view class="sec-icon">{{sec.icon}}</view>
+          <view class="sec-index">{{sec.index}}</view>
+        </view>
         <view class="sec-title">{{sec.title}}</view>
       </view>
       <rich-text class="sec-body" nodes="{{sec.html}}"></rich-text>

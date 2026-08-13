@@ -11,6 +11,25 @@ const storage = require('../../utils/storage')
 const labels = require('../../utils/labels')
 const markdown = require('../../utils/markdown')
 
+// 章节图标映射
+const SECTION_ICONS = {
+  '人格': '🎭', '类型': '🎭', '画像': '🎭', '特质': '🎭',
+  '优势': '💎', '天赋': '💎', '潜能': '💎', '力量': '💎',
+  '职业': '🧭', '发展': '🧭', '方向': '🧭', '事业': '🧭',
+  '关系': '🤝', '人际': '🤝', '社交': '🤝', '团队': '🤝',
+  '成长': '🌱', '建议': '🌱', '行动': '🌱', '提升': '🌱',
+  '挑战': '⚡', '风险': '⚡', '盲区': '⚡', '弱点': '⚡',
+  '协同': '🔗', '融合': '🔗', '交叉': '🔗', '整合': '🔗',
+  '总结': '✨', '结语': '✨', '未来': '✨', '展望': '✨',
+}
+
+function pickIcon(title) {
+  for (const key in SECTION_ICONS) {
+    if (title && title.includes(key)) return SECTION_ICONS[key]
+  }
+  return '📖'
+}
+
 Page({
   data: {
     loading: true,
@@ -18,6 +37,12 @@ Page({
     typeBadges: [],
     generatedAt: '',
     sections: [],
+    // 可视化数据
+    snapshotCards: [],   // 四体系快照卡片
+    mbtiBars: [],        // MBTI 维度进度条
+    hollandBars: [],     // 霍兰德六型条形图
+    gallupBars: [],      // 盖洛普四领域条形图
+    hasResults: false,   // 是否有可视化数据
     posterW: 600,
     posterH: 900
   },
@@ -92,13 +117,17 @@ Page({
      渲染报告
      ============================================================ */
   renderReport(report) {
+    const r = report.results || {}
+
+    // 章节渲染（加图标）
     const sections = (report.sections || []).map((s, i) => ({
       index: String(i + 1).padStart(2, '0'),
       title: s.title || `章节 ${i + 1}`,
+      icon: pickIcon(s.title),
       html: markdown.render(s.content)
     }))
 
-    const r = report.results || {}
+    // 类型标签
     const badges = []
     if (r.enneagram) {
       badges.push(`${r.enneagram.main_type}号 ${r.enneagram.type_name || labels.ENNEAGRAM_NAMES[r.enneagram.main_type] || ''}`)
@@ -112,13 +141,147 @@ Page({
     const profile = report.profile || storage.getProfile() || {}
     const name = profile.name || '你'
 
+    // 四体系快照卡片
+    const snapshotCards = this._buildSnapshotCards(r)
+
+    // MBTI 维度进度条
+    const mbtiBars = this._buildMbtiBars(r.mbti)
+
+    // 霍兰德条形图
+    const hollandBars = this._buildHollandBars(r.holland)
+
+    // 盖洛普条形图
+    const gallupBars = this._buildGallupBars(r.gallup)
+
     this.setData({
       loading: false,
       greet: `你好，${name}！这是你的完整人格画像`,
       typeBadges: badges.filter(Boolean),
       generatedAt: report.generated_at || '',
-      sections
+      sections,
+      snapshotCards,
+      mbtiBars,
+      hollandBars,
+      gallupBars,
+      hasResults: snapshotCards.length > 0
     })
+  },
+
+  /* ---- 四体系快照卡片 ---- */
+  _buildSnapshotCards(r) {
+    const cards = []
+
+    if (r.mbti) {
+      const type = r.mbti.type || ''
+      cards.push({
+        key: 'mbti',
+        icon: '🧩',
+        title: 'MBTI',
+        type: type,
+        desc: labels.MBTI_DESC[type] || '独特的人格类型',
+        color: '#3B9DEA'
+      })
+    }
+
+    if (r.enneagram) {
+      const num = r.enneagram.main_type
+      const name = r.enneagram.type_name || labels.ENNEAGRAM_NAMES[num] || ''
+      cards.push({
+        key: 'enneagram',
+        icon: '🔢',
+        title: '九型人格',
+        type: `${num}号 ${name}`,
+        desc: labels.ENNEAGRAM_DESC[num] || '',
+        color: '#F2545B'
+      })
+    }
+
+    if (r.holland) {
+      const code = r.holland.code || ''
+      const top = code.charAt(0)
+      cards.push({
+        key: 'holland',
+        icon: '🎯',
+        title: '霍兰德',
+        type: code,
+        desc: labels.HOLLAND_DESC[top] || '',
+        color: '#F59E0B'
+      })
+    }
+
+    if (r.gallup) {
+      const domain = r.gallup.top_domain || ''
+      cards.push({
+        key: 'gallup',
+        icon: '💪',
+        title: '盖洛普',
+        type: labels.GALLUP_DOMAINS[domain] || domain,
+        desc: labels.GALLUP_DOMAIN_DESC[domain] || '',
+        color: '#8B5CF6'
+      })
+    }
+
+    return cards
+  },
+
+  /* ---- MBTI 维度进度条 ---- */
+  _buildMbtiBars(mbti) {
+    if (!mbti || !mbti.dimensions) return []
+    const d = mbti.dimensions
+    const pairs = [
+      { left: 'E', right: 'I', leftVal: d.E || 0, rightVal: d.I || 0, leftLabel: '外向', rightLabel: '内向' },
+      { left: 'S', right: 'N', leftVal: d.S || 0, rightVal: d.N || 0, leftLabel: '实感', rightLabel: '直觉' },
+      { left: 'T', right: 'F', leftVal: d.T || 0, rightVal: d.F || 0, leftLabel: '思考', rightLabel: '情感' },
+      { left: 'J', right: 'P', leftVal: d.J || 0, rightVal: d.P || 0, leftLabel: '判断', rightLabel: '感知' },
+    ]
+    return pairs.map(p => {
+      const total = p.leftVal + p.rightVal || 1
+      const leftPct = Math.round((p.leftVal / total) * 100)
+      const rightPct = 100 - leftPct
+      const dominant = p.leftVal >= p.rightVal ? p.left : p.right
+      return { ...p, leftPct, rightPct, dominant }
+    })
+  },
+
+  /* ---- 霍兰德六型条形图 ---- */
+  _buildHollandBars(holland) {
+    if (!holland || !holland.scores) return []
+    const names = labels.HOLLAND_NAMES
+    const s = holland.scores
+    const max = Math.max(...Object.values(s), 1)
+    const items = [
+      { code: 'S', name: names.S, score: s.S || 0 },
+      { code: 'A', name: names.A, score: s.A || 0 },
+      { code: 'E', name: names.E, score: s.E || 0 },
+      { code: 'C', name: names.C, score: s.C || 0 },
+      { code: 'I', name: names.I, score: s.I || 0 },
+      { code: 'R', name: names.R, score: s.R || 0 },
+    ]
+    // 按分数降序
+    items.sort((a, b) => b.score - a.score)
+    return items.map(item => ({
+      ...item,
+      pct: Math.round((item.score / max) * 100)
+    }))
+  },
+
+  /* ---- 盖洛普四领域条形图 ---- */
+  _buildGallupBars(gallup) {
+    if (!gallup || !gallup.domains) return []
+    const names = labels.GALLUP_DOMAINS
+    const d = gallup.domains
+    const max = Math.max(...Object.values(d), 1)
+    const items = [
+      { key: 'relationship_building', name: names.relationship_building, score: d.relationship_building || 0, color: '#F2545B' },
+      { key: 'strategic_thinking', name: names.strategic_thinking, score: d.strategic_thinking || 0, color: '#3B9DEA' },
+      { key: 'executing', name: names.executing, score: d.executing || 0, color: '#F59E0B' },
+      { key: 'influencing', name: names.influencing, score: d.influencing || 0, color: '#8B5CF6' },
+    ]
+    items.sort((a, b) => b.score - a.score)
+    return items.map(item => ({
+      ...item,
+      pct: Math.round((item.score / max) * 100)
+    }))
   },
 
   /* ============================================================

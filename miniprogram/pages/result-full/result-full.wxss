@@ -89,6 +89,267 @@
   color: var(--text-muted);
 }
 
+/* ===== 四体系快照卡片 ===== */
+.snapshot-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-bottom: 32rpx;
+}
+
+.snapshot-card {
+  width: calc(50% - 10rpx);
+  box-sizing: border-box;
+  padding: 28rpx 24rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  border-top: 6rpx solid #F2545B;
+  box-shadow: 0 4rpx 20rpx rgba(43, 38, 34, 0.05);
+}
+
+.sc-icon {
+  font-size: 44rpx;
+  margin-bottom: 12rpx;
+}
+
+.sc-title {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin-bottom: 8rpx;
+  letter-spacing: 1rpx;
+}
+
+.sc-type {
+  font-size: 36rpx;
+  font-weight: 800;
+  margin-bottom: 10rpx;
+  line-height: 1.3;
+}
+
+.sc-desc {
+  font-size: 23rpx;
+  line-height: 1.6;
+  color: var(--text-sub);
+}
+
+/* ===== 可视化卡片通用 ===== */
+.viz-card {
+  padding: 32rpx 28rpx;
+  margin-bottom: 28rpx;
+}
+
+.viz-head {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 24rpx;
+}
+
+.viz-icon {
+  font-size: 36rpx;
+}
+
+.viz-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* ===== MBTI 维度进度条 ===== */
+.mbti-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 22rpx;
+}
+
+.mbti-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.mbti-label {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  min-width: 80rpx;
+}
+
+.mbti-letter {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.mbti-letter--active {
+  color: var(--brand-coral);
+  font-weight: 800;
+}
+
+.mbti-vs {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  min-width: 50rpx;
+  text-align: center;
+}
+
+.mbti-track {
+  flex: 1;
+  height: 16rpx;
+  display: flex;
+  border-radius: 8rpx;
+  overflow: hidden;
+  background: #F0EAE2;
+}
+
+.mbti-fill--left {
+  background: linear-gradient(90deg, #3B9DEA, #5BAFEF);
+  transition: width 0.6s ease;
+}
+
+.mbti-fill--right {
+  background: linear-gradient(90deg, #F5C5C8, #F2545B);
+  transition: width 0.6s ease;
+}
+
+.mbti-divider {
+  width: 2rpx;
+  background: #FFFFFF;
+  flex-shrink: 0;
+}
+
+/* ===== 霍兰德条形图 ===== */
+.holland-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.holland-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.hb-label {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  width: 130rpx;
+  flex-shrink: 0;
+}
+
+.hb-code {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #F59E0B;
+  width: 36rpx;
+}
+
+.hb-name {
+  font-size: 24rpx;
+  color: var(--text-sub);
+}
+
+.hb-track {
+  flex: 1;
+  height: 20rpx;
+  background: #F5F0E8;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+
+.hb-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #F59E0B, #FBBF24);
+  border-radius: 10rpx;
+  transition: width 0.6s ease;
+}
+
+.hb-score {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-main);
+  min-width: 40rpx;
+  text-align: right;
+}
+
+/* ===== 盖洛普条形图 ===== */
+.gallup-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.gallup-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.gb-label {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.gb-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gb-name {
+  font-size: 25rpx;
+  color: var(--text-sub);
+}
+
+.gb-track {
+  flex: 1;
+  height: 22rpx;
+  background: #F5F0E8;
+  border-radius: 11rpx;
+  overflow: hidden;
+}
+
+.gb-fill {
+  height: 100%;
+  border-radius: 11rpx;
+  transition: width 0.6s ease;
+}
+
+.gb-score {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-main);
+  min-width: 40rpx;
+  text-align: right;
+}
+
+/* ===== 章节分割线 ===== */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin: 40rpx 0 32rpx;
+}
+
+.sd-line {
+  flex: 1;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, #E0D8CC, transparent);
+}
+
+.sd-text {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 4rpx;
+}
+
 /* ---------- 章节卡片 ---------- */
 .section-card {
   padding: 32rpx;
@@ -99,25 +360,46 @@
   display: flex;
   align-items: center;
   gap: 16rpx;
-  margin-bottom: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.sec-icon-wrap {
+  position: relative;
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(242,84,91,0.08), rgba(139,92,246,0.08));
+  border-radius: 16rpx;
+}
+
+.sec-icon {
+  font-size: 36rpx;
 }
 
 .sec-index {
-  font-size: 22rpx;
+  position: absolute;
+  bottom: -6rpx;
+  right: -6rpx;
+  font-size: 18rpx;
   font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, #F2545B, #8B5CF6);
-  padding: 6rpx 18rpx;
+  padding: 2rpx 10rpx;
   border-radius: 999rpx;
-  flex-shrink: 0;
+  min-width: 28rpx;
+  text-align: center;
 }
 
 .sec-title {
   position: relative;
-  padding-left: 20rpx;
+  padding-left: 16rpx;
   font-size: 34rpx;
   font-weight: 700;
   color: var(--text-main);
+  flex: 1;
 }
 
 .sec-title::before {
