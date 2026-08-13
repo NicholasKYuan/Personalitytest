@@ -288,7 +288,18 @@ def _split_sections(markdown_text):
             seen[key] = sec
     sections = list(seen.values())
 
-    return sections
+    # 合并短章节：内容 < 150 字的章节合并到前一个章节
+    # 这解决 AI 输出过多 ## 子标题（核心特质、内在动力等各自独立）的问题
+    merged = []
+    for sec in sections:
+        if merged and len(sec["content"]) < 150:
+            # 短章节：追加到前一个章节
+            prev = merged[-1]
+            prev["content"] += "\n\n" + "### " + sec["title"] + "\n\n" + sec["content"]
+        else:
+            merged.append(sec)
+
+    return merged
 
 
 def _strip_preface(text):
