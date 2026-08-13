@@ -413,16 +413,30 @@ def my_sessions(request: Request):
     max_cutoff = now_ts - SESSION_TTL_PAID  # 最长保留30天，先查出再按付费状态过滤
 
     with database.get_db() as db:
-        rows = db.execute(
-            """SELECT s.session_id, s.status, s.free_summary, s.created_at,
-                      MAX(CASE WHEN o.status='paid' THEN 1 ELSE 0 END) AS has_paid
-               FROM sessions s
-               LEFT JOIN orders o ON o.session_id = s.session_id
-               WHERE s.openid = %s AND s.created_at > %s AND s.status IN ('answered','ready','failed')
-               GROUP BY s.session_id
-               ORDER BY s.created_at DESC""",
-            (openid, max_cutoff),
-        ).fetchall()
+        # mock 模式下所有 mock_openid_* 视为同一用户
+        pay_mock = os.getenv("PAY_MOCK", "0") == "1"
+        if pay_mock and openid.startswith("mock_openid_"):
+            rows = db.execute(
+                """SELECT s.session_id, s.status, s.free_summary, s.created_at,
+                          MAX(CASE WHEN o.status='paid' THEN 1 ELSE 0 END) AS has_paid
+                   FROM sessions s
+                   LEFT JOIN orders o ON o.session_id = s.session_id
+                   WHERE s.openid LIKE 'mock_openid_%%' AND s.created_at > %s AND s.status IN ('answered','ready','failed')
+                   GROUP BY s.session_id
+                   ORDER BY s.created_at DESC""",
+                (max_cutoff,),
+            ).fetchall()
+        else:
+            rows = db.execute(
+                """SELECT s.session_id, s.status, s.free_summary, s.created_at,
+                          MAX(CASE WHEN o.status='paid' THEN 1 ELSE 0 END) AS has_paid
+                   FROM sessions s
+                   LEFT JOIN orders o ON o.session_id = s.session_id
+                   WHERE s.openid = %s AND s.created_at > %s AND s.status IN ('answered','ready','failed')
+                   GROUP BY s.session_id
+                   ORDER BY s.created_at DESC""",
+                (openid, max_cutoff),
+            ).fetchall()
 
     records = []
     for r in rows:
