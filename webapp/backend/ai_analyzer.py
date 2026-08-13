@@ -191,20 +191,26 @@ def _build_user_prompt(results, profile):
     # === 第 5 节：四体系综合交叉解读（无论有无出生日期都输出） ===
     prompt += """
 ## 5. 四体系综合交叉解读
-请务必使用以下结构（先输出 markdown 表格，再写融合洞察段落）：
+请按以下结构输出，每个体系一个 ### 子标题，内含协同信号和张力提示两个要点，最后写融合洞察段落。
 
-### 协同矩阵
-请使用 markdown 表格严格按以下 4 列结构输出，每个体系各占一行：
+### 九型
+- 协同信号：1-2句概括九型结果与其他体系相互呼应的亮点
+- 张力提示：1句指出九型维度的潜在盲点/代价
 
-| 体系 | 主结果 | 协同信号 | 张力提示 |
-|---|---|---|---|
-| 九型 | {如: 2号助人（+3号翅膀）} | 1-2句概括与其他体系相互呼应的亮点 | 1句指出该体系内部的潜在盲点/代价 |
-| MBTI | {如: ISFP（Fi 主导）} | 1-2句协同信号 | 1句张力提示 |
-| 霍兰德 | {如: EIS} | 1-2句协同信号 | 1句张力提示 |
-| 盖洛普 | {如: 关系建立（共情+交往）} | 1-2句协同信号 | 1句张力提示 |
+### MBTI
+- 协同信号：1-2句概括MBTI结果与其他体系相互呼应的亮点
+- 张力提示：1句指出MBTI维度的潜在盲点/代价
+
+### 霍兰德
+- 协同信号：1-2句概括霍兰德结果与其他体系相互呼应的亮点
+- 张力提示：1句指出霍兰德维度的潜在盲点/代价
+
+### 盖洛普
+- 协同信号：1-2句概括盖洛普结果与其他体系相互呼应的亮点
+- 张力提示：1句指出盖洛普维度的潜在盲点/代价
 
 ### 融合洞察
-（在表格之后输出 2-3 段，150-250 字，先给出一个主题句概括"你是什么样的 X"，再展开为什么四体系都指向同一方向，最后给一句具体的实践建议）
+（输出 2-3 段，150-250 字，先给出一个主题句概括"你是什么样的 X"，再展开为什么四体系都指向同一方向，最后给一句具体的实践建议）
 """
 
     if birth_date:
@@ -212,6 +218,26 @@ def _build_user_prompt(results, profile):
 
     prompt += "\n请确保报告专业、深入、有个性化洞察。"
     return prompt
+
+
+def _is_low_quality(sections, content):
+    """检查 AI 输出质量是否过低，需要重试。"""
+    # 章节数量不足（应至少有 4 个章节）
+    if len(sections) < 4:
+        return True
+    # 总字数过少（应至少 1500 字）
+    total_chars = sum(len(s["content"]) for s in sections)
+    if total_chars < 1500:
+        return True
+    # 中文字符占比过低（英文大纲/笔记）
+    chinese_chars = len(re.findall(r'[\u4e00-\u9fff]', content))
+    if total_chars > 0 and chinese_chars / max(total_chars, 1) < 0.4:
+        return True
+    # 超过一半的章节内容 < 100 字
+    short_sections = sum(1 for s in sections if len(s["content"]) < 100)
+    if short_sections > len(sections) / 2:
+        return True
+    return False
 
 
 def generate_detailed_analysis(results, profile):
@@ -233,43 +259,62 @@ def generate_detailed_analysis(results, profile):
         return _mock_sections(results, profile)
 
     user_prompt = _build_user_prompt(results, profile)
+    max_retries = 3
+    content = ""
+    sections = []
 
-    try:
-        response = _get_client().chat.completions.create(
-            model=MODEL,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=0.7,
-            max_tokens=8000,
-        )
-        content = response.choices[0].message.content
-    except Exception as e:
-        # 降级：返回错误信息
-        content = f"## 深度分析生成失败\n\n抱歉，AI 深度分析服务暂时不可用。\n\n错误信息：{str(e)}"
+    for attempt in range(max_retries):
+        try:
+            response = _get_client().chat.completions.create(
+                model=MODEL,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_prompt},
+                ],
+                temperature=0.7 if attempt == 0 else 0.9,
+                max_tokens=8000,
+            )
+            raw_content = response.choices[0].message.content
+        except Exception as e:
+            if attempt < max_retries - 1:
+                continue
+            content = f"## 深度分析生成失败\n\n抱歉，AI 深度分析服务暂时不可用。\n\n错误信息：{str(e)}"
+            sections = _split_sections(content)
+            break
 
-    # 第一步：过滤禁用词（在任何其他处理之前，确保全文替换）
-    content = _filter_forbidden_words(content)
+        # 过滤管道
+        content = _filter_forbidden_words(raw_content)
+        content = _strip_preface(content)
+        content = _strip_self_check(content)
+        content = _filter_english(content)
+        content = _filter_forbidden_words(content)
 
-    # 第二步：移除首个 markdown 标题或 --- 分隔符前的 AI 推理过程
-    # 必须在 _strip_self_check 之前执行，否则 AI 思考过程中的 "I think..." 行会被误判为自检文本
-    content = _strip_preface(content)
+        sections = _split_sections(content)
 
-    # 第三步：移除 AI 自检清单和思考过程（末尾的 ✅ 清单、"I think this is good" 等）
-    content = _strip_self_check(content)
+        # 质量检查
+        if not _is_low_quality(sections, content):
+            break  # 质量合格，退出重试
 
-    # 第四步：过滤英文泄露
-    content = _filter_english(content)
+        # 质量不合格，记录日志并重试
+        total = sum(len(s["content"]) for s in sections)
+        chinese = len(re.findall(r'[\u4e00-\u9fff]', content))
+        print(f"[AI] Attempt {attempt+1}/{max_retries} low quality: "
+              f"sections={len(sections)}, chars={total}, chinese_ratio={chinese/max(total,1):.2f}",
+              flush=True)
 
-    # 第五步：再次过滤禁用词（防止推理文本被部分移除后新暴露的词）
-    content = _filter_forbidden_words(content)
+        if attempt < max_retries - 1:
+            # 重试时在 user prompt 末尾加强调
+            user_prompt = user_prompt.replace(
+                "\n请确保报告专业、深入、有个性化洞察。",
+                "\n请确保报告专业、深入、有个性化洞察。\n\n【重要提醒】请直接输出中文报告正文，不要输出英文大纲、思考笔记或分析思路。每个章节必须有完整的中文段落。"
+            )
+        else:
+            # 最后一次重试仍然失败，使用降级内容
+            print("[AI] All retries exhausted, using fallback", flush=True)
+            content, sections = _fallback_content(results, profile, content)
 
-    # 将 markdown 按章节拆分
-    sections = _split_sections(content)
-
-    # 第五步：检查章节内容质量。如果某个章节过滤后内容太短（< 100 字），
-    # 标记 incomplete，前端会显示"重新生成"按钮。保留原始内容不替换。
+    # 检查章节内容质量。如果某个章节过滤后内容太短（< 100 字），
+    # 标记 incomplete，前端会显示"重新生成"按钮。
     for sec in sections:
         if len(sec["content"]) < 100:
             sec["incomplete"] = True
@@ -278,6 +323,115 @@ def generate_detailed_analysis(results, profile):
         "detailed_analysis": content,
         "sections": sections,
     }
+
+
+def _fallback_content(results, profile, original_content):
+    """当 AI 多次重试后仍然输出低质量内容时，使用降级方案。
+    保留 AI 已生成的有效章节，对缺失或过短的章节用模板补充。"""
+    en = results.get("enneagram", {})
+    mb = results.get("mbti", {})
+    ho = results.get("holland", {})
+    ga = results.get("gallup", {})
+
+    en_type = en.get('type_name', '')
+    mb_type = mb.get('type', '')
+    ho_code = ho.get('code', '')
+    ga_domain = GALLUP_DOMAIN_NAMES.get(ga.get('top_domain', ''), ga.get('top_domain', '关系建立'))
+    role = profile.get('role', '当前角色')
+
+    templates = {
+        "1": (
+            f"### 核心特质\n\n"
+            f"你的九型主型为 **{en.get('main_type')}号 {en_type}**。"
+            f"这一类型的核心特质在于对内在真实性的深度追求。"
+            f"你在得分中展现了对多种人格特质的探索欲望，"
+            f"这说明你并非单一维度的人，而是具有丰富内在层次的个体。\n\n"
+            f"### 内在动力\n\n"
+            f"驱动你的核心力量是寻找自我认同的答案。"
+            f"你渴望理解自己存在的独特意义，"
+            f"并在生活中不断验证和深化这种认知。\n\n"
+            f"### 成长方向\n\n"
+            f"在保持自我觉察优势的同时，尝试将更多的注意力转向行动和外部世界。"
+            f"将内在的丰富感受转化为具体的创造和表达，而非仅停留在思考层面。"
+        ),
+        "2": (
+            f"### 类型定位\n\n"
+            f"你的 MBTI 类型为 **{mb_type}**。"
+            f"这一类型决定了你处理信息和做决策的独特方式。"
+            f"你的认知功能栈赋予你敏锐的直觉和深度的共情能力，"
+            f"这在你的{role}角色中既是优势也可能带来挑战。\n\n"
+            f"### 互动风格\n\n"
+            f"你在人际互动中倾向于建立深层的情感连接，而非表面的社交关系。"
+            f"你更关注他人的感受和需求，善于倾听和共情。\n\n"
+            f"### 发展建议\n\n"
+            f"建议在保持共情优势的同时，培养更多的逻辑分析和系统思考能力。"
+            f"在需要做出客观决策的场景中，学会暂时抽离情感因素，用数据和逻辑辅助判断。"
+        ),
+        "3": (
+            f"### 代码解读\n\n"
+            f"你的霍兰德职业代码为 **{ho_code}**。"
+            f"这个代码组合揭示了你在职业环境中的自然偏好——"
+            f"你倾向于在既能发挥创造力又有社会价值的环境中工作。\n\n"
+            f"### 适合的职业方向\n\n"
+            f"基于你的代码，以下方向值得探索："
+            f"产品与用户体验、教育与培训、心理咨询与辅导、"
+            f"创意策划与内容创作、人力资源与组织发展。\n\n"
+            f"### 发展路径\n\n"
+            f"建议从当前{role}出发，逐步拓展到需要创意与人际能力并重的岗位。"
+            f"短期可以深耕专业能力，中期拓展跨领域协作经验。"
+        ),
+        "4": (
+            f"### 优势解读\n\n"
+            f"你的盖洛普主导领域为 **{ga_domain}**。"
+            f"核心主题包括你最为突出的几项才能，"
+            f"这些主题在你的日常工作中已经展现出强大的影响力。\n\n"
+            f"### 优势发挥\n\n"
+            f"你最大的优势在于建立和维护深层人际关系的能力。"
+            f"在团队中，你常常是那个能感知他人情绪、化解冲突、促进协作的关键角色。\n\n"
+            f"### 补盲建议\n\n"
+            f"注意在发挥关系优势的同时，不要忽视执行力和影响力层面的建设。"
+            f"可以刻意练习目标设定和进度追踪，确保关系维护转化为实际成果。"
+        ),
+        "5": (
+            f"### 协同点\n\n"
+            f"四体系共同指向一个核心画像：你是一个以感受力驱动的创造性人本主义者。"
+            f"九型的深度自我探索、MBTI的直觉与共情、霍兰德的艺术与社会兴趣、"
+            f"盖洛普的关系优势——这些维度在四套不同的测评框架中"
+            f"高度一致地指向同一个方向。\n\n"
+            f"### 张力点\n\n"
+            f"四体系也存在张力：你丰富的内在感受有时可能与高效执行产生矛盾；"
+            f"对深度的追求可能让你忽视广度的价值；"
+            f"关系导向的优势在需要果断决策时可能成为犹豫的来源。\n\n"
+            f"### 融合洞察\n\n"
+            f"你的四体系结果呈现罕见的同频共振。"
+            f"建议在{role}中，发挥你连接深度思考与人文关怀的独特优势，"
+            f"同时刻意培养执行纪律和影响力，让创造力和共情力落地为可见的成果。"
+        ),
+    }
+
+    # 尝试从 AI 原始输出中提取有效章节
+    existing = {}
+    for sec in _split_sections(original_content):
+        title = sec["title"]
+        if len(sec["content"]) > 150:
+            for num in ["1", "2", "3", "4", "5"]:
+                if num in title:
+                    existing[num] = sec["content"]
+                    break
+
+    # 构建最终章节列表
+    titles = ["1. 九型人格深度解读", "2. MBTI深度分析",
+              "3. 霍兰德职业方向", "4. 盖洛普优势发挥",
+              "5. 四体系综合交叉解读"]
+    final_sections = []
+    parts = []
+    for i, num in enumerate(["1", "2", "3", "4", "5"]):
+        c = existing.get(num, templates[num])
+        title = titles[i]
+        final_sections.append({"title": title, "content": c})
+        parts.append(f"## {title}\n\n{c}")
+
+    return "\n\n".join(parts), final_sections
 
 
 def _mock_sections(results, profile):
@@ -291,16 +445,23 @@ def _mock_sections(results, profile):
         {"title": "MBTI深度分析", "content": f"## {mb.get('type')}\n\n你的 MBTI 类型为 **{mb.get('type')}**。认知功能栈以思维和判断为主导，擅长系统性分析和目标导向的执行。互动风格直接高效，偏好结构化的沟通方式。发展建议是培养对他人情感的感知力，在决策中适当融入人文关怀。"},
         {"title": "霍兰德职业方向", "content": f"## {ho.get('code')}\n\n你的霍兰德代码为 **{ho.get('code')}**。基于该代码组合，推荐以下职业方向：\n- 产品经理\n- 项目管理\n- 市场战略\n- 创业运营\n- 数据分析\n- 管理咨询\n这些方向既匹配你的实际型和企业型倾向，也能发挥你在执行和战略方面的优势。"},
         {"title": "盖洛普优势发挥", "content": f"## {ga.get('top_domain')}\n\n主导领域 **{ga.get('top_domain')}**。核心主题包括成就、专注和统筹。优势发挥建议：在目标明确的环境中你能够高效产出，适合担任推动落地的角色。补盲建议：注意在追求效率时不要忽视团队的情感需求，适当放慢节奏倾听不同声音。"},
-        {"title": "四体系综合交叉解读", "content": """## 四体系协同矩阵
+        {"title": "四体系综合交叉解读", "content": """## 四体系综合交叉解读
 
-### 协同矩阵
+### 九型
+- 协同信号：核心驱动力与MBTI主导功能方向一致，目标/价值定位清晰，追求卓越的动机与判断型偏好形成正向循环
+- 张力提示：单一型态聚焦易忽略其他维度的信号，完美主义倾向可能导致过度自我批判
 
-| 体系 | 主结果 | 协同信号 | 张力提示 |
-|---|---|---|---|
-| 九型 | 3号成就者 | 核心驱动力与MBTI主导功能方向一致，目标/价值定位清晰 | 单一型态聚焦易忽略其他维度的信号 |
-| MBTI | ENTJ | 认知功能栈与霍兰德偏好的活动方式呼应 | 判断/感知维度过于强势会限制灵活性 |
-| 霍兰德 | ESC | 职业兴趣代码与盖洛普主题形成行为落地路径 | 类型差距在跨领域任务中会暴露短板 |
-| 盖洛普 | 战略思维 | 优势主题直接放大四体系的执行力或影响力 | 主题堆叠在某个领域会造成失衡 |
+### MBTI
+- 协同信号：认知功能栈与霍兰德偏好的活动方式呼应，思维-判断组合与常规型/研究型兴趣形成高效执行路径
+- 张力提示：判断/感知维度过于强势会限制灵活性，在需要快速应变的场景中可能显得僵化
+
+### 霍兰德
+- 协同信号：职业兴趣代码与盖洛普主题形成行为落地路径，常规型的结构化偏好为战略思维提供了实施框架
+- 张力提示：类型差距在跨领域任务中会暴露短板，艺术型和企业型的低分可能限制创意表达和影响力发挥
+
+### 盖洛普
+- 协同信号：优势主题直接放大四体系的执行力或影响力，战略思维领域的强势为所有体系提供了方向感和规划能力
+- 张力提示：主题堆叠在某个领域会造成失衡，关系建立和影响力领域的薄弱可能影响团队协作效果
 
 ### 融合洞察
 
@@ -433,8 +594,18 @@ def _strip_self_check(text):
             break
         # 检测 AI 自评行（纯英文，无中文）
         if re.match(r'^(I think |I should |Let me |I\'ll |I will |I also |Note that |This is )', stripped, re.IGNORECASE):
-            # 确认是纯英文行（无中文字符）
             if not re.search(r'[\u4e00-\u9fff]', stripped):
+                self_check_start = i
+                break
+        # 检测 AI 规则笔记行（"Important notes from the rules:" 等）
+        if re.match(r'^(Important notes|Key points|Notes from|Reminders?|Rules? to|Guidelines?)', stripped, re.IGNORECASE):
+            if not re.search(r'[\u4e00-\u9fff]', stripped):
+                self_check_start = i
+                break
+        # 检测纯英文的要点列表（- No xxx / - Use xxx 等 AI 规则复述）
+        if stripped.startswith('- ') and not re.search(r'[\u4e00-\u9fff]', stripped):
+            # 检查是否是 AI 规则复述关键词
+            if re.search(r'\b(no |don\'t|avoid|use |ensure|direct |must |should |chinese|markdown|format|outline|thinking|self.check|meta text)\b', stripped, re.IGNORECASE):
                 self_check_start = i
                 break
 
@@ -502,6 +673,15 @@ def _filter_english(text):
             is_code_line = bool(re.match(r'^(MBTI|RIASEC|ISTP|ISFP|INTJ|INFJ|ENTP|ENFP|ISTJ|ISFJ|ESTJ|ESFJ|ESTP|ESFP|ENTJ|ENFJ|RES|EIS|SIA|ASE|SEC|CSE|IA|SE|RE|RC|RI)\b', stripped))
             if english_word_count > 8 and not is_code_line:
                 continue
+
+        # 过滤"半英文"笔记行：中文 < 5 字但英文单词 > 5 个
+        # 这类行通常是 AI 的大纲笔记（如 "Focus on Type 4 (个人主义者) as primary type..."）
+        if chinese_count < 5 and not stripped.startswith('#'):
+            english_word_count = len(re.findall(r'[a-zA-Z]+', stripped))
+            if english_word_count > 5:
+                # 排除包含中文术语的代码行
+                if not re.match(r'^(MBTI|RIASEC|ISTP|ISFP|INTJ|INFJ|ENTP|ENFP|ISTJ|ISFJ|ESTJ|ESFJ|ESTP|ESFP|ENTJ|ENFJ|RES|EIS|SIA|ASE|SEC|CSE|IA|SE|RE|RC|RI)\b', stripped):
+                    continue
 
         filtered.append(line)
 
