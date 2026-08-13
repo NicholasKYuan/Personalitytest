@@ -29,21 +29,37 @@ MODEL = os.getenv("MINIMAX_MODEL", "MiniMax-M3")
 SYSTEM_PROMPT = """你是专业的心理测评分析师，精通九型人格、MBTI、霍兰德职业兴趣理论和盖洛普优势识别器。
 你的任务是根据用户的测评结果，生成一份深度、专业、有洞察力的个性化解读报告。
 
-报告要求：
-1. 使用 Markdown 格式，分章节输出
-2. 全程使用简体中文撰写。**严格禁止输出任何英文单词、短语、句式或标题**（允许保留的极少量英文：MBTI/ISTP 等4字母类型代码、霍兰德 RIASEC 三字母代码——但出现时必须是代码本身，不要附带英文释义如 "ISTP (Introversion...)"）
-3. **所有小标题（##、###、####）、列表项（-）、加粗强调（**...**）必须使用中文**，不得出现 "Growth direction"、"Fear:"、"Synergies and tensions"、"Relationship_building domain" 等英文标题
-4. 描述九型人格时，用"动机与恐惧""核心特质""成长方向"等中文小节标题，不要用 "Motivations and fears"
-5. 描述 MBTI 时，用"认知功能""思维模式""互动风格"等中文，不要用 "Thinking patterns"
-6. 描述霍兰德时，用"代码解读""职业路径""发展建议"等中文，不要用 "EIS interpretation"
-7. 描述盖洛普时，用中文主题名（如"审慎""专注""成就"），不要附英文原名
-8. 描述综合解读时，用"协同点""张力点""融合洞察"等中文
-9. 语言温暖、专业、有共感力，避免生硬的术语堆砌
-10. 每个体系先解读核心特质，再给出发展建议
-11. 四体系交叉解读要找出协同点和张力点，体现融合分析的价值
-12. 结合用户的身份角色和测评目的，给出有针对性的建议
-13. 总字数控制在 2000-3500 字
-14. 如包含传统易学结合解读章节，用现代生涯规划语言表述，禁止出现八字、五行、紫微、占星等字眼，可使用"命理与心理的呼应"这一表述
+报告要求（务必严格遵守）：
+
+1. 使用 Markdown 格式，分章节输出。
+
+2. **写作方式：禁止先列 outline 再展开**。不要在每个章节内先写"我会讲：动机、恐惧、成长方向"这种 outline 列表，请直接以完整中文段落（每段 80-150 字）开始阐述，让读者立刻进入深度解读。
+
+3. 全程使用简体中文撰写。**严格禁止输出任何英文单词、短语、句式或标题**。
+   - 允许保留的极少量英文：MBTI/ISTP 等 4 字母类型代码、霍兰德 RIASEC 三字母代码（出现时必须是代码本身，不要附带英文释义如 "ISTP (Introversion...)"）
+   - **绝对禁止** 输出英文小标题（如 "Growth direction"、"Motivation and fears"、"EIS interpretation"、"Synergies and tensions"、"relationship_building domain" 等）
+
+4. **所有小标题（##、###、####）、列表项、加粗强调必须使用中文**。
+
+5. 描述九型人格时，用"核心特质""内在动力""潜在盲区""成长方向"等中文小节标题（如果一定要用小节标题的话），或直接用连续段落。
+
+6. 描述 MBTI 时，用"类型定位""认知功能栈""互动风格""发展建议"等中文。
+
+7. 描述霍兰德时，用"代码解读""适合的职业方向""发展路径"等中文。
+
+8. 描述盖洛普时，用中文主题名（如"审慎""专注""成就"），不要附英文原名。
+
+9. 描述综合解读时，用"协同点""张力点""融合洞察"等中文。
+
+10. 语言温暖、专业、有共感力，避免生硬的术语堆砌。
+
+11. 每个体系的核心解读要直接进入深度分析（不是"该类型的特点是..."这种教科书腔），要结合用户的角色、目的、当下状态给出个性化洞察。
+
+12. 四体系交叉解读要找出协同点和张力点，体现融合分析的价值。
+
+13. 总字数控制在 2000-3500 字。
+
+14. 如包含传统易学结合解读章节，用现代生涯规划语言表述，禁止出现八字、五行、紫微、占星等字眼，可使用"命理与心理的呼应"这一表述。
 """
 
 
@@ -225,6 +241,13 @@ def generate_detailed_analysis(results, profile):
     # 将 markdown 按章节拆分
     sections = _split_sections(content)
 
+    # 第五步：检查章节内容质量。如果某个章节过滤后内容太短（< 100 字），
+    # 说明 AI 只列了要点没展开正文，标记为"待重试"，避免给用户看空章节。
+    for sec in sections:
+        if len(sec["content"]) < 100:
+            sec["incomplete"] = True
+            sec["content"] = "（本章节深度解读生成不完整，请点击页面下方『重新生成报告』按钮重试。）"
+
     return {
         "detailed_analysis": content,
         "sections": sections,
@@ -318,6 +341,7 @@ def _filter_english(text):
     过滤掉 AI 输出中的英文过程文本/英文小标题/英文短语。
     移除纯英文行（允许 MBTI、霍兰德等缩写），保留中文内容。
     也过滤混合语言行中英文占比过高的行（如 AI 推理过程）。
+    特别处理：LLM 有时只列英文 outline 不展开正文，这类"短英文行"需要识别并过滤。
     """
     lines = text.split('\n')
     filtered = []
@@ -329,7 +353,6 @@ def _filter_english(text):
 
         # 跳过 Markdown 标题中的纯英文（### Growth direction）
         if re.match(r'^#{1,6}\s+[A-Za-z]', stripped):
-            # 仅当整行没有中文字符时过滤
             if not re.search(r'[\u4e00-\u9fff]', stripped):
                 continue
 
@@ -337,8 +360,7 @@ def _filter_english(text):
         if re.match(r'^[-*•]\s+[A-Za-z]', stripped):
             if not re.search(r'[\u4e00-\u9fff]', stripped):
                 continue
-            # 列表项有中文但前半部分是英文短语（如"- Growth direction 成长方向"），也过滤
-            # 取冒号/破折号前的英文短语
+            # 列表项有中文但前半部分是英文短语（如"- Growth direction 成长方向"），裁掉英文部分
             m = re.match(r'^[-*•]\s+([A-Za-z][A-Za-z\s\-,:&\(\)\.]+?)([\u4e00-\u9fff]|$)', stripped)
             if m and len(m.group(1).strip()) > 3:
                 stripped = re.sub(r'^([-*•]\s+)[A-Za-z][A-Za-z\s\-,:&\(\)\.]+?(\s+)(?=[\u4e00-\u9fff])',
@@ -355,6 +377,10 @@ def _filter_english(text):
             if not re.search(r'[\u4e00-\u9fff]', stripped):
                 continue
 
+        # 跳过英文下划线标签（relationship_building domain、career_paths、thinking_patterns）
+        if re.match(r'^[a-z]+(_[a-z]+)+\s*$', stripped, re.IGNORECASE):
+            continue
+
         # 计算中文字符数
         chinese_chars = len(re.findall(r'[\u4e00-\u9fff]', stripped))
         # 计算英文单词数（排除常见缩写）
@@ -363,7 +389,7 @@ def _filter_english(text):
 
         # 如果一行几乎没有中文，且英文词较多，则判定为英文泄露
         if chinese_chars < 5 and english_words > 2:
-            continue  # 跳过这行
+            continue
 
         # 如果英文词比中文字符多，也是英文泄露（混合语言行）
         if english_words > chinese_chars and english_words > 3:
