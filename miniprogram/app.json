@@ -5,7 +5,8 @@
     "pages/quiz/quiz",
     "pages/result-free/result-free",
     "pages/pay/pay",
-    "pages/result-full/result-full"
+    "pages/result-full/result-full",
+    "pages/records/records"
   ],
   "window": {
     "backgroundTextStyle": "dark",

@@ -194,6 +194,20 @@ function getStats() {
   return request('GET', '/api/stats', null, { auth: false })
 }
 
+/** GET /api/my/sessions — 查询我的测评记录（未付费7天/已付费30天） */
+function getMySessions() {
+  if (isMock()) {
+    return Promise.resolve({
+      records: [
+        { session_id: 'mock-1', status: 'answered', paid: false, preview: '你是一个富有创造力的人...', created_at: Date.now() / 1000 - 86400 },
+        { session_id: 'mock-2', status: 'ready', paid: true, preview: '你的领导力倾向明显...', created_at: Date.now() / 1000 - 172800 }
+      ],
+      total: 2
+    })
+  }
+  return request('GET', '/api/my/sessions')
+}
+
 module.exports = {
   ERR,
   isMock,
@@ -205,5 +219,6 @@ module.exports = {
   getReportDetail,
   redeemCode,
   getHealth,
-  getStats
+  getStats,
+  getMySessions
 }

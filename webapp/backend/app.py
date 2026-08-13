@@ -396,6 +396,49 @@ def report_status(session_id: str = Query(...), request: Request = None):
     return {"code": 0, "message": "ok", "data": report_service.get_report_status(session_id)}
 
 
+SESSION_TTL_UNPAID = 7 * 24 * 3600   # 未付费保留7天
+SESSION_TTL_PAID = 30 * 24 * 3600    # 已付费保留30天
+
+
+@app.get("/api/my/sessions")
+def my_sessions(request: Request):
+    """查询当前用户的测评记录（未付费7天内，已付费30天内）。"""
+    openid = _require_openid(request)
+    now_ts = time.time()
+    max_cutoff = now_ts - SESSION_TTL_PAID  # 最长保留30天，先查出再按付费状态过滤
+
+    with database.get_db() as db:
+        rows = db.execute(
+            """SELECT s.session_id, s.status, s.free_summary, s.created_at,
+                      MAX(CASE WHEN o.status='paid' THEN 1 ELSE 0 END) AS has_paid
+               FROM sessions s
+               LEFT JOIN orders o ON o.session_id = s.session_id
+               WHERE s.openid = %s AND s.created_at > %s AND s.status IN ('answered','ready','failed')
+               GROUP BY s.session_id
+               ORDER BY s.created_at DESC""",
+            (openid, max_cutoff),
+        ).fetchall()
+
+    records = []
+    for r in rows:
+        paid = bool(r["has_paid"])
+        ttl = SESSION_TTL_PAID if paid else SESSION_TTL_UNPAID
+        if r["created_at"] < now_ts - ttl:
+            continue  # 已过期的跳过
+
+        summary = r.get("free_summary") or ""
+        preview = summary[:50] + "..." if len(summary) > 50 else summary
+        records.append({
+            "session_id": r["session_id"],
+            "status": r["status"],
+            "paid": paid,
+            "preview": preview,
+            "created_at": r["created_at"],
+        })
+
+    return {"code": 0, "message": "ok", "data": {"records": records, "total": len(records)}}
+
+
 @app.get("/api/report/{session_id}")
 def get_report(session_id: str, request: Request):
     """生成可下载的 HTML 报告文件（Web 兼容；小程序会话需已支付）。"""

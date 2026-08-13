@@ -66,6 +66,11 @@ Page({
     wx.navigateTo({ url: '/pages/profile/profile' })
   },
 
+  /** 查看我的测评记录 */
+  onViewRecords() {
+    wx.navigateTo({ url: '/pages/records/records' })
+  },
+
   onShareAppMessage() {
     return {
       title: '四体系融合人格测评，发现你的独特光芒',

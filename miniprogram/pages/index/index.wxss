@@ -180,6 +180,29 @@
   color: var(--brand-coral);
 }
 
+.footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.footer-links .footer-history {
+  margin-top: 0;
+}
+
+.footer-divider {
+  color: var(--text-muted);
+  font-size: 24rpx;
+}
+
+.footer-records {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--brand-violet);
+}
+
 /* ---------- 阶梯入场 ---------- */
 .index-page .section:nth-of-type(3) {
   animation-delay: 0.1s;

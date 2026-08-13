@@ -181,6 +181,17 @@ def main():
     except Exception as e:
         step("兑换码验证(无效码)", False, str(e))
 
+    # 13. 我的测评记录
+    try:
+        r = client.get(f"{BASE}/api/my/sessions", headers=headers)
+        data = ext(r)
+        records = data.get("records", [])
+        ok = r.status_code == 200 and isinstance(records, list) and len(records) > 0
+        found = any(rec.get("session_id") == session_id for rec in records)
+        step("我的测评记录", ok and found, f"total={len(records)}, found_current={found}")
+    except Exception as e:
+        step("我的测评记录", False, str(e))
+
     # 汇总
     print("\n" + "=" * 60)
     total = PASS + FAIL
