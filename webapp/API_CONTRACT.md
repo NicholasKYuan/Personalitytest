@@ -42,7 +42,7 @@ Content-Type: application/json
       "category": "interpersonal-relationship",
       "difficulty": 2
     },
-    ...  // 共100题
+    ...  // 共120题
   ]
 }
 ```
@@ -129,7 +129,7 @@ Content-Type: application/json
 ## 前端流程
 
 1. **填写信息页**：表单收集 name/age/gender/role/purpose/current_state/birth_date
-2. **答题页**：逐题或分页展示100题，用户点选选项，进度条显示
+2. **答题页**：逐题或分页展示120题，用户点选选项，进度条显示
 3. **结果页**：
    - 免费区：四体系类型结果 + 简要说明
    - 付费区：解锁深度分析（点击按钮 → 调 /api/analyze → 展示AI解读）

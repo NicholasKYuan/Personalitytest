@@ -4,7 +4,7 @@
 
 ## 功能特性
 
-- **1500 题融合题库**：每道题同时映射 1-4 个测评体系，支持 forced-choice 和 likert-4 两种量表
+- **2000 题融合题库**：每道题同时映射 1-4 个测评体系，支持 forced-choice 和 likert-4 两种量表
 - **智能筛选器**：根据用户画像（年龄/角色/目的/状态）动态筛选 120 题，保证体系覆盖与类别均衡
 - **四体系评分**：九型人格 9 型、MBTI 8 维、霍兰德 6 型、盖洛普 4 领域同步计算
 - **AI 深度分析**：集成 Minimax M3，生成 9000+ 字个性化深度解读报告
@@ -15,24 +15,24 @@
 - **后端**：FastAPI + Uvicorn
 - **前端**：原生 HTML / CSS / JavaScript（无框架依赖）
 - **AI**：Minimax M3（OpenAI 兼容 API）
-- **题库**：JSONL 格式，1500 题
+- **题库**：JSONL 格式，2000 题
 
 ## 项目结构
 
 ```
 ├── question-bank/        # 题库
-│   ├── items.jsonl        # 1500 题主文件
+│   ├── items.jsonl        # 2000 题主文件
 │   ├── schema.json        # 题目 schema
 │   ├── taxonomy.md        # 四体系分类体系
 │   └── catalog/           # 数字资产目录
 ├── selector/             # 筛选器
 │   ├── selector.py        # 筛选逻辑
-│   ├── scorer.py          # 四体系评分
+│   ├── select-logic.md   # 筛选逻辑文档
 │   └── profile-schema.json
 ├── webapp/               # Web 应用
 │   ├── backend/           # FastAPI 后端
 │   │   ├── app.py         # 主应用
-│   │   ├── ai_analyzer.py # AI 深度分析
+│   │   ├── ai_analyzer.py # AI 深度分析（结果解读核心）
 │   │   ├── scorer.py      # 评分引擎
 │   │   └── report_generator.py
 │   ├── frontend/          # 前端
@@ -40,7 +40,10 @@
 │   │   ├── css/style.css
 │   │   └── js/app.js
 │   └── templates/         # 报告模板
-└── skill/                # Skill 定义
+└── skill/                # Skill 定义（三个独立 skill）
+    ├── SKILL.md                  # 筛选 skill：2000题→120题个性化测评卷
+    ├── interpretation/SKILL.md   # 结果解读 skill：评分结果→AI深度解读章节
+    └── report-generator/SKILL.md # 报告生成 skill：解读章节→品牌化HTML报告
 ```
 
 ## 快速开始

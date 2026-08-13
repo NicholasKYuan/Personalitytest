@@ -129,7 +129,7 @@
     <view class="regen-banner fade-in" wx:if="{{hasIncomplete}}">
       <block wx:if="{{canRegenerate}}">
         <view class="regen-text">部分章节内容偏短，建议重新生成以获得更完整的深度分析（仅限1次）</view>
-        <button class="regen-btn" bindtap="onRegenerate" loading="{{regenerating}}" disabled="{{regenerating}}">
+        <button class="regen-btn hover-press" bindtap="onRegenerate" loading="{{regenerating}}" disabled="{{regenerating}}">
           重新生成报告
         </button>
       </block>
@@ -161,8 +161,8 @@
 
   <!-- 底部操作栏 -->
   <view class="action-bar" wx:if="{{!loading}}">
-    <button class="ab-btn" bindtap="onPoster">生成海报</button>
-    <button class="ab-btn" open-type="share">转发好友</button>
-    <button class="ab-btn ab-btn--ghost" bindtap="onSaveReport">保存报告</button>
+    <button class="ab-btn hover-press" bindtap="onPoster">生成海报</button>
+    <button class="ab-btn hover-press" open-type="share">转发好友</button>
+    <button class="ab-btn ab-btn--ghost hover-press" bindtap="onSaveReport">保存报告</button>
   </view>
 </view>

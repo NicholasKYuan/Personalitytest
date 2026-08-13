@@ -19,7 +19,7 @@
 
   <!-- 记录列表 -->
   <view class="records-list" wx:if="{{!loading && records.length > 0}}">
-    <view class="record-card glass-card fade-in" wx:for="{{records}}" wx:key="session_id"
+    <view class="record-card glass-card fade-in hover-press" wx:for="{{records}}" wx:key="session_id"
           data-id="{{item.session_id}}" data-paid="{{item.paid}}" bindtap="onRecordTap">
       <view class="record-left">
         <view class="record-date">{{item.dateText}}</view>

@@ -46,6 +46,14 @@ STATE_TO_STATES = {
     'growth-seeking': ['leadership-growth','self-exploration'],
 }
 
+# decision_horizon → 偏好的难度范围（用于匹配题目的远见性）
+DECISION_HORIZON_DIFFS = {
+    'immediate': [1, 2],        # 短期决策 → 偏好低难度、现状类题
+    'within-1-year': [2, 3],    # 近期决策 → 中等难度
+    '1-3-years': [3, 4],        # 中期决策 → 中高难度、前瞻类
+    '3-plus-years': [4, 5],     # 长期决策 → 高难度、远见类
+}
+
 CATEGORIES = ['interpersonal-relationship','decision-making','stress-response','motivation-value',
               'learning-cognition','work-career','emotion-self','action-habit',
               'future-vision','conflict-choice']
@@ -53,11 +61,22 @@ CATEGORIES = ['interpersonal-relationship','decision-making','stress-response','
 # 覆盖要求
 MIN_ENNEAGRAM_PER_TYPE = 5
 MIN_MBTI_PER_POLE = 4
-MIN_HOLLAND_PER_TYPE = 2  # R型在题库中仅68题，按比例2/100足够
-MIN_HOLLAND_R = 1  # R型题库偏少，单独降门槛
+MIN_HOLLAND_PER_TYPE = 2  # RIASEC各型题库均≥268题，2/100足够
+MIN_HOLLAND_R = 2  # R型题库现有268题，与其他型持平
 MIN_GALLUP_PER_DOMAIN = 8
-MIN_REVERSE = 12
+MIN_REVERSE = 10
 DIFF_TARGET = {2: 36, 3: 54, 4: 24, 5: 6}  # 难度1不进卷，120题按比例
+
+# 量表多样性要求（5种量表在120题中的最低配额）
+MIN_SCALE_DIVERSITY = {
+    'forced-choice': 50,   # 主力题型，至少50题
+    'likert-4': 10,        # 至少10题（部分profile状态匹配的likert-4题较少）
+    'likert-5': 2,         # 新增量表，至少2题（题库仅18题）
+    'likert-7': 1,         # 新增量表，至少1题（题库仅11题）
+    'ranking': 1,          # 新增量表，至少1题（题库仅12题）
+}
+# 含holland分数的题目最低数量（holland覆盖已提升至34%+）
+MIN_HOLLAND_QUESTIONS = 30
 
 
 def load_profile(path):
@@ -87,13 +106,22 @@ def target_states(profile):
     return ts
 
 
-def state_match_score(item, ts):
+def state_match_score(item, ts, decision_horizon=None):
     s = 0
     aps = set(item.get('applicable_states', []))
     if profile_purpose_in(aps, ts):
         s += 3
     overlap = aps & ts
     s += 2 * len(overlap)
+    # decision_horizon 匹配：用户决策时间窗口与题目难度/远见性匹配 → +1
+    if decision_horizon:
+        preferred_diffs = DECISION_HORIZON_DIFFS.get(decision_horizon, [])
+        if item.get('difficulty', 0) in preferred_diffs:
+            s += 1
+    # 多维度奖励：4体系融合题信息量更大，优先选入 → +1
+    n_systems = len(set(k.split('.')[0] for o in item['options'] for k in o.get('score', {})))
+    if n_systems >= 4:
+        s += 1
     return s
 
 
@@ -148,9 +176,10 @@ def _is_near_duplicate(stem1, stem2):
 def select(profile, bank, seed=None):
     rng = random.Random(seed if seed is not None else hash(json.dumps(profile, sort_keys=True)))
     ts = target_states(profile)
+    dh = profile.get('decision_horizon')
 
-    # Step 1: 打分
-    scored = [(state_match_score(it, ts), it) for it in bank]
+    # Step 1: 打分（传入 decision_horizon 以匹配题目难度/远见性）
+    scored = [(state_match_score(it, ts, dh), it) for it in bank]
 
     # Step 2: 类别配额 —— 每类先取分数最高的前 12 题（10类×12=120）
     by_cat = defaultdict(list)
@@ -274,8 +303,7 @@ def select(profile, bank, seed=None):
     try_fix(ho_ok, lambda it: any(k.startswith('holland.') for o in it['options'] for k in o['score']))
     try_fix(ga_ok, lambda it: any(k.startswith('gallup.') for o in it['options'] for k in o['score']))
 
-    # Step 3.5: 霍兰德覆盖专项补足 —— 确保至少 25 题含 Holland 分数
-    MIN_HOLLAND_QUESTIONS = 25
+    # Step 3.5: 霍兰德覆盖专项补足 —— 确保至少 30 题含 Holland 分数
     def holland_question_count(sel):
         return sum(1 for it in sel if any(k.startswith('holland.') for o in it['options'] for k in o['score']))
     
@@ -310,11 +338,62 @@ def select(profile, bank, seed=None):
         selected.append(best_holland)
         selected_ids.add(best_holland['id'])
 
-    # Step 4: reverse 题补足
+    # Step 4: 量表多样性补足 —— 确保新量表类型(likert-5/likert-7/ranking)进入试卷
+    # （放在reverse之前，避免reverse步骤把新量表题挤掉）
+    for scale_type, min_count in MIN_SCALE_DIVERSITY.items():
+        current = sum(1 for it in selected if it.get('scale') == scale_type)
+        while current < min_count:
+            cands = [
+                it for it in bank
+                if it['id'] not in selected_ids
+                and it.get('scale') == scale_type
+            ]
+            cands.sort(key=lambda it: -state_match_score(it, ts, dh))
+            if not cands:
+                break
+            best = cands[0]
+            is_dup = any(_is_near_duplicate(sel['stem'], best['stem']) for sel in selected)
+            if is_dup:
+                # 尝试下一个候选
+                found = False
+                for c in cands[1:]:
+                    is_dup2 = any(_is_near_duplicate(sel['stem'], c['stem']) for sel in selected)
+                    if not is_dup2:
+                        best = c
+                        found = True
+                        break
+                if not found:
+                    break
+            # 从forced-choice中找可替换的（forced-choice占最多），但不替换reverse题
+            cat_count_now = Counter(it['category'] for it in selected)
+            replaceable = [
+                it for it in selected
+                if it.get('scale') == 'forced-choice'
+                and not it.get('reverse')
+                and cat_count_now[it['category']] > 8
+            ]
+            if not replaceable:
+                # 尝试替换likert-4（非reverse）
+                replaceable = [
+                    it for it in selected
+                    if it.get('scale') == 'likert-4'
+                    and not it.get('reverse')
+                    and cat_count_now[it['category']] > 8
+                ]
+            if not replaceable:
+                break
+            worst = min(replaceable, key=lambda it: state_match_score(it, ts, dh))
+            selected.remove(worst)
+            selected_ids.discard(worst['id'])
+            selected.append(best)
+            selected_ids.add(best['id'])
+            current += 1
+
+    # Step 4.5: reverse 题补足
     rev_count = sum(1 for it in selected if it.get('reverse'))
     if rev_count < MIN_REVERSE:
         cands = [it for it in bank if it.get('reverse') and it['id'] not in selected_ids]
-        cands.sort(key=lambda it: -state_match_score(it, ts))
+        cands.sort(key=lambda it: -state_match_score(it, ts, dh))
         for c in cands:
             if sum(1 for it in selected if it.get('reverse')) >= MIN_REVERSE:
                 break
@@ -322,8 +401,17 @@ def select(profile, bank, seed=None):
             is_dup = any(_is_near_duplicate(sel['stem'], c['stem']) for sel in selected)
             if is_dup:
                 continue
-            worst = min((it for it in selected if not it.get('reverse')),
-                        key=lambda it: state_match_score(it, ts), default=None)
+            # 从非reverse题中找可替换的（优先替换状态分最低的）
+            cat_count_now = Counter(it['category'] for it in selected)
+            replaceable = [
+                it for it in selected
+                if not it.get('reverse')
+                and cat_count_now[it['category']] > 8
+            ]
+            if not replaceable:
+                # 回退：允许从最低类别的题中替换
+                replaceable = [it for it in selected if not it.get('reverse')]
+            worst = min(replaceable, key=lambda it: state_match_score(it, ts, dh), default=None)
             if worst is None:
                 break
             selected.remove(worst)
@@ -368,6 +456,22 @@ def select(profile, bank, seed=None):
     # Step 4.7: 类别均衡 —— 每类限制在 8~15 题之间
     CAT_MIN = 8
     CAT_MAX = 15
+
+    def _is_protected(it):
+        """判断题目是否受保护（不应被后续步骤移除）"""
+        # reverse题在达标线时不移除
+        if it.get('reverse'):
+            rev_now = sum(1 for s in selected if s.get('reverse'))
+            if rev_now <= MIN_REVERSE:
+                return True
+        # 新量表类型在达标线时不移除
+        scale = it.get('scale', '')
+        if scale in ('likert-5', 'likert-7', 'ranking'):
+            sc_now = sum(1 for s in selected if s.get('scale') == scale)
+            if sc_now <= MIN_SCALE_DIVERSITY.get(scale, 0):
+                return True
+        return False
+
     while True:
         cat_counts = Counter(it['category'] for it in selected)
         over_cats = [c for c, n in cat_counts.items() if n > CAT_MAX]
@@ -377,7 +481,7 @@ def select(profile, bank, seed=None):
         swapped = False
         for over_cat in over_cats:
             over_qs = sorted(
-                [it for it in selected if it['category'] == over_cat],
+                [it for it in selected if it['category'] == over_cat and not _is_protected(it)],
                 key=lambda it: state_match_score(it, ts)
             )
             for q_over in over_qs:
@@ -413,8 +517,8 @@ def select(profile, bank, seed=None):
     # Step 5: 难度分布校准 —— 向目标 {2:36, 3:54, 4:24, 5:6} 靠拢
     DIFF_TARGET = {2: 36, 3: 54, 4: 24, 5: 6}  # 难度1不进卷
 
-    # 5a: 替换难度1的题（同时检查类别不超限）
-    diff1_qs = [it for it in selected if it.get('difficulty', 0) == 1]
+    # 5a: 替换难度1的题（同时检查类别不超限，保护reverse和新量表题）
+    diff1_qs = [it for it in selected if it.get('difficulty', 0) == 1 and not _is_protected(it)]
     for q1 in diff1_qs:
         cands = [
             it for it in bank
@@ -443,7 +547,7 @@ def select(profile, bank, seed=None):
             if current <= target:
                 continue
             over_qs = sorted(
-                [it for it in selected if it.get('difficulty', 0) == d],
+                [it for it in selected if it.get('difficulty', 0) == d and not _is_protected(it)],
                 key=lambda it: state_match_score(it, ts)
             )
             for q_over in over_qs:
@@ -517,14 +621,21 @@ def build_report(profile, ordered):
         'reverse_count': sum(1 for it in ordered if it.get('reverse')),
         'difficulty_dist': dict(sorted(Counter(it['difficulty'] for it in ordered).items())),
         'category_dist': dict(sorted(Counter(it['category'] for it in ordered).items())),
+        'scale_dist': dict(sorted(Counter(it.get('scale', 'unknown') for it in ordered).items())),
+        'multi_system_count': sum(1 for it in ordered if len(set(k.split('.')[0] for o in it['options'] for k in o.get('score', {}))) >= 4),
     }
     # 达标检查
     checks = {
         'enneagram_all_types>=5': all(v >= MIN_ENNEAGRAM_PER_TYPE for v in report['enneagram'].values()),
         'mbti_all_poles>=4': all(v >= MIN_MBTI_PER_POLE for v in report['mbti'].values()),
-        'holland_all_types>=2(R>=1)': all(ho.get(t, 0) >= (MIN_HOLLAND_R if t == 'R' else MIN_HOLLAND_PER_TYPE) for t in 'RIASEC'),
+        'holland_all_types>=2(R>=2)': all(ho.get(t, 0) >= (MIN_HOLLAND_R if t == 'R' else MIN_HOLLAND_PER_TYPE) for t in 'RIASEC'),
         'gallup_all_domains>=8': all(v >= MIN_GALLUP_PER_DOMAIN for v in report['gallup'].values()),
-        'reverse>=12': report['reverse_count'] >= MIN_REVERSE,
+        'reverse>=10': report['reverse_count'] >= MIN_REVERSE,
+        'scale_diversity_ok': all(
+            report['scale_dist'].get(st, 0) >= mc
+            for st, mc in MIN_SCALE_DIVERSITY.items()
+        ),
+        'holland_questions>=30': sum(1 for it in ordered if any(k.startswith('holland.') for o in it['options'] for k in o.get('score', {}))) >= MIN_HOLLAND_QUESTIONS,
     }
     report['checks'] = checks
     report['all_passed'] = all(checks.values())

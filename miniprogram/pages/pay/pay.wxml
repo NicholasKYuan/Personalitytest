@@ -50,7 +50,7 @@
   </view>
 
   <!-- 底部支付栏 -->
-  <view class="pay-bar">
+  <view class="bottom-bar pay-bar">
     <view class="pb-info">
       <view class="pb-total">
         <text class="pb-currency">¥</text>

@@ -15,6 +15,7 @@
     <view class="radar-tabs">
       <view
         class="radar-tab {{activeTab === item.key ? 'radar-tab--active' : ''}}"
+        hover-class="hover-press"
         wx:for="{{tabs}}"
         wx:key="key"
         data-key="{{item.key}}"
@@ -31,7 +32,7 @@
       </view>
       <view class="rc-type" style="color: {{item.color}};">{{item.type}}</view>
       <view class="rc-desc">{{item.desc}}</view>
-      <view class="rc-cta" data-key="{{item.key}}" bindtap="onUnlock">查看深度解读</view>
+      <view class="rc-cta" hover-class="hover-press" data-key="{{item.key}}" bindtap="onUnlock">查看深度解读</view>
     </view>
   </view>
 
@@ -62,7 +63,7 @@
         <view class="cv-text">{{item}}</view>
       </view>
     </view>
-    <button class="btn-accent btn-block" bindtap="onUnlock">{{paid ? '查看完整深度报告' : '解锁完整深度报告 29.9 元'}}</button>
+    <button class="btn-primary btn-block" bindtap="onUnlock">{{paid ? '查看完整深度报告' : '解锁完整深度报告 29.9 元'}}</button>
     <view class="cta-trust">{{paid ? '报告已解锁，点击查看你的完整人格画像' : '已有 8,200+ 人解锁了深度报告'}}</view>
   </view>
 

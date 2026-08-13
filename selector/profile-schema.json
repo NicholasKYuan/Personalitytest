@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "User Profile for Personality Test",
-  "description": "用户填写的个人信息，用于驱动 AI 从 1500 题中筛选 100 题。字段尽量贴合星耀启程受众（K12 学生、本科生、硕博生、家长、创业者）。",
+  "description": "用户填写的个人信息，用于驱动 AI 从 2000 题中筛选 120 题。字段尽量贴合星耀启程受众（K12 学生、本科生、硕博生、家长、创业者）。",
   "type": "object",
   "required": ["age", "role", "purpose"],
   "properties": {

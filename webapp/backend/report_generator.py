@@ -74,28 +74,45 @@ def _pct(score, max_score):
 
 
 def _radar_points(results):
-    """计算雷达图 SVG 坐标点"""
+    """计算雷达图 SVG 坐标点（使用归一化值，与类型判断逻辑一致）"""
     en = results.get("enneagram", {})
     mb = results.get("mbti", {})
     ho = results.get("holland", {})
     ga = results.get("gallup", {})
 
-    # 各体系最高分
-    en_max = max(en.get("scores", {}).values()) if en.get("scores") else 1
-    mb_scores = mb.get("dimensions", {})
-    mb_max = max(mb_scores.values()) if mb_scores else 1
-    ho_scores = ho.get("scores", {})
-    ho_max = max(ho_scores.values()) if ho_scores else 1
-    ga_scores = ga.get("domains", {})
-    ga_max = max(ga_scores.values()) if ga_scores else 1
+    # 九型：主型的归一化值
+    en_norm = en.get("normalized", {})
+    en_main_key = f"type{en.get('main_type', 1)}"
+    en_val = en_norm.get(en_main_key, 0)
+
+    # MBTI：4 对维度中胜出极的归一化值平均
+    mb_norm = mb.get("normalized", {})
+    mbti_type = mb.get("type", "")
+    mb_pairs = [("E", "I"), ("S", "N"), ("T", "F"), ("J", "P")]
+    mb_winning_vals = []
+    for a, b in mb_pairs:
+        na = mb_norm.get(a, 0)
+        nb = mb_norm.get(b, 0)
+        winner = a if a in mbti_type else b
+        mb_winning_vals.append(mb_norm.get(winner, 0))
+    mb_val = sum(mb_winning_vals) / len(mb_winning_vals) if mb_winning_vals else 0
+
+    # 霍兰德：前1高分型的归一化值
+    ho_norm = ho.get("normalized", {})
+    holland_code = ho.get("code", "")
+    ho_val = ho_norm.get(holland_code[0], 0) if holland_code else 0
+
+    # 盖洛普：主导领域的归一化值
+    ga_norm = ga.get("normalized", {})
+    ga_val = ga_norm.get(ga.get("top_domain", ""), 0)
 
     # 综合分 = 四体系平均归一化
-    composite = (en_max + mb_max + ho_max + ga_max) / 4
+    composite = (en_val + mb_val + ho_val + ga_val) / 4
 
-    # 归一化到 0-1
-    vals = [en_max, mb_max, ho_max, ga_max, composite]
-    all_max = max(vals) if vals else 1
-    normalized = [v / all_max if all_max > 0 else 0 for v in vals]
+    # 归一化到 0-1（除以理论最大值 3.0，因为 score 范围 -3..3，归一化后最大约 3.0）
+    MAX_NORM = 3.0
+    vals = [en_val, mb_val, ho_val, ga_val, composite]
+    normalized = [min(1.0, v / MAX_NORM) if v > 0 else 0 for v in vals]
 
     # 雷达图五个顶点坐标 (正五边形)
     cx, cy = 150, 150
@@ -113,7 +130,7 @@ def _radar_points(results):
 
 
 def _markdown_to_html(md):
-    """简易 Markdown 转 HTML"""
+    """简易 Markdown 转 HTML（支持标题、列表、加粗、表格）"""
     if not md:
         return ""
     # 转义
@@ -123,9 +140,12 @@ def _markdown_to_html(md):
     html_parts = []
     in_ul = False
     in_ol = False
+    i = 0
 
-    for line in lines:
-        stripped = line.strip()
+    while i < len(lines):
+        stripped = lines[i].strip()
+
+        # 空行
         if not stripped:
             if in_ul:
                 html_parts.append("</ul>")
@@ -133,7 +153,40 @@ def _markdown_to_html(md):
             if in_ol:
                 html_parts.append("</ol>")
                 in_ol = False
+            i += 1
             continue
+
+        # 表格检测：当前行以 | 开头，且下一行是分隔行（|---|---|）
+        if stripped.startswith("|") and i + 1 < len(lines):
+            next_line = lines[i + 1].strip()
+            if re.match(r'^\|[\s\-:|]+\|$', next_line):
+                # 收集表格行
+                table_lines = [stripped]
+                i += 2  # 跳过分隔行
+                while i < len(lines) and lines[i].strip().startswith("|"):
+                    table_lines.append(lines[i].strip())
+                    i += 1
+
+                # 解析表格
+                # 表头
+                header_cells = [c.strip() for c in table_lines[0].strip("|").split("|")]
+                html_parts.append('<table style="width:100%;border-collapse:collapse;margin:0.75rem 0;font-size:0.85rem;">')
+                html_parts.append('<thead><tr>')
+                for cell in header_cells:
+                    html_parts.append(f'<th style="border:1px solid var(--border);padding:0.5rem;background:var(--bg);text-align:left;font-weight:700;">{cell}</th>')
+                html_parts.append('</tr></thead>')
+                # 数据行
+                html_parts.append('<tbody>')
+                for row_line in table_lines[1:]:
+                    cells = [c.strip() for c in row_line.strip("|").split("|")]
+                    html_parts.append('<tr>')
+                    for cell in cells:
+                        # 支持单元格内的加粗
+                        cell_html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', cell)
+                        html_parts.append(f'<td style="border:1px solid var(--border);padding:0.5rem;">{cell_html}</td>')
+                    html_parts.append('</tr>')
+                html_parts.append('</tbody></table>')
+                continue
 
         # 标题
         m = re.match(r'^(#{2,3})\s+(.+)', stripped)
@@ -146,6 +199,7 @@ def _markdown_to_html(md):
                 in_ol = False
             level = len(m.group(1))
             html_parts.append(f"<h{level}>{m.group(2)}</h{level}>")
+            i += 1
             continue
 
         # 无序列表
@@ -157,7 +211,9 @@ def _markdown_to_html(md):
             if not in_ul:
                 html_parts.append("<ul>")
                 in_ul = True
-            html_parts.append(f"<li>{m.group(1)}</li>")
+            text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', m.group(1))
+            html_parts.append(f"<li>{text}</li>")
+            i += 1
             continue
 
         # 有序列表
@@ -169,7 +225,9 @@ def _markdown_to_html(md):
             if not in_ol:
                 html_parts.append("<ol>")
                 in_ol = True
-            html_parts.append(f"<li>{m.group(1)}</li>")
+            text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', m.group(1))
+            html_parts.append(f"<li>{text}</li>")
+            i += 1
             continue
 
         # 段落
@@ -182,6 +240,7 @@ def _markdown_to_html(md):
         # 加粗：先开<strong>再闭</strong>，支持一行多组
         text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', stripped)
         html_parts.append(f"<p>{text}</p>")
+        i += 1
 
     if in_ul:
         html_parts.append("</ul>")
@@ -192,13 +251,143 @@ def _markdown_to_html(md):
 
 
 def _extract_section(sections, keywords):
-    """从 AI sections 中按关键词提取内容"""
+    """从 AI sections 中按关键词提取内容，返回 HTML。"""
     for s in sections:
         title = s.get("title", "")
         for kw in keywords:
             if kw in title:
                 return _markdown_to_html(s.get("content", ""))
     return ""
+
+
+def _extract_subsection_from_content(content, keywords):
+    """
+    从一个 ## 章节的 markdown 内容中，按 ### 子标题关键词提取子章节内容。
+    返回 HTML 格式的子章节内容（不含子标题本身），未找到则返回空字符串。
+    """
+    if not content:
+        return ""
+    lines = content.split("\n")
+    current_sub_title = None
+    current_sub_lines = []
+    sub_sections = []  # [(sub_title, sub_content), ...]
+
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("### ") or stripped.startswith("#### "):
+            # 保存上一个子章节
+            if current_sub_title is not None:
+                sub_sections.append((current_sub_title, "\n".join(current_sub_lines).strip()))
+            current_sub_title = stripped.lstrip("#").strip()
+            current_sub_lines = []
+        else:
+            if current_sub_title is not None:
+                current_sub_lines.append(line)
+            # else: 属于章节开头但不在任何 ### 子标题下的内容，忽略
+
+    # 保存最后一个子章节
+    if current_sub_title is not None:
+        sub_sections.append((current_sub_title, "\n".join(current_sub_lines).strip()))
+
+    # 按关键词匹配
+    for sub_title, sub_content in sub_sections:
+        for kw in keywords:
+            if kw in sub_title:
+                return _markdown_to_html(sub_content)
+
+    return ""
+
+
+def _extract_section_content_only(sections, keywords):
+    """从 AI sections 中按关键词提取原始 markdown 内容（不转 HTML）"""
+    for s in sections:
+        title = s.get("title", "")
+        for kw in keywords:
+            if kw in title:
+                return s.get("content", "")
+    return ""
+
+
+# 霍兰德代码对应的默认职业方向（当 AI 输出无法提取职业列表时使用）
+HOLLAND_DEFAULT_CAREERS = {
+    "R": ["工程师", "技术员", "建筑师", "农艺师", "运动员"],
+    "I": ["科研人员", "数据分析师", "医生", "大学教授", "产品研究员"],
+    "A": ["设计师", "作家", "音乐人", "导演", "创意策划"],
+    "S": ["教师", "心理咨询师", "社工", "人力资源", "培训师"],
+    "E": ["创业者", "市场营销", "项目经理", "律师", "销售总监"],
+    "C": ["会计师", "审计师", "行政主管", "数据库管理员", "财务分析师"],
+}
+
+
+def _extract_career_list(ai_sections, holland_code):
+    """
+    从 AI 霍兰德章节中提取职业推荐列表，生成 HTML <li> 项。
+    如果无法提取，回退到基于霍兰德代码的默认职业列表。
+    """
+    holland_md = _extract_section_content_only(ai_sections, ["霍兰德", "职业", "方向"])
+    careers = []
+
+    if holland_md:
+        lines = holland_md.split("\n")
+        for line in lines:
+            stripped = line.strip()
+            # 匹配列表项: "- 职业名称" 或 "1. 职业名称" 或 "**职业名称**"
+            # 也匹配行内包含职业名称的加粗文本
+            m = re.match(r'^[-*]\s+(.+)', stripped)
+            if not m:
+                m = re.match(r'^\d+[\.\)]\s+(.+)', stripped)
+            if m:
+                text = m.group(1).strip()
+                # 去掉 markdown 加粗标记，提取纯文本
+                text_clean = re.sub(r'\*\*(.+?)\*\*', r'\1', text)
+                # 只取较短的行作为职业名（避免把整段分析当职业名）
+                if len(text_clean) <= 30 and text_clean:
+                    careers.append(text_clean)
+            elif not careers:
+                # 尝试提取加粗的职业名
+                bold_matches = re.findall(r'\*\*(.+?)\*\*', stripped)
+                for bm in bold_matches:
+                    bm_clean = bm.strip()
+                    # 过滤掉太长或明显不是职业名的
+                    if 2 <= len(bm_clean) <= 15 and not any(kw in bm_clean for kw in ["代码", "霍兰德", "类型", "得分"]):
+                        # 过滤掉类似霍兰德代码的全大写短字符串（如 REC、EAS）
+                        if not (len(bm_clean) <= 3 and bm_clean.isupper()):
+                            careers.append(bm_clean)
+
+    # 去重，最多取 8 个
+    seen = set()
+    unique_careers = []
+    for c in careers:
+        if c not in seen:
+            seen.add(c)
+            unique_careers.append(c)
+        if len(unique_careers) >= 8:
+            break
+
+    # 回退到默认职业列表
+    if not unique_careers and holland_code:
+        for code_char in holland_code[:3]:
+            defaults = HOLLAND_DEFAULT_CAREERS.get(code_char, [])
+            for d in defaults[:3]:
+                if d not in seen:
+                    seen.add(d)
+                    unique_careers.append(d)
+                if len(unique_careers) >= 6:
+                    break
+            if len(unique_careers) >= 6:
+                break
+
+    if not unique_careers:
+        unique_careers = ["请参考霍兰德代码对应的职业方向"]
+
+    # 生成 HTML
+    icons = ["💼", "🎯", "🚀", "📋", "🔬", "🎨", "📊", "🤝"]
+    html_parts = []
+    for i, career in enumerate(unique_careers):
+        icon = icons[i % len(icons)]
+        html_parts.append(f'<li><span class="career-icon">{icon}</span>{career}</li>')
+
+    return "".join(html_parts)
 
 
 def generate_report_html(results, profile, ai_sections):
@@ -255,32 +444,42 @@ def generate_report_html(results, profile, ai_sections):
     )
 
     # 职业推荐列表
-    career_suggestions = _extract_section(ai_sections, ["霍兰德", "职业", "方向"])
-    career_list_html = ""
-    if career_suggestions:
-        career_list_html = f"<li>{career_suggestions}</li>"
-    else:
-        career_list_html = "<li>请参考霍兰德代码对应的职业方向</li>"
+    career_list_html = _extract_career_list(ai_sections, holland_code)
 
     # AI 章节内容
     enneagram_analysis = _extract_section(ai_sections, ["九型", "enneagram"])
     mbti_analysis = _extract_section(ai_sections, ["MBTI", "mbti"])
     holland_analysis = _extract_section(ai_sections, ["霍兰德", "holland", "职业"])
     gallup_analysis = _extract_section(ai_sections, ["盖洛普", "gallup", "优势"])
-    cross_analysis = _extract_section(ai_sections, ["交叉", "综合", "cross"])
 
-    # 易学章节
-    lifecycle_content = ""
-    if birth_date:
-        lifecycle_content = _extract_section(ai_sections, ["易学", "传统", "命理", "生涯", "lifecycle"])
+    # 综合交叉解读：提取章节原始 markdown，用于后续子章节提取
+    cross_section_md = _extract_section_content_only(ai_sections, ["交叉", "综合", "cross"])
+    cross_analysis = _markdown_to_html(cross_section_md) if cross_section_md else _extract_section(ai_sections, ["交叉", "综合", "cross"])
 
-    # 协同点与张力点
-    synergy = _extract_section(ai_sections, ["协同", "synergy"])
-    tension = _extract_section(ai_sections, ["张力", "tension"])
+    # 协同点与张力点：从综合交叉解读章节内部提取 ### 子标题
+    synergy = _extract_subsection_from_content(cross_section_md, ["协同", "synergy"]) if cross_section_md else ""
+    tension = _extract_subsection_from_content(cross_section_md, ["张力", "tension"]) if cross_section_md else ""
     if not synergy:
         synergy = "详见综合交叉解读"
     if not tension:
         tension = "详见综合交叉解读"
+
+    # 易学/生涯发展时机建议章节
+    lifecycle_content = ""
+    lifecycle_focus = ""
+    lifecycle_pitfall = ""
+    lifecycle_cross = ""
+    if birth_date:
+        lifecycle_md = _extract_section_content_only(ai_sections, ["易学", "传统", "命理", "生涯", "lifecycle"])
+        if lifecycle_md:
+            # 尝试从 ### 子标题中提取4个子板块
+            lifecycle_content = _extract_subsection_from_content(lifecycle_md, ["当前", "定位"])
+            lifecycle_focus = _extract_subsection_from_content(lifecycle_md, ["专注", "方向"])
+            lifecycle_pitfall = _extract_subsection_from_content(lifecycle_md, ["避坑", "提醒", "注意"])
+            lifecycle_cross = _extract_subsection_from_content(lifecycle_md, ["交叉", "印证", "验证"])
+            # 如果没有子标题结构，把全部内容放在 LIFECYCLE_CURRENT
+            if not lifecycle_content and not lifecycle_focus and not lifecycle_pitfall and not lifecycle_cross:
+                lifecycle_content = _markdown_to_html(lifecycle_md)
 
     # MBTI 标签
     mbti_type = mb.get("type", "")
@@ -319,9 +518,9 @@ def generate_report_html(results, profile, ai_sections):
         "{{TENSION_POINTS}}": tension,
 
         "{{LIFECYCLE_CURRENT}}": lifecycle_content if lifecycle_content else "",
-        "{{LIFECYCLE_FOCUS}}": "",
-        "{{LIFECYCLE_PITFALL}}": "",
-        "{{LIFECYCLE_CROSS}}": "",
+        "{{LIFECYCLE_FOCUS}}": lifecycle_focus if lifecycle_focus else "",
+        "{{LIFECYCLE_PITFALL}}": lifecycle_pitfall if lifecycle_pitfall else "",
+        "{{LIFECYCLE_CROSS}}": lifecycle_cross if lifecycle_cross else "",
     }
 
     # 九型得分

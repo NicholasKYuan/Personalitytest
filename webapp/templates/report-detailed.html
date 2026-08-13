@@ -453,6 +453,9 @@
                 </svg>
             </div>
             <p style="text-align:center;font-size:0.78rem;color:var(--text-3);">四体系得分雷达图（面积越大代表各体系特征越鲜明）</p>
+            <p style="font-size:0.75rem;color:var(--text-3);margin-top:0.5rem;padding:0.5rem 0.75rem;background:var(--bg);border-radius:var(--radius);line-height:1.6;">
+                💡 <strong>关于得分说明</strong>：各体系类型判定采用<strong>归一化得分</strong>（即该维度总分 ÷ 该维度在试卷中出现的题数），以消除不同维度题目数量不均带来的偏差。因此，您在下方看到的<strong>原始得分条</strong>可能与最终类型判定不完全对应——例如某型原始分较低但因出现题数少，归一化后反而排名靠前。这是测评科学性的体现，非计算错误。
+            </p>
         </div>
     </section>
 
@@ -568,6 +571,7 @@
                     <span class="bar-score">{{MBTI_SCORE_P}}</span>
                 </div>
             </div>
+            <p style="font-size:0.72rem;color:var(--text-3);margin-bottom:0.75rem;">注：MBTI 类型由各维度归一化得分比较得出，非原始分直接对比。</p>
 
             <!-- AI 生成的深度分析内容 -->
             <!-- {{MBTI_ANALYSIS}} -->
@@ -615,6 +619,7 @@
                     <span class="bar-score">{{HOLLAND_SCORE_C}}</span>
                 </div>
             </div>
+            <p style="font-size:0.72rem;color:var(--text-3);margin-bottom:0.75rem;">注：霍兰德代码由各类型归一化得分排序取前三组成，非原始分直接排序。</p>
 
             <!-- 职业推荐 -->
             <h4 style="font-size:0.9rem;margin:1rem 0 0.5rem;">推荐职业方向</h4>

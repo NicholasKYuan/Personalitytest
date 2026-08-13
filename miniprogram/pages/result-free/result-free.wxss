@@ -1,5 +1,5 @@
 .result-free-page {
-  padding-bottom: 100rpx;
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
 }
 
 /* ---------- 头部 ---------- */
@@ -12,12 +12,6 @@
   display: flex;
   justify-content: center;
   margin-bottom: 24rpx;
-}
-
-.logo-wrap--md {
-  width: 96rpx;
-  height: 96rpx;
-  border-radius: 28rpx;
 }
 
 .rf-title {
@@ -58,11 +52,11 @@
   color: var(--text-sub);
   background: var(--bg-card);
   border: 1rpx solid var(--border-light);
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .radar-tab--active {
-  color: var(--brand-coral);
+  color: var(--text-coral);
   background: rgba(242, 84, 91, 0.08);
   border-color: rgba(242, 84, 91, 0.45);
   font-weight: 600;
@@ -107,7 +101,7 @@
   margin-top: 18rpx;
   font-size: 26rpx;
   font-weight: 500;
-  color: var(--brand-coral);
+  color: var(--text-coral);
 }
 
 /* ---------- 免费简述 ---------- */
@@ -124,7 +118,7 @@
 }
 
 .fs-text {
-  font-size: 27rpx;
+  font-size: 28rpx;
   line-height: 1.8;
   color: var(--text-sub);
 }
@@ -153,8 +147,8 @@
 .pp-badge {
   padding: 6rpx 20rpx;
   border-radius: 999rpx;
-  font-size: 22rpx;
-  color: var(--brand-coral);
+  font-size: 24rpx;
+  color: var(--badge-text-red);
   background: rgba(242, 84, 91, 0.10);
   border: 1rpx solid rgba(242, 84, 91, 0.30);
 }
@@ -192,7 +186,7 @@
 }
 
 .cta-quote {
-  font-size: 27rpx;
+  font-size: 28rpx;
   line-height: 1.8;
   font-style: italic;
   color: var(--text-sub);
@@ -220,7 +214,7 @@
 }
 
 .cv-text {
-  font-size: 27rpx;
+  font-size: 28rpx;
   color: var(--text-main);
 }
 

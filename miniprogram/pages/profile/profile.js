@@ -26,7 +26,16 @@ Page({
     horizonIndex: 0,
 
     errors: {},
-    submitting: false
+    submitting: false,
+    focusField: ''
+  },
+
+  onInputFocus(e) {
+    this.setData({ focusField: e.currentTarget.dataset.field || '' })
+  },
+
+  onInputBlur() {
+    this.setData({ focusField: '' })
   },
 
   onNameInput(e) {

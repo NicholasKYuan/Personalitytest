@@ -26,7 +26,7 @@
   margin-top: 16rpx;
   font-size: 34rpx;
   font-weight: 500;
-  color: var(--brand-coral);
+  color: var(--text-coral);
   letter-spacing: 4rpx;
 }
 
@@ -55,28 +55,28 @@
 
 /* 九型人格 → 珊瑚红 */
 .system-tag--0 {
-  color: var(--rainbow-red);
+  color: var(--badge-text-red);
   background: rgba(242, 84, 91, 0.10);
   border: 1rpx solid rgba(242, 84, 91, 0.30);
 }
 
 /* MBTI → 紫罗兰 */
 .system-tag--1 {
-  color: var(--rainbow-violet);
+  color: var(--badge-text-violet);
   background: rgba(139, 92, 246, 0.10);
   border: 1rpx solid rgba(139, 92, 246, 0.30);
 }
 
 /* 霍兰德 → 蓝 */
 .system-tag--2 {
-  color: var(--rainbow-blue);
+  color: var(--badge-text-blue);
   background: rgba(59, 158, 216, 0.10);
   border: 1rpx solid rgba(59, 158, 216, 0.30);
 }
 
 /* 盖洛普 → 绿 */
 .system-tag--3 {
-  color: var(--rainbow-green);
+  color: var(--badge-text-green);
   background: rgba(52, 199, 123, 0.10);
   border: 1rpx solid rgba(52, 199, 123, 0.30);
 }
@@ -177,7 +177,7 @@
   margin-top: 16rpx;
   font-size: 28rpx;
   font-weight: 500;
-  color: var(--brand-coral);
+  color: var(--text-coral);
 }
 
 .footer-links {
@@ -200,7 +200,7 @@
 .footer-records {
   font-size: 28rpx;
   font-weight: 500;
-  color: var(--brand-violet);
+  color: var(--text-violet);
 }
 
 /* ---------- 阶梯入场 ---------- */

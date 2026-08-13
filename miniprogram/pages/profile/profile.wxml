@@ -13,13 +13,13 @@
   <view class="form-card glass-card fade-in">
     <view class="form-row">
       <view class="form-label">昵称<text class="form-optional">（可选）</text></view>
-      <input class="form-input" type="text" placeholder="用于报告中称呼你" maxlength="20" value="{{name}}" bindinput="onNameInput" placeholder-class="ph" />
+      <input class="form-input {{focusField === 'name' ? 'form-input--focus' : ''}}" type="text" placeholder="用于报告中称呼你" maxlength="20" value="{{name}}" bindinput="onNameInput" data-field="name" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder-class="ph" />
     </view>
 
     <!-- 年龄（必填） -->
     <view class="form-row">
       <view class="form-label">年龄<text class="form-required"> *</text></view>
-      <input class="form-input" type="number" placeholder="12 - 80 岁" maxlength="2" value="{{age}}" bindinput="onAgeInput" placeholder-class="ph" />
+      <input class="form-input {{focusField === 'age' ? 'form-input--focus' : ''}}" type="number" placeholder="12 - 80 岁" maxlength="2" value="{{age}}" bindinput="onAgeInput" data-field="age" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder-class="ph" />
       <view class="form-error" wx:if="{{errors.age}}">{{errors.age}}</view>
     </view>
 

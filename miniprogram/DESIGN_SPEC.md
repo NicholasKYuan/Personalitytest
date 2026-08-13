@@ -46,6 +46,7 @@ page {
   --brand-coral-deep: #E03E52; /* 珊瑚红加深，按下态/深强调 */
   --brand-violet: #8B5CF6;     /* logo 彩虹·紫端，辅强调色 */
   --brand-gradient: linear-gradient(135deg, #F2545B 0%, #8B5CF6 100%); /* 品牌主渐变 */
+  --btn-gradient: linear-gradient(135deg, #D13841 0%, #8B5CF6 100%);  /* 承载白色文字的按钮渐变（起点加深，白字对比度 4.8:1 过 AA） */
 
   /* ---- 彩虹辅助色（取自 logo，用于标签/分类/图表） ---- */
   --rainbow-red: #F2545B;
@@ -65,8 +66,20 @@ page {
   /* ---- 文字 ---- */
   --text-main: #2B2622;        /* 主文字·深墨棕（比纯黑柔和） */
   --text-sub: #6E665E;         /* 次要文字·暖灰 */
-  --text-muted: #A89F95;       /* 辅助文字·浅暖灰 */
+  --text-muted: #756A60;       /* 辅助文字·暖灰（WCAG AA 4.93:1 on bg-page） */
   --text-onbrand: #FFFFFF;     /* 渐变按钮上的白字 */
+
+  /* ---- 品牌色作为小字文字色（对比度 ≥ 4.5:1，替代直接用彩虹色作小字） ---- */
+  --text-coral: #CD3540;       /* 链接/强调文字·珊瑚红加深 */
+  --text-violet: #6D3FD4;      /* 紫罗兰加深 */
+  --text-warning: #8F5A00;     /* 警示文字·琥珀加深 */
+  --text-warning-deep: #92400E;/* 警示横幅正文 */
+
+  /* ---- 徽章专用深色文字（在 10% 浅色底上对比度 ≥ 4.5:1） ---- */
+  --badge-text-red: #C03A42;
+  --badge-text-violet: #6D3FD4;
+  --badge-text-blue: #186FA6;
+  --badge-text-green: #177E4A;
 
   /* ---- 线条与分割 ---- */
   --border-light: #F0EAE2;     /* 浅分割线 */
@@ -162,7 +175,7 @@ page {
 ```css
 /* 主按钮（胶囊渐变） */
 .btn-primary {
-  background: var(--brand-gradient);
+  background: var(--btn-gradient);
   color: var(--text-onbrand);
   font-size: 34rpx;
   font-weight: 600;
@@ -190,7 +203,7 @@ page {
 
 /* 文字按钮（弱行动） */
 .btn-text {
-  color: var(--brand-coral);
+  color: var(--text-coral);
   font-size: 28rpx;
   font-weight: 500;
   background: transparent;
@@ -268,7 +281,7 @@ button[disabled] {
   border: 2rpx solid var(--border-light);
   border-radius: 24rpx;
   box-shadow: var(--shadow-card);
-  transition: all 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 .option-item--selected {
   border-color: var(--brand-coral);
@@ -291,16 +304,16 @@ button[disabled] {
 
 /* ---- 分类徽章（彩虹色系按体系分配） ---- */
 .badge-category {  /* 九型人格→珊瑚红 */
-  color: var(--rainbow-red);
+  color: var(--badge-text-red);
   background: rgba(242, 84, 91, 0.10);
   border: 1rpx solid rgba(242, 84, 91, 0.30);
 }
 .badge-scale {     /* MBTI→紫罗兰 */
-  color: var(--rainbow-violet);
+  color: var(--badge-text-violet);
   background: rgba(139, 92, 246, 0.10);
   border: 1rpx solid rgba(139, 92, 246, 0.30);
 }
-/* 霍兰德→蓝 rgba(59,158,216,…)，盖洛普→绿 rgba(52,199,123,…)，规则同上 */
+/* 霍兰德→蓝 badge-text-blue，盖洛普→绿 badge-text-green，规则同上 */
 ```
 
 ---

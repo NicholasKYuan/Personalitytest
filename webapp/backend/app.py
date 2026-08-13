@@ -902,6 +902,51 @@ def admin_sessions(username: str = Query(...), password: str = Query(...), page:
     return {"code": 0, "data": {"total": total, "page": page, "size": size, "sessions": sessions}}
 
 
+class AdminDeleteSessionsRequest(BaseModel):
+    username: str
+    password: str
+    openid_prefix: str = ""  # 只删匹配前缀的会话，如 "mock_openid_e2e_"
+    keep_latest: int = 0    # 保留最近 N 条，0=全删
+
+
+@app.post("/api/admin/sessions/delete")
+def admin_delete_sessions(req: AdminDeleteSessionsRequest):
+    """批量删除会话及其关联订单（仅限 mock/e2e 测试数据）。"""
+    _check_admin(req.username, req.password)
+    prefix = req.openid_prefix or "mock_openid_e2e_"
+    with database.get_db() as db:
+        # 找到要删的 session_id
+        if req.keep_latest > 0:
+            rows = db.execute(
+                "SELECT session_id FROM sessions WHERE openid LIKE %s "
+                "ORDER BY created_at DESC LIMIT %s OFFSET %s",
+                (prefix + "%", 999999, req.keep_latest),
+            ).fetchall()
+            keep_ids = {r["session_id"] for r in rows}
+            all_rows = db.execute(
+                "SELECT session_id FROM sessions WHERE openid LIKE %s",
+                (prefix + "%",),
+            ).fetchall()
+            del_ids = [r["session_id"] for r in all_rows if r["session_id"] not in keep_ids]
+        else:
+            rows = db.execute(
+                "SELECT session_id FROM sessions WHERE openid LIKE %s",
+                (prefix + "%",),
+            ).fetchall()
+            del_ids = [r["session_id"] for r in rows]
+
+        if not del_ids:
+            return {"code": 0, "message": "没有匹配的会话", "data": {"deleted": 0}}
+
+        # 删关联订单
+        placeholders = ",".join(["%s"] * len(del_ids))
+        db.execute(f"DELETE FROM orders WHERE session_id IN ({placeholders})", del_ids)
+        # 删会话
+        db.execute(f"DELETE FROM sessions WHERE session_id IN ({placeholders})", del_ids)
+
+    return {"code": 0, "message": f"已删除 {len(del_ids)} 条会话", "data": {"deleted": len(del_ids)}}
+
+
 @app.get("/api/admin/orders")
 def admin_orders(username: str = Query(...), password: str = Query(...), page: int = Query(1), size: int = Query(20)):
     """订单列表（分页）。"""

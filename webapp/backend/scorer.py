@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 scorer.py — 四体系评分逻辑
-接收100题答案，计算九型人格 / MBTI / 霍兰德 / 盖洛普结果。
+接收120题答案，计算九型人格 / MBTI / 霍兰德 / 盖洛普结果。
 """
 from collections import Counter, defaultdict
 
@@ -46,10 +46,10 @@ GALLUP_THEME_NAMES = {
 
 def score_answers(questions, answers):
     """
-    计算100题答案的四体系结果。
+    计算120题答案的四体系结果。
 
     Args:
-        questions: 100道题的完整数据（含 options[].score）
+        questions: 120道题的完整数据（含 options[].score）
         answers: [{"question_id": "Q0001", "option_index": 0}, ...]
 
     Returns:
@@ -201,19 +201,23 @@ def score_answers(questions, answers):
             "main_type": main_type_num,
             "type_name": main_type_name,
             "scores": enneagram_result,
+            "normalized": enneagram_normalized,
         },
         "mbti": {
             "type": mbti_type,
             "dimensions": mbti_dimensions,
+            "normalized": mbti_normalized,
         },
         "holland": {
             "code": holland_code,
             "scores": holland_raw,
+            "normalized": holland_normalized,
         },
         "gallup": {
             "top_domain": top_domain,
             "domains": gallup_raw,
             "top_themes": top_themes,
+            "normalized": gallup_normalized,
         },
     }
 

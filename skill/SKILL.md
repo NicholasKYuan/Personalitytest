@@ -1,11 +1,11 @@
 ---
 name: personality-test-selector
-summary: 从 1500 四体系融合题库中，按用户个人信息筛选出适配当前状态的 100 题测评卷
+summary: 从 2117 四体系融合题库中，按用户个人信息筛选出适配当前状态的 120 题测评卷
 description: |
   星耀启程人格测评的筛选 skill。输入用户 profile（年龄/角色/测评目的/当前状态），
-  从 1500 道融合题（九型人格 + MBTI + 霍兰德 + 盖洛普 四体系题目级融合）中筛选 100 题，
+  从 2000 道融合题（九型人格 + MBTI + 霍兰德 + 盖洛普 四体系题目级融合）中筛选 120 题，
   保证四体系全部维度可计算，输出可直接作答的测评卷 JSON。
-  触发词：筛选题目、生成测评卷、选 100 题、个性化测评、测评选题。
+  触发词：筛选题目、生成测评卷、选 120 题、个性化测评、测评选题。
 read_when:
   - 需要根据用户信息生成个性化测评卷
   - 需要校验测评卷的四体系维度覆盖
@@ -15,7 +15,7 @@ read_when:
 
 ## 用途
 
-给定用户 profile，产出 100 题个性化测评卷。一次作答即可计算：
+给定用户 profile，产出 120 题个性化测评卷。一次作答即可计算：
 - 九型人格主型 + 侧翼参考
 - MBTI 四字母类型
 - 霍兰德职业代码（前 3 位）
@@ -23,7 +23,7 @@ read_when:
 
 ## 文件位置
 
-- 题库：`question-bank/items.jsonl`（1500 题，每题含四体系 score 映射）
+- 题库：`question-bank/items.jsonl`（2000 题，每题含四体系 score 映射）
 - 题库结构：`question-bank/schema.json` + `question-bank/taxonomy.md`
 - 用户字段：`selector/profile-schema.json`
 - 算法说明：`selector/select-logic.md`
@@ -55,15 +55,15 @@ python selector/selector.py \
 输出 JSON 自带 `coverage_report.checks`，必须全部 `true`：
 - `enneagram_all_types>=5` — 九型每型至少 5 题有贡献
 - `mbti_all_poles>=4` — MBTI 每极至少 4 题
-- `holland_all_types>=5` — 霍兰德每型至少 5 题
+- `holland_all_types>=2(R>=1)` — 霍兰德每型至少 2 题（R型至少 1 题，因题库偏少）
 - `gallup_all_domains>=8` — 盖洛普每领域至少 8 题
-- `reverse>=10` — 反向题至少 10 题（一致性检测用）
+- `reverse>=12` — 反向题至少 12 题（一致性检测用）
 
 若有 `false`：向用户说明"该维度样本偏少，对应结果置信度较低"，或重跑筛选。
 
 ### 4. 交付测评卷
 
-输出 JSON 中 `questions` 数组即 100 题作答序列（已按类别交错 + 难度递增排序），
+输出 JSON 中 `questions` 数组即 120 题作答序列（已按类别交错 + 难度递增排序），
 `selection_reasons` 提供每题一句话选择理由（可向用户展示筛选的个性化依据）。
 
 ## 题库计分约定（作答后算分必读）

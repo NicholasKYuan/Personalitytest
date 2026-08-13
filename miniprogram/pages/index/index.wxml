@@ -64,9 +64,9 @@
     <button class="btn-primary btn-block" bindtap="onStart">开始免费测评</button>
     <view class="footer-tip">答题免费，详细报告可选择性解锁</view>
     <view class="footer-links">
-      <view class="footer-history" bindtap="onStart">开始我的探索</view>
+      <view class="footer-history" hover-class="hover-press" bindtap="onStart">开始我的探索</view>
       <view class="footer-divider">·</view>
-      <view class="footer-records" bindtap="onViewRecords">我的测评记录</view>
+      <view class="footer-records" hover-class="hover-press" bindtap="onViewRecords">我的测评记录</view>
     </view>
   </view>
 </view>

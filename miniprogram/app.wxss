@@ -10,14 +10,22 @@ page {
   --brand-coral-deep: #E03E52;
   --brand-violet: #8B5CF6;
   --brand-gradient: linear-gradient(135deg, #F2545B 0%, #8B5CF6 100%);
+  /* 承载白色文字的品牌渐变（起点加深至 #D13841，白字对比度 4.8:1 过 AA） */
+  --btn-gradient: linear-gradient(135deg, #D13841 0%, #8B5CF6 100%);
 
-  /* ---- 彩虹辅助色（四体系主题色） ---- */
+  /* ---- 彩虹辅助色（四体系主题色，仅用于图表/装饰/大字，勿用于小字） ---- */
   --rainbow-red: #F2545B;
   --rainbow-orange: #F59E0B;
   --rainbow-green: #34C77B;
   --rainbow-blue: #3B9ED8;
   --rainbow-violet: #8B5CF6;
   --rainbow-purple: #C65CF0;
+
+  /* ---- 徽章专用深色文字（在 10% 浅色底上对比度 ≥ 4.5:1） ---- */
+  --badge-text-red: #C03A42;     /* 4.76:1 on red tint */
+  --badge-text-violet: #6D3FD4;  /* 5.61:1 on violet tint */
+  --badge-text-blue: #186FA6;    /* 4.91:1 on blue tint */
+  --badge-text-green: #177E4A;   /* 4.70:1 on green tint */
 
   /* ---- 背景 ---- */
   --bg-page: #FAF7F2;
@@ -29,8 +37,14 @@ page {
   /* ---- 文字 ---- */
   --text-main: #2B2622;
   --text-sub: #6E665E;
-  --text-muted: #A89F95;
+  --text-muted: #756A60;       /* 修复：原 #A89F95 仅 2.44:1 → 现 4.93:1 过 AA */
   --text-onbrand: #FFFFFF;
+
+  /* ---- 品牌色作为小字文字色（对比度 ≥ 4.5:1） ---- */
+  --text-coral: #CD3540;       /* 4.70:1 on bg-page，用于 btn-text/链接/强调文字 */
+  --text-violet: #6D3FD4;      /* 5.93:1 on bg-page */
+  --text-warning: #8F5A00;     /* 5.41:1 on bg-page，替代 #F59E0B 直接作文字色 */
+  --text-warning-deep: #92400E; /* 警示横幅正文 */
 
   /* ---- 线条与分割 ---- */
   --border-light: #F0EAE2;
@@ -42,6 +56,7 @@ page {
   --color-warning: #F59E0B;
   --color-error: #F2545B;
   --color-info: #3B9ED8;
+  --bg-warning-soft: #FEF3C7;  /* 警示横幅/标签浅底 */
 
   /* ---- 星光点缀 ---- */
   --star-gold: rgba(245, 158, 11, 0.55);
@@ -128,7 +143,7 @@ page {
 }
 
 .btn-primary {
-  background: var(--brand-gradient);
+  background: var(--btn-gradient);
   color: var(--text-onbrand);
   font-size: 34rpx;
   font-weight: 600;
@@ -144,18 +159,6 @@ page {
   transform: scale(0.98);
 }
 
-.btn-accent {
-  background: var(--brand-gradient);
-  color: var(--text-onbrand);
-  font-size: 34rpx;
-  font-weight: 600;
-  border-radius: 999rpx;
-  padding: 26rpx 0;
-  line-height: 1.4;
-  border: none;
-  box-shadow: var(--shadow-brand);
-}
-
 .btn-ghost {
   background: var(--bg-card);
   color: var(--text-main);
@@ -169,10 +172,32 @@ page {
 }
 
 .btn-text {
-  color: var(--brand-coral);
+  color: var(--text-coral);
   font-size: 28rpx;
   font-weight: 500;
   background: transparent;
+}
+
+/* ---------- 可点击 view 的触感反馈（配合 hover-class="hover-press"） ---------- */
+.hover-press {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+/* ---------- 底部固定操作栏（pay/result-full 共用） ---------- */
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
+  background: #FFFFFF;
+  border-top: 1rpx solid var(--border-light);
+  box-shadow: 0 -4rpx 24rpx rgba(43, 38, 34, 0.06);
+  z-index: 100;
+  box-sizing: border-box;
 }
 
 /* 微信 button 默认样式清除 */
@@ -242,10 +267,22 @@ button[disabled] {
   border-radius: 36rpx;
 }
 
+.logo-wrap--md {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 28rpx;
+}
+
 .logo-wrap--sm {
   width: 80rpx;
   height: 80rpx;
   border-radius: 24rpx;
+}
+
+.logo-wrap--xs {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 20rpx;
 }
 
 /* ---------- 入场动画 ---------- */

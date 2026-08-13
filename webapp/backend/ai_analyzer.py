@@ -26,6 +26,30 @@ def _get_client():
 
 MODEL = os.getenv("MINIMAX_MODEL", "MiniMax-M3")
 
+# 盖洛普 34 主题中文名映射（传入 AI prompt 前转中文）
+GALLUP_THEME_NAMES = {
+    "achiever": "成就", "activator": "行动", "adaptability": "适应",
+    "analytical": "分析", "arranger": "统筹", "belief": "信仰",
+    "command": "统率", "communication": "沟通", "competition": "竞争",
+    "connectedness": "关联", "context": "回顾", "consistency": "公平",
+    "deliberative": "审慎", "developer": "伯乐", "discipline": "纪律",
+    "empathy": "体谅", "focus": "专注", "futuristic": "前瞻",
+    "harmony": "和谐", "ideation": "理念", "includer": "包容",
+    "individualization": "个别", "input": "搜集", "intellection": "思维",
+    "learner": "学习", "maximizer": "完美", "positivity": "积极",
+    "relator": "交往", "responsibility": "责任", "restorative": "排难",
+    "self_assurance": "自信", "significance": "追求", "strategic": "战略",
+    "woo": "取悦",
+}
+
+# 盖洛普四领域中文名映射
+GALLUP_DOMAIN_NAMES = {
+    "executing": "执行力",
+    "influencing": "影响力",
+    "relationship_building": "关系建立",
+    "strategic_thinking": "战略思维",
+}
+
 SYSTEM_PROMPT = """你是专业的心理测评分析师，精通九型人格、MBTI、霍兰德职业兴趣理论和盖洛普优势识别器。
 你的任务是根据用户的测评结果，生成一份深度、专业、有洞察力的个性化解读报告。
 
@@ -83,9 +107,11 @@ def _build_user_prompt(results, profile):
 
     # 盖洛普领域得分
     gallup_domains_str = "\n".join(
-        f"  {k}: {v}" for k, v in gallup["domains"].items()
+        f"  {GALLUP_DOMAIN_NAMES.get(k, k)}: {v}" for k, v in gallup["domains"].items()
     )
-    gallup_themes_str = "、".join(gallup["top_themes"]) if gallup["top_themes"] else "暂无"
+    # 盖洛普主题名转中文后传入 prompt
+    gallup_themes_cn = [GALLUP_THEME_NAMES.get(t, t) for t in gallup["top_themes"]]
+    gallup_themes_str = "、".join(gallup_themes_cn) if gallup_themes_cn else "暂无"
 
     # 用户信息
     name = profile.get("name", "用户")
@@ -132,7 +158,7 @@ def _build_user_prompt(results, profile):
 {holland_scores_str}
 
 ### 盖洛普优势
-- 主导领域：{gallup['top_domain']}
+- 主导领域：{GALLUP_DOMAIN_NAMES.get(gallup['top_domain'], gallup['top_domain'])}
 - 领域得分：
 {gallup_domains_str}
 - 核心主题：{gallup_themes_str}
@@ -151,14 +177,23 @@ def _build_user_prompt(results, profile):
 基于代码 {holland['code']}，推荐适合的职业方向和发展路径。
 
 ### 4. 盖洛普优势发挥
-解读主导领域 {gallup['top_domain']} 和核心主题 {gallup_themes_str}，给出优势发挥和补盲建议。盖洛普主题用中文名称。
+解读主导领域 {GALLUP_DOMAIN_NAMES.get(gallup['top_domain'], gallup['top_domain'])} 和核心主题 {gallup_themes_str}，给出优势发挥和补盲建议。
 
 ### 5. 四体系综合交叉解读
-找出四个体系之间的协同点和张力点，给出融合洞察。
+找出四个体系之间的协同点和张力点，给出融合洞察。请务必使用以下子标题结构：
+
+### 协同点
+（列出2-3个四体系之间的协同亮点）
+
+### 张力点
+（列出1-2个四体系之间的张力或潜在冲突）
+
+### 融合洞察
+（综合四体系的整体洞察）
 """
 
     if birth_date:
-        prompt += "\n### 6. 传统易学结合解读\n基于出生日期，用现代生涯规划语言提供命理与心理呼应的参考视角。禁止出现八字、五行、紫微、占星等字眼。\n"
+        prompt += "\n### 6. 传统易学结合解读\n基于出生日期，用现代生涯规划语言提供命理与心理呼应的参考视角。禁止出现八字、五行、紫微、占星等字眼。请务必使用以下4个子标题，每个80-150字：\n\n### 当前发展阶段定位\n（分析用户当前所处的人生发展阶段）\n\n### 近三年专注方向\n（建议未来1-3年的核心发展方向）\n\n### 阶段性格避坑提醒\n（提示当前阶段需要避免的陷阱）\n\n### 与四体系交叉验证\n（将易学视角与MBTI/九型/霍兰德/盖洛普四体系结果相互印证，必须有具体引用）\n"
 
     prompt += "\n请确保报告专业、深入、有个性化洞察。"
     return prompt
@@ -233,12 +268,20 @@ def _mock_sections(results, profile):
     ho = results.get("holland", {})
     ga = results.get("gallup", {})
     sections = [
-        {"title": "九型人格深度解读", "content": f"## {en.get('main_type')}号 {en.get('type_name')}\n\n你的九型主型为 **{en.get('main_type')}号 {en.get('type_name')}**（MOCK）。"},
-        {"title": "MBTI深度分析", "content": f"## {mb.get('type')}\n\n你的 MBTI 类型为 **{mb.get('type')}**（MOCK）。"},
-        {"title": "霍兰德职业方向", "content": f"## {ho.get('code')}\n\n你的霍兰德代码为 **{ho.get('code')}**（MOCK）。"},
-        {"title": "盖洛普优势发挥", "content": f"## {ga.get('top_domain')}\n\n主导领域 **{ga.get('top_domain')}**（MOCK）。"},
-        {"title": "四体系综合交叉解读", "content": "## 综合视角\n\n四体系综合解读（MOCK）。"},
+        {"title": "九型人格深度解读", "content": f"## {en.get('main_type')}号 {en.get('type_name')}\n\n你的九型主型为 **{en.get('main_type')}号 {en.get('type_name')}**（MOCK）。核心特质包括追求卓越、关注效率与形象管理。内在动力源于对成功和认可的渴望，恐惧被否定或被视为失败者。成长方向是学会真实地连接他人，而非仅通过成就获得认可。"},
+        {"title": "MBTI深度分析", "content": f"## {mb.get('type')}\n\n你的 MBTI 类型为 **{mb.get('type')}**（MOCK）。认知功能栈以思维和判断为主导，擅长系统性分析和目标导向的执行。互动风格直接高效，偏好结构化的沟通方式。发展建议是培养对他人情感的感知力，在决策中适当融入人文关怀。"},
+        {"title": "霍兰德职业方向", "content": f"## {ho.get('code')}\n\n你的霍兰德代码为 **{ho.get('code')}**（MOCK）。基于该代码组合，推荐以下职业方向：\n- 产品经理\n- 项目管理\n- 市场战略\n- 创业运营\n- 数据分析\n- 管理咨询\n这些方向既匹配你的实际型和企业型倾向，也能发挥你在执行和战略方面的优势。"},
+        {"title": "盖洛普优势发挥", "content": f"## {ga.get('top_domain')}\n\n主导领域 **{ga.get('top_domain')}**（MOCK）。核心主题包括成就、专注和统筹。优势发挥建议：在目标明确的环境中你能够高效产出，适合担任推动落地的角色。补盲建议：注意在追求效率时不要忽视团队的情感需求，适当放慢节奏倾听不同声音。"},
+        {"title": "四体系综合交叉解读", "content": "## 综合视角\n\n### 协同点\n\n四体系协同解读（MOCK）：九型成就者与MBTI判断型高度一致，驱动执行力。盖洛普执行力领域进一步强化了目标达成能力。霍兰德企业型倾向与九型成就动机形成正向循环。\n\n### 张力点\n\n九型的形象关注与MBTI直觉型的抽象偏好存在张力。霍兰德实际型偏好与盖洛普关系建立领域的薄弱可能影响团队协作。\n\n### 融合洞察\n\n综合来看，该用户适合目标导向的创造型工作。建议在保持高效执行的同时，有意识地培养人际感知力，以实现更全面的领导力发展。"},
     ]
+
+    # 当存在 birth_date 时，添加第 6 章
+    if profile.get("birth_date"):
+        sections.append({
+            "title": "传统易学结合解读",
+            "content": '## 命理与心理的呼应\n\n### 当前发展阶段定位\n\n（MOCK）结合您的出生年月日，当前正处于事业上升期，能量场偏向行动与突破。这是建立核心竞争力和拓展影响力的关键阶段。\n\n### 近三年专注方向\n\n（MOCK）建议未来 1-3 年聚焦于专业深度的建立和资源网络的拓展。适合主导创新型项目，将个人能力转化为可复制的系统。\n\n### 阶段性格避坑提醒\n\n（MOCK）当前阶段需注意避免过度自信导致的决策仓促。在高速发展中容易忽略细节和人际维护，建议定期复盘并保持与导师的对话。\n\n### 与四体系交叉验证\n\n（MOCK）九型 8 号的挑战者特质与当前命理阶段的突破能量高度吻合。MBTI 判断型偏好与「事业上升期」的节奏匹配。霍兰德企业型倾向在当前阶段有天然优势。盖洛普执行力领域的强势为这一阶段提供了坚实的行动力基础。'
+        })
+
     return {"detailed_analysis": "", "sections": sections}
 
 
@@ -325,6 +368,11 @@ def _filter_english(text):
     过滤掉 AI 输出中的过程文本（如 "Here is..."、"I'll..." 等推理过程）。
     中英文混排可以接受，不过滤英文小标题或短语。
     但纯英文段落（无中文字符的连续多行英文）会被移除。
+
+    优化点：
+    - 中文豁免阈值从 10 提高到 15 个汉字，减少误删
+    - 关键词列表收窄为 AI 推理最强信号词
+    - "Note:" / "Important" 开头的行仅在无中文字符时才跳过
     """
     lines = text.split('\n')
     filtered = []
@@ -334,19 +382,30 @@ def _filter_english(text):
             filtered.append(line)
             continue
 
-        # 跳过 AI 推理过程文本（"Here is...", "I'll...", "Let me..." 等）
-        if re.match(r'^(Here|I\'ll|Let me|Sure|Below|This is|The user|Now I|First|Second|Let\'s|I will|I need|I should|Birth date|Avoid|Note:|Important|The instruction|Since|Given|For him|For her|For this|For the user|This user|The profile)', stripped, re.IGNORECASE):
-            continue
+        # 统计中文字符数
+        chinese_chars = re.findall(r'[\u4e00-\u9fff]', stripped)
+        has_chinese = len(chinese_chars) > 0
+        chinese_count = len(chinese_chars)
 
-        # 跳过包含 AI 推理关键词的行
-        if re.search(r'\b(avoid|forbidden|instruction|requirement|I can use|I\'ll talk|I should|mentioned|as allowed|says|allows|prompt|system prompt)\b', stripped, re.IGNORECASE):
-            # 但保留包含中文字符的行（可能是正常内容碰巧包含这些词）
-            if not re.search(r'[\u4e00-\u9fff]{10,}', stripped):
+        # 跳过 AI 推理过程文本（"Here is...", "I'll...", "Let me..." 等）
+        # 仅在行首匹配，且后面紧跟空格或标点
+        if re.match(r'^(Here |I\'ll |Let me |Sure,|Below is|This is |The user |Now I |First,|Second,|Let\'s |I will |I need |I should |Given |Since )', stripped, re.IGNORECASE):
+            # 但如果该行有 >= 15 个中文字符，可能是正文碰巧以这些词开头，保留
+            if chinese_count < 15:
+                continue
+
+        # 跳过包含 AI 推理关键词的行（仅最强信号词）
+        # 收窄列表：只保留 AI 推理过程中几乎不会出现在正文中的词
+        if re.search(r'\b(system prompt|as allowed|I\'ll talk|I should (not|avoid|mention))\b', stripped, re.IGNORECASE):
+            if chinese_count < 15:
+                continue
+
+        # "Note:" / "Important" 开头的行：仅在无中文时才跳过
+        if re.match(r'^(Note:|Important:|The instruction|Birth date|Avoid )', stripped, re.IGNORECASE):
+            if not has_chinese:
                 continue
 
         # 过滤纯英文段落：行中没有任何中文字符 + 英文单词 > 8 个
-        # 这能抓到 "For him as programmer, this is interesting - 7s can become..." 这种推理文本
-        has_chinese = bool(re.search(r'[\u4e00-\u9fff]', stripped))
         if not has_chinese and not stripped.startswith('#'):
             english_word_count = len(re.findall(r'[a-zA-Z]+', stripped))
             # 排除 MBTI/霍兰德等类型代码行
