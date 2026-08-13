@@ -293,3 +293,92 @@
   font-size: 22rpx;
   color: var(--text-muted);
 }
+
+/* ---------- AI 生成进度遮罩 ---------- */
+.gen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.gen-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 56rpx 48rpx 48rpx;
+  width: 600rpx;
+  text-align: center;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.15);
+}
+
+.gen-icon {
+  margin-bottom: 32rpx;
+}
+
+.gen-spinner {
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0 auto;
+  border: 6rpx solid #f0f0f0;
+  border-top-color: #8B5CF6;
+  border-radius: 50%;
+  animation: gen-spin 1s linear infinite;
+}
+
+@keyframes gen-spin {
+  to { transform: rotate(360deg); }
+}
+
+.gen-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8rpx;
+}
+
+.gen-subtitle {
+  font-size: 24rpx;
+  color: var(--text-muted);
+  margin-bottom: 40rpx;
+}
+
+.gen-progress-wrap {
+  width: 100%;
+  height: 16rpx;
+  background: #f0f0f0;
+  border-radius: 999rpx;
+  overflow: hidden;
+  margin-bottom: 16rpx;
+}
+
+.gen-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #F2545B, #8B5CF6);
+  border-radius: 999rpx;
+  transition: width 0.5s ease;
+}
+
+.gen-progress-text {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--brand-coral);
+  margin-bottom: 24rpx;
+}
+
+.gen-time {
+  font-size: 24rpx;
+  color: var(--text-sub);
+  margin-bottom: 8rpx;
+}
+
+.gen-tip {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  line-height: 1.5;
+}

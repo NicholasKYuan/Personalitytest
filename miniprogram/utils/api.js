@@ -31,6 +31,8 @@ function isMock() {
 
 /**
  * 通用请求
+ * - CLOUD_ENV 有值时走 wx.cloud.callContainer()（云托管模式，免备案免白名单）
+ * - CLOUD_ENV 为空时走 wx.request()（传统模式，需 HTTPS + 白名单）
  * @param {string} method GET/POST
  * @param {string} path 以 / 开头的接口路径
  * @param {object} data 请求体 / query 参数
@@ -45,43 +47,72 @@ function request(method, path, data, options = {}) {
       if (token) header.Authorization = 'Bearer ' + token
     }
 
-    wx.request({
-      url: config.BASE_URL + path,
-      method,
-      data,
-      header,
-      success(res) {
-        const body = res.data
+    const useCloud = !!(config.CLOUD_ENV && wx.cloud && wx.cloud.callContainer)
 
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          // 新版统一包装 { code, message, data }
-          if (body && typeof body === 'object' && typeof body.code === 'number') {
-            if (body.code === ERR.OK) {
-              return resolve(body.data !== undefined ? body.data : body)
-            }
-            if (body.code === ERR.UNAUTHORIZED && auth && !retried) {
-              // token 失效 → 重新登录后重试一次
-              return reloginAndRetry(method, path, data, resolve, reject)
-            }
-            const err = new Error(body.message || `请求失败(${body.code})`)
-            err.code = body.code
-            return reject(err)
+    const handleSuccess = (res) => {
+      const body = res.data
+
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        // 新版统一包装 { code, message, data }
+        if (body && typeof body === 'object' && typeof body.code === 'number') {
+          if (body.code === ERR.OK) {
+            return resolve(body.data !== undefined ? body.data : body)
           }
-          // 旧版裸数据
-          return resolve(body)
+          if (body.code === ERR.UNAUTHORIZED && auth && !retried) {
+            // token 失效 → 重新登录后重试一次
+            return reloginAndRetry(method, path, data, resolve, reject)
+          }
+          const err = new Error(body.message || `请求失败(${body.code})`)
+          err.code = body.code
+          return reject(err)
         }
-
-        // HTTP 层错误
-        const msg =
-          (body && (body.message || body.detail)) || `请求失败(${res.statusCode})`
-        const err = new Error(msg)
-        err.code = res.statusCode
-        return reject(err)
-      },
-      fail() {
-        reject(new Error('网络异常，请检查网络连接'))
+        // 旧版裸数据
+        return resolve(body)
       }
-    })
+
+      // HTTP 层错误
+      let msg = body && (body.message || body.detail)
+      if (Array.isArray(msg)) {
+        msg = msg.map((d) => (d && d.msg) || JSON.stringify(d)).join('；')
+      } else if (msg && typeof msg !== 'string') {
+        msg = JSON.stringify(msg)
+      }
+      msg = msg || `请求失败(${res.statusCode})`
+      const err = new Error(msg)
+      err.code = res.statusCode
+      return reject(err)
+    }
+
+    const handleFail = (err) => {
+      console.error('[api] request fail:', method, path, err)
+      const errMsg = (err && (err.errMsg || err.message)) || '网络异常'
+      reject(new Error(errMsg))
+    }
+
+    if (useCloud) {
+      // 云托管模式：通过 wx.cloud.callContainer 调用，免域名白名单
+      wx.cloud.callContainer({
+        config: { env: config.CLOUD_ENV },
+        path: path,
+        method,
+        data,
+        header: Object.assign({}, header, {
+          'X-WX-SERVICE': config.CLOUD_SERVICE
+        }),
+        success: handleSuccess,
+        fail: handleFail
+      })
+    } else {
+      // 传统模式：wx.request
+      wx.request({
+        url: config.BASE_URL + path,
+        method,
+        data,
+        header,
+        success: handleSuccess,
+        fail: handleFail
+      })
+    }
   })
 }
 
@@ -113,7 +144,7 @@ function login(code, nickname, avatarUrl) {
 /** POST /api/session — 创建会话，返回 120 题（剥除 score） */
 function createSession(profile) {
   if (isMock()) return mockApi.createSession(profile)
-  return request('POST', '/api/session', { profile })
+  return request('POST', '/api/session', profile)
 }
 
 /** POST /api/submit — 提交答案，返回四体系结果 + free_summary */
@@ -157,6 +188,12 @@ function getHealth() {
   return request('GET', '/api/health', null, { auth: false })
 }
 
+/** GET /api/stats — 公开统计：完成测评人数 */
+function getStats() {
+  if (isMock()) return Promise.resolve({ completed_count: 12580 })
+  return request('GET', '/api/stats', null, { auth: false })
+}
+
 module.exports = {
   ERR,
   isMock,
@@ -167,5 +204,6 @@ module.exports = {
   getReportStatus,
   getReportDetail,
   redeemCode,
-  getHealth
+  getHealth,
+  getStats
 }

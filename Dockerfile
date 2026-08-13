@@ -16,6 +16,6 @@ RUN mkdir -p /app/webapp/backend/sessions /data/sessions
 
 WORKDIR /app/webapp/backend
 
-EXPOSE 8000
+EXPOSE 80
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]

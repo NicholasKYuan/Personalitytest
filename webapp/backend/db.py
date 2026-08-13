@@ -1,94 +1,131 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-db.py — SQLite 数据层（users / sessions / orders）
+db.py — MySQL 数据层（users / sessions / orders / redeem_codes）
 
-初期使用 SQLite（单文件、零运维），上线可切换 MySQL（结构兼容，表定义见
-miniprogram/BACKEND_SPEC.md §5）。JSON 字段一律存 TEXT。
+使用 pymysql 驱动，通过环境变量配置连接：
+  MYSQL_HOST / MYSQL_PORT / MYSQL_USER / MYSQL_PASSWORD / MYSQL_DATABASE
+
+接口与原 SQLite 版本兼容：get_db() 返回带 execute() 方法的上下文管理器。
 """
 import os
-import sqlite3
-import threading
 import time
-from pathlib import Path
+from contextlib import contextmanager
 
-BACKEND_DIR = Path(__file__).parent.resolve()
-DEFAULT_DB = str(BACKEND_DIR / "app.db")
+import pymysql
 
+# ---------------------------------------------------------------------------
+# MySQL 兼容的建表语句（inline index，无需 CREATE INDEX IF NOT EXISTS）
+# ---------------------------------------------------------------------------
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (
-    openid           TEXT PRIMARY KEY,
-    nickname         TEXT    DEFAULT '',
-    avatar_url       TEXT    DEFAULT '',
-    token            TEXT    DEFAULT '',
-    token_expire_at  REAL    DEFAULT 0,
-    created_at       REAL    DEFAULT 0,
-    last_login_at    REAL    DEFAULT 0
-);
+    openid           VARCHAR(128) PRIMARY KEY,
+    nickname         VARCHAR(255) DEFAULT '',
+    avatar_url       TEXT,
+    token            VARCHAR(255) DEFAULT '',
+    token_expire_at  DOUBLE DEFAULT 0,
+    created_at       DOUBLE DEFAULT 0,
+    last_login_at    DOUBLE DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS sessions (
-    session_id   TEXT PRIMARY KEY,
-    openid       TEXT NOT NULL DEFAULT '',   -- 小程序会话绑定 openid；Web 遗留会话为空串
-    profile      TEXT NOT NULL,   -- JSON
-    questions    TEXT NOT NULL,   -- JSON（完整题，含 score，仅服务端）
-    answers      TEXT,            -- JSON
-    results      TEXT,            -- JSON（四体系评分）
+    session_id   VARCHAR(128) PRIMARY KEY,
+    openid       VARCHAR(128) NOT NULL DEFAULT '',
+    profile      TEXT NOT NULL,
+    questions    MEDIUMTEXT NOT NULL,
+    answers      MEDIUMTEXT,
+    results      MEDIUMTEXT,
     free_summary TEXT,
-    status       TEXT DEFAULT 'created',  -- created | answered | generating | ready | failed
-    ai_sections  TEXT,            -- JSON（付费正文，服务端保护）
+    status       VARCHAR(32) DEFAULT 'created',
+    ai_sections  MEDIUMTEXT,
     ai_error     TEXT,
-    created_at   REAL DEFAULT 0,
-    updated_at   REAL DEFAULT 0
-);
-CREATE INDEX IF NOT EXISTS idx_sessions_openid ON sessions(openid);
+    created_at   DOUBLE DEFAULT 0,
+    updated_at   DOUBLE DEFAULT 0,
+    INDEX idx_sessions_openid (openid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS orders (
-    id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    out_trade_no   TEXT UNIQUE,
-    session_id     TEXT NOT NULL,
-    openid         TEXT NOT NULL,
-    amount_fen     INTEGER DEFAULT 2990,   -- 固定 29.90 元
-    status         TEXT DEFAULT 'pending', -- pending | paid | closed | refunded
-    prepay_id      TEXT DEFAULT '',
-    transaction_id TEXT DEFAULT '',
-    notify_raw     TEXT,                   -- 微信回调原文（对账用）
-    created_at     REAL DEFAULT 0,
-    paid_at        REAL DEFAULT 0
-);
-CREATE INDEX IF NOT EXISTS idx_orders_session    ON orders(session_id);
-CREATE INDEX IF NOT EXISTS idx_orders_openid_st  ON orders(openid, status);
+    id             INT PRIMARY KEY AUTO_INCREMENT,
+    out_trade_no   VARCHAR(64) UNIQUE,
+    session_id     VARCHAR(128) NOT NULL,
+    openid         VARCHAR(128) NOT NULL,
+    amount_fen     INT DEFAULT 2990,
+    status         VARCHAR(32) DEFAULT 'pending',
+    prepay_id      VARCHAR(128) DEFAULT '',
+    transaction_id VARCHAR(64) DEFAULT '',
+    notify_raw     TEXT,
+    created_at     DOUBLE DEFAULT 0,
+    paid_at        DOUBLE DEFAULT 0,
+    INDEX idx_orders_session (session_id),
+    INDEX idx_orders_openid_st (openid, status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS redeem_codes (
-    code             TEXT PRIMARY KEY,
-    batch_label      TEXT    DEFAULT '',
-    status           TEXT    DEFAULT 'unused',   -- unused | used | disabled
-    created_at       REAL    DEFAULT 0,
-    expires_at       REAL    DEFAULT 0,           -- 0 = 永不过期
-    used_at          REAL    DEFAULT 0,
-    used_by_openid   TEXT    DEFAULT '',
-    used_session_id  TEXT    DEFAULT '',
-    created_by       TEXT    DEFAULT ''
-);
-CREATE INDEX IF NOT EXISTS idx_redeem_status ON redeem_codes(status);
+    code             VARCHAR(64) PRIMARY KEY,
+    batch_label      VARCHAR(128) DEFAULT '',
+    status           VARCHAR(32) DEFAULT 'unused',
+    created_at       DOUBLE DEFAULT 0,
+    expires_at       DOUBLE DEFAULT 0,
+    used_at          DOUBLE DEFAULT 0,
+    used_by_openid   VARCHAR(128) DEFAULT '',
+    used_session_id  VARCHAR(128) DEFAULT '',
+    created_by       VARCHAR(128) DEFAULT '',
+    INDEX idx_redeem_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 """
 
-_lock = threading.Lock()
+
+class _DBWrapper:
+    """模拟 sqlite3.Connection.execute() 接口，简化迁移。"""
+
+    def __init__(self, conn):
+        self._conn = conn
+
+    def execute(self, sql, params=()):
+        cur = self._conn.cursor()
+        cur.execute(sql, params)
+        return cur
+
+    def executescript(self, script):
+        """执行多条 SQL（按 ; 分割）。"""
+        cur = self._conn.cursor()
+        for stmt in script.split(";"):
+            stmt = stmt.strip()
+            if stmt:
+                cur.execute(stmt)
+        cur.close()
 
 
-def _db_path() -> str:
-    url = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_DB}")
-    if url.startswith("sqlite:///"):
-        return url[len("sqlite:///"):]
-    if url.startswith("sqlite:"):
-        return url[len("sqlite:"):]
-    raise RuntimeError(f"暂仅支持 SQLite，DATABASE_URL={url}")
+@contextmanager
+def get_db():
+    """获取数据库连接（上下文管理器）。
 
-
-def get_db() -> sqlite3.Connection:
-    conn = sqlite3.connect(_db_path(), timeout=15)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
-    return conn
+    用法与 SQLite 版完全一致：
+        with get_db() as db:
+            row = db.execute("SELECT ... WHERE id=%s", (id,)).fetchone()
+    """
+    conn = pymysql.connect(
+        host=os.getenv("MYSQL_HOST", "localhost"),
+        port=int(os.getenv("MYSQL_PORT", "3306")),
+        user=os.getenv("MYSQL_USER", "root"),
+        password=os.getenv("MYSQL_PASSWORD", ""),
+        database=os.getenv("MYSQL_DATABASE", "personality"),
+        charset="utf8mb4",
+        cursorclass=pymysql.cursors.DictCursor,
+        autocommit=False,
+        connect_timeout=10,
+        read_timeout=30,
+        write_timeout=30,
+    )
+    wrapper = _DBWrapper(conn)
+    try:
+        yield wrapper
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 
 def now() -> float:
@@ -96,7 +133,8 @@ def now() -> float:
 
 
 def init_db():
-    with _lock, get_db() as db:
+    """建表（幂等）。"""
+    with get_db() as db:
         db.executescript(SCHEMA)
 
 

@@ -25,12 +25,18 @@ TOKEN_TTL = 7 * 24 * 3600  # 7 天
 def _code2session(code: str) -> dict:
     """调用微信 code2session，返回 {openid, session_key} 或 {errcode, errmsg}。
 
-    PAY_MOCK=1 且 code 以 MOCK 开头时，跳过真实调用，返回确定性 mock openid
-    （便于无小程序登录凭证时联调全流程）。
+    PAY_MOCK=1 时跳过真实调用，返回确定性 mock openid
+    （便于无小程序登录凭证或云托管网络受限时联调全流程）。
     """
-    if os.getenv("PAY_MOCK", "0") == "1" and code.startswith("MOCK"):
-        openid = "mock_openid_" + hashlib.md5(code.encode()).hexdigest()[:16]
+    pay_mock = os.getenv("PAY_MOCK", "0") == "1"
+
+    # PAY_MOCK 模式：直接返回 mock openid，不调用微信 API
+    # 注意：所有 mock 登录共用同一个 openid，避免 token 过期重登后 openid 变化导致 403
+    if pay_mock:
+        openid = "mock_openid_default_user"
         return {"openid": openid, "session_key": "mock_session_key"}
+
+    # 真实模式：调用微信 code2session
     params = {
         "appid": WX_APPID,
         "secret": WX_SECRET,
@@ -56,23 +62,23 @@ def login_with_code(code: str, nickname: str = "", avatar_url: str = "") -> dict
     is_new = False
 
     with get_db() as db:
-        row = db.execute("SELECT openid FROM users WHERE openid=?", (openid,)).fetchone()
+        row = db.execute("SELECT openid FROM users WHERE openid=%s", (openid,)).fetchone()
         if row is None:
             is_new = True
             db.execute(
-                "INSERT INTO users (openid, nickname, avatar_url, created_at, last_login_at) VALUES (?,?,?,?,?)",
+                "INSERT INTO users (openid, nickname, avatar_url, created_at, last_login_at) VALUES (%s,%s,%s,%s,%s)",
                 (openid, nickname, avatar_url, t, t),
             )
         else:
             db.execute(
-                "UPDATE users SET last_login_at=?, nickname=CASE WHEN ?<>'' THEN ? ELSE nickname END, "
-                "avatar_url=CASE WHEN ?<>'' THEN ? ELSE avatar_url END WHERE openid=?",
+                "UPDATE users SET last_login_at=%s, nickname=CASE WHEN %s<>'' THEN %s ELSE nickname END, "
+                "avatar_url=CASE WHEN %s<>'' THEN %s ELSE avatar_url END WHERE openid=%s",
                 (t, nickname, nickname, avatar_url, avatar_url, openid),
             )
 
         token = secrets.token_urlsafe(32)
         expire = t + TOKEN_TTL
-        db.execute("UPDATE users SET token=?, token_expire_at=? WHERE openid=?", (token, expire, openid))
+        db.execute("UPDATE users SET token=%s, token_expire_at=%s WHERE openid=%s", (token, expire, openid))
 
     return {"token": token, "openid": openid, "is_new": is_new, "expires_in": TOKEN_TTL}
 
@@ -83,7 +89,7 @@ def verify_token(token: str):
         return None
     with get_db() as db:
         row = db.execute(
-            "SELECT openid, token_expire_at FROM users WHERE token=? AND token_expire_at>?",
+            "SELECT openid, token_expire_at FROM users WHERE token=%s AND token_expire_at>%s",
             (token, now()),
         ).fetchone()
     return row["openid"] if row else None

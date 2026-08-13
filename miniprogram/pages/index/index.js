@@ -3,9 +3,11 @@
  * 品牌展示、测试说明、用户评价、开始入口；进入时检查未完成会话并引导续测。
  */
 const storage = require('../../utils/storage')
+const api = require('../../utils/api')
 
 Page({
   data: {
+    completedCount: '12,580',
     systems: ['九型人格', 'MBTI', '霍兰德', '盖洛普'],
     features: [
       { title: '120 题精准测评，融合四大权威体系' },
@@ -23,6 +25,18 @@ Page({
 
   onShow() {
     this.checkUnfinishedQuiz()
+    this.loadStats()
+  },
+
+  /** 从后端获取真实完成测评人数 */
+  loadStats() {
+    api.getStats()
+      .then((data) => {
+        if (data && data.completed_count != null) {
+          this.setData({ completedCount: data.completed_count.toLocaleString() })
+        }
+      })
+      .catch(() => { /* 静默失败，保留默认值 */ })
   },
 
   /** 检查本地是否有未完成的会话，弹窗引导继续 */

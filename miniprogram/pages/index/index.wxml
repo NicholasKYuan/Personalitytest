@@ -49,7 +49,7 @@
   <!-- 数据统计 -->
   <view class="stats-section glass-card fade-in">
     <view class="stat-item">
-      <view class="stat-num">12,580</view>
+      <view class="stat-num">{{completedCount}}</view>
       <view class="stat-label">人已完成测评</view>
     </view>
     <view class="stat-divider"></view>

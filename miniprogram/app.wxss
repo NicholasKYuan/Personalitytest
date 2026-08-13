@@ -251,6 +251,7 @@ button[disabled] {
 /* ---------- 入场动画 ---------- */
 .fade-in {
   animation: fadeSlideIn 0.5s ease both;
+  opacity: 1; /* 兜底：动画未触发也保证可见 */
 }
 
 @keyframes fadeSlideIn {

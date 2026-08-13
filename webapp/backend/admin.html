@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>星鉴人格 · 管理后台</title>
+<style>
+:root {
+  --bg: #f5f6fa;
+  --card: #fff;
+  --primary: #6366f1;
+  --primary-d: #4f46e5;
+  --text: #1e293b;
+  --text-2: #64748b;
+  --border: #e2e8f0;
+  --green: #10b981;
+  --red: #ef4444;
+  --orange: #f59e0b;
+  --radius: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif; background:var(--bg); color:var(--text); -webkit-text-size-adjust:100%; }
+
+/* Login */
+.login-wrap { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
+.login-card { background:var(--card); border-radius:16px; padding:32px 28px; width:100%; max-width:360px; box-shadow:0 4px 24px rgba(0,0,0,.08); }
+.login-card h1 { font-size:20px; text-align:center; margin-bottom:6px; }
+.login-card p { text-align:center; color:var(--text-2); font-size:13px; margin-bottom:20px; }
+.login-card input { width:100%; padding:12px 16px; border:1px solid var(--border); border-radius:8px; font-size:16px; margin-bottom:10px; outline:none; transition:border .2s; }
+.login-card input:focus { border-color:var(--primary); }
+.login-card button { width:100%; padding:12px; background:var(--primary); color:#fff; border:none; border-radius:8px; font-size:16px; cursor:pointer; transition:background .2s; }
+.login-card button:active { background:var(--primary-d); }
+.login-error { color:var(--red); font-size:13px; text-align:center; margin-top:8px; min-height:18px; }
+
+/* Layout */
+.app { display:none; }
+.topbar { background:var(--card); border-bottom:1px solid var(--border); padding:0 16px; height:52px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10; }
+.topbar h1 { font-size:16px; font-weight:600; }
+.topbar .right { display:flex; align-items:center; gap:12px; }
+.topbar .right span { font-size:12px; color:var(--text-2); }
+.btn-logout { color:var(--text-2); cursor:pointer; font-size:13px; border:none; background:none; padding:4px 8px; }
+.btn-logout:active { color:var(--red); }
+
+/* Tabs - scrollable on mobile */
+.tabs { display:flex; gap:4px; padding:12px 12px 0; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.tabs::-webkit-scrollbar { display:none; }
+.tab { padding:8px 16px; border-radius:8px 8px 0 0; cursor:pointer; font-size:14px; color:var(--text-2); border:1px solid transparent; border-bottom:none; white-space:nowrap; flex-shrink:0; }
+.tab.active { background:var(--card); border-color:var(--border); color:var(--primary); font-weight:500; }
+.tab:active:not(.active) { background:rgba(99,102,241,.08); }
+
+.content { padding:12px 16px 40px; }
+.panel { display:none; }
+.panel.active { display:block; }
+
+/* Stats cards */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:16px; }
+.stat-card { background:var(--card); border-radius:var(--radius); padding:16px; box-shadow:0 1px 4px rgba(0,0,0,.05); }
+.stat-card .label { font-size:12px; color:var(--text-2); margin-bottom:6px; }
+.stat-card .value { font-size:24px; font-weight:700; }
+.stat-card .value.green { color:var(--green); }
+.stat-card .value.orange { color:var(--orange); }
+.stat-card .sub { font-size:11px; color:var(--text-2); margin-top:4px; }
+
+/* Table - responsive with horizontal scroll */
+.table-card { background:var(--card); border-radius:var(--radius); overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.05); }
+.table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+table { width:100%; border-collapse:collapse; min-width:600px; }
+th { background:#f8fafc; padding:10px 14px; text-align:left; font-size:12px; color:var(--text-2); font-weight:500; white-space:nowrap; border-bottom:1px solid var(--border); }
+td { padding:10px 14px; font-size:13px; border-bottom:1px solid var(--border); }
+tr:last-child td { border-bottom:none; }
+tr:hover { background:#f8fafc; }
+.mono { font-family:'SF Mono',Consolas,monospace; font-size:12px; }
+.truncate { max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* Badges */
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:500; }
+.badge-green { background:#d1fae5; color:#065f46; }
+.badge-orange { background:#fef3c7; color:#92400e; }
+.badge-red { background:#fee2e2; color:#991b1b; }
+.badge-gray { background:#f1f5f9; color:#64748b; }
+.badge-blue { background:#dbeafe; color:#1e40af; }
+
+/* Pagination */
+.pagination { display:flex; justify-content:center; align-items:center; gap:8px; padding:12px; }
+.pagination button { padding:6px 14px; border:1px solid var(--border); border-radius:6px; background:var(--card); cursor:pointer; font-size:13px; }
+.pagination button:active:not(:disabled) { border-color:var(--primary); color:var(--primary); }
+.pagination button:disabled { opacity:.4; cursor:not-allowed; }
+.pagination span { font-size:13px; color:var(--text-2); }
+
+/* Redeem tools */
+.toolbar { display:flex; gap:8px; margin-bottom:12px; align-items:center; flex-wrap:wrap; }
+.btn { padding:8px 14px; border-radius:8px; border:none; cursor:pointer; font-size:14px; }
+.btn-primary { background:var(--primary); color:#fff; }
+.btn-primary:active { background:var(--primary-d); }
+.btn-sm { padding:4px 10px; font-size:12px; border-radius:6px; }
+.btn-disable { background:#fee2e2; color:#991b1b; }
+.btn-enable { background:#d1fae5; color:#065f46; }
+input.filter { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:14px; outline:none; }
+input.filter:focus { border-color:var(--primary); }
+select.filter { padding:8px 12px; border:1px solid var(--border); border-radius:8px; font-size:14px; outline:none; background:#fff; }
+
+/* Toast */
+.toast { position:fixed; top:16px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; font-size:14px; z-index:100; opacity:0; transition:opacity .3s; }
+.toast.show { opacity:1; }
+.toast-success { background:#d1fae5; color:#065f46; }
+.toast-error { background:#fee2e2; color:#991b1b; }
+
+/* Generate modal */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:50; align-items:center; justify-content:center; padding:20px; }
+.modal-overlay.show { display:flex; }
+.modal { background:var(--card); border-radius:16px; padding:28px 24px; width:100%; max-width:380px; }
+.modal h3 { font-size:18px; margin-bottom:16px; }
+.modal label { display:block; font-size:14px; margin-bottom:6px; color:var(--text-2); }
+.modal input { width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:16px; margin-bottom:14px; outline:none; }
+.modal input:focus { border-color:var(--primary); }
+.modal-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:8px; }
+.modal-actions button { padding:8px 20px; border-radius:8px; border:none; cursor:pointer; font-size:14px; }
+.btn-cancel { background:#f1f5f9; color:var(--text-2); }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <h1>星鉴人格 · 管理后台</h1>
+    <p>请输入管理员账号密码</p>
+    <input type="text" id="loginUser" placeholder="用户名" autocomplete="username" value="">
+    <input type="password" id="loginPass" placeholder="密码" autocomplete="current-password">
+    <button onclick="doLogin()">登录</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- App -->
+<div class="app" id="app">
+  <div class="topbar">
+    <h1>星鉴人格 · 管理后台</h1>
+    <div class="right">
+      <span id="serverInfo"></span>
+      <button class="btn-logout" onclick="doLogout()">退出</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('dashboard', event)">总览</div>
+    <div class="tab" onclick="switchTab('users', event)">用户数据</div>
+    <div class="tab" onclick="switchTab('orders', event)">支付订单</div>
+    <div class="tab" onclick="switchTab('sessions', event)">测评记录</div>
+    <div class="tab" onclick="switchTab('redeem', event)">兑换码管理</div>
+  </div>
+
+  <div class="content">
+    <!-- Dashboard -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-grid" id="statsGrid"></div>
+    </div>
+
+    <!-- Users -->
+    <div class="panel" id="panel-users">
+      <div class="toolbar">
+        <input class="filter" id="userSearch" placeholder="搜索昵称/openid..." oninput="renderUsers()">
+      </div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>昵称</th><th>OpenID</th><th>注册时间</th><th>最后登录</th></tr></thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="usersPager"></div>
+      </div>
+    </div>
+
+    <!-- Orders -->
+    <div class="panel" id="panel-orders">
+      <div class="toolbar">
+        <select class="filter" id="orderStatusFilter" onchange="renderOrders()">
+          <option value="">全部状态</option>
+          <option value="paid">已支付</option>
+          <option value="pending">待支付</option>
+          <option value="closed">已关闭</option>
+        </select>
+      </div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>订单号</th><th>OpenID</th><th>金额</th><th>状态</th><th>交易号</th><th>创建时间</th><th>支付时间</th></tr></thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="ordersPager"></div>
+      </div>
+    </div>
+
+    <!-- Sessions -->
+    <div class="panel" id="panel-sessions">
+      <div class="toolbar">
+        <select class="filter" id="sessionStatusFilter" onchange="renderSessions()">
+          <option value="">全部状态</option>
+          <option value="created">已创建</option>
+          <option value="answered">已答题</option>
+          <option value="generating">生成中</option>
+          <option value="ready">已完成</option>
+          <option value="failed">失败</option>
+        </select>
+      </div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Session ID</th><th>OpenID</th><th>状态</th><th>创建时间</th><th>更新时间</th></tr></thead>
+            <tbody id="sessionsBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="sessionsPager"></div>
+      </div>
+    </div>
+
+    <!-- Redeem -->
+    <div class="panel" id="panel-redeem">
+      <div class="toolbar">
+        <input class="filter" id="redeemSearch" placeholder="搜索兑换码..." oninput="renderRedeem()">
+        <select class="filter" id="redeemStatusFilter" onchange="renderRedeem()">
+          <option value="">全部状态</option>
+          <option value="unused">未使用</option>
+          <option value="used">已使用</option>
+          <option value="disabled">已停用</option>
+        </select>
+        <button class="btn btn-primary" onclick="showGenModal()">+ 生成新码</button>
+        <button class="btn btn-sm" style="background:#f1f5f9;color:var(--text-2)" onclick="exportRedeem()">导出CSV</button>
+      </div>
+      <div class="stats-grid" id="redeemStats"></div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>兑换码</th><th>批次</th><th>状态</th><th>使用者</th><th>使用时间</th><th>创建时间</th><th>操作</th></tr></thead>
+            <tbody id="redeemBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Generate modal -->
+<div class="modal-overlay" id="genModal">
+  <div class="modal">
+    <h3>生成兑换码</h3>
+    <label>生成数量</label>
+    <input type="number" id="genCount" value="10" min="1" max="500">
+    <label>批次标签</label>
+    <input type="text" id="genLabel" placeholder="例如：第二批合作方">
+    <label>有效期（天，0=永不过期）</label>
+    <input type="number" id="genExpires" value="0" min="0">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="hideGenModal()">取消</button>
+      <button class="btn btn-primary" onclick="doGenerate()">生成</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = location.origin;
+let ADMIN_USER = '';
+let ADMIN_PASS = '';
+let allUsers = [], allOrders = [], allSessions = [], allRedeem = [];
+let userPage = 1, orderPage = 1, sessionPage = 1;
+const PAGE_SIZE = 20;
+
+// ---- Utils ----
+function fmtTime(ts) {
+  if (!ts || ts === 0) return '-';
+  const d = new Date(ts * 1000);
+  return d.toLocaleString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show toast-' + type;
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function authParams() {
+  return '&username=' + encodeURIComponent(ADMIN_USER) + '&password=' + encodeURIComponent(ADMIN_PASS);
+}
+async function api(path, opts={}) {
+  const sep = path.includes('?') ? '&' : '?';
+  const url = path + sep + 'username=' + encodeURIComponent(ADMIN_USER) + '&password=' + encodeURIComponent(ADMIN_PASS);
+  const res = await fetch(API + url, opts);
+  const data = await res.json();
+  if (data.code !== 0) throw new Error(data.detail || data.message || '请求失败');
+  return data.data;
+}
+
+// ---- Login ----
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  if (!user || !pass) { document.getElementById('loginError').textContent = '请输入用户名和密码'; return; }
+  ADMIN_USER = user;
+  ADMIN_PASS = pass;
+  fetch(API + '/api/admin/stats?username=' + encodeURIComponent(user) + '&password=' + encodeURIComponent(pass))
+    .then(r => r.json())
+    .then(d => {
+      if (d.code === 0) {
+        try { localStorage.setItem('admin_cred', btoa(user + ':' + pass)); } catch(e) {}
+        document.getElementById('loginWrap').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        document.getElementById('serverInfo').textContent = location.host;
+        loadAll();
+      } else {
+        document.getElementById('loginError').textContent = d.detail || '用户名或密码错误';
+        ADMIN_USER = ''; ADMIN_PASS = '';
+      }
+    })
+    .catch(() => {
+      document.getElementById('loginError').textContent = '连接失败，请检查网络';
+      ADMIN_USER = ''; ADMIN_PASS = '';
+    });
+}
+function doLogout() {
+  ADMIN_USER = ''; ADMIN_PASS = '';
+  try { localStorage.removeItem('admin_cred'); } catch(e) {}
+  location.reload();
+}
+
+// Auto-login from saved credentials
+try {
+  const saved = localStorage.getItem('admin_cred');
+  if (saved) {
+    const [u, p] = atob(saved).split(':');
+    if (u && p) { document.getElementById('loginUser').value = u; document.getElementById('loginPass').value = p; }
+  }
+} catch(e) {}
+
+// ---- Tab switch ----
+function switchTab(name, ev) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  ev.target.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+// ---- Load all data ----
+async function loadAll() {
+  await loadStats();
+  await loadUsers();
+  await loadOrders();
+  await loadSessions();
+  await loadRedeem();
+}
+
+// ---- Dashboard stats ----
+async function loadStats() {
+  try {
+    const s = await api('/api/admin/stats');
+    const sg = document.getElementById('statsGrid');
+    sg.innerHTML = `
+      <div class="stat-card"><div class="label">总用户数</div><div class="value">${s.total_users}</div><div class="sub">近7天新增 ${s.recent_users_7d}</div></div>
+      <div class="stat-card"><div class="label">测评会话</div><div class="value">${s.total_sessions}</div><div class="sub">${Object.entries(s.session_status_dist||{}).map(([k,v])=>`${k}:${v}`).join(' · ')}</div></div>
+      <div class="stat-card"><div class="label">支付订单</div><div class="value green">${s.paid_orders}</div><div class="sub">总订单 ${s.total_orders}</div></div>
+      <div class="stat-card"><div class="label">总收入（元）</div><div class="value green">${s.total_revenue_yuan}</div><div class="sub">不含兑换码</div></div>
+      <div class="stat-card"><div class="label">兑换码</div><div class="value orange">${s.redeem.total}</div><div class="sub">未用 ${s.redeem.unused} · 已用 ${s.redeem.used} · 停用 ${s.redeem.disabled}</div></div>
+    `;
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+// ---- Users ----
+async function loadUsers(page=1) {
+  try {
+    const d = await api(`/api/admin/users?page=${page}&size=${PAGE_SIZE}`);
+    allUsers = d.users || [];
+    userPage = page;
+    renderUsers(d.total);
+  } catch(e) { showToast(e.message, 'error'); }
+}
+function renderUsers(total) {
+  const q = document.getElementById('userSearch').value.toLowerCase();
+  let list = allUsers;
+  if (q) list = list.filter(u => (u.nickname||'').toLowerCase().includes(q) || u.openid.toLowerCase().includes(q));
+  const body = document.getElementById('usersBody');
+  body.innerHTML = list.map(u => `<tr>
+    <td>${u.nickname || '-'}</td>
+    <td class="mono truncate" title="${u.openid}">${u.openid.substring(0,16)}...</td>
+    <td>${fmtTime(u.created_at)}</td>
+    <td>${fmtTime(u.last_login_at)}</td>
+  </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--text-2);padding:24px">暂无数据</td></tr>';
+  renderPager('usersPager', userPage, Math.ceil((total||0)/PAGE_SIZE), loadUsers);
+}
+
+// ---- Orders ----
+async function loadOrders(page=1) {
+  try {
+    const d = await api(`/api/admin/orders?page=${page}&size=${PAGE_SIZE}`);
+    allOrders = d.orders || [];
+    orderPage = page;
+    renderOrders(d.total);
+  } catch(e) { showToast(e.message, 'error'); }
+}
+function renderOrders(total) {
+  const sf = document.getElementById('orderStatusFilter').value;
+  let list = allOrders;
+  if (sf) list = list.filter(o => o.status === sf);
+  const body = document.getElementById('ordersBody');
+  const badgeMap = {paid:'badge-green',pending:'badge-orange',closed:'badge-red',refunded:'badge-gray'};
+  const labelMap = {paid:'已支付',pending:'待支付',closed:'已关闭',refunded:'已退款'};
+  body.innerHTML = list.map(o => `<tr>
+    <td class="mono">${o.out_trade_no}</td>
+    <td class="mono truncate" title="${o.openid}">${o.openid.substring(0,12)}...</td>
+    <td>${o.amount_yuan > 0 ? '¥'+o.amount_yuan : '<span class="badge badge-blue">兑换</span>'}</td>
+    <td><span class="badge ${badgeMap[o.status]||'badge-gray'}">${labelMap[o.status]||o.status}</span></td>
+    <td class="mono truncate" title="${o.transaction_id}">${o.transaction_id || '-'}</td>
+    <td>${fmtTime(o.created_at)}</td>
+    <td>${fmtTime(o.paid_at)}</td>
+  </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:24px">暂无数据</td></tr>';
+  renderPager('ordersPager', orderPage, Math.ceil((total||0)/PAGE_SIZE), loadOrders);
+}
+
+// ---- Sessions ----
+async function loadSessions(page=1) {
+  try {
+    const d = await api(`/api/admin/sessions?page=${page}&size=${PAGE_SIZE}`);
+    allSessions = d.sessions || [];
+    sessionPage = page;
+    renderSessions(d.total);
+  } catch(e) { showToast(e.message, 'error'); }
+}
+function renderSessions(total) {
+  const sf = document.getElementById('sessionStatusFilter').value;
+  let list = allSessions;
+  if (sf) list = list.filter(s => s.status === sf);
+  const badgeMap = {created:'badge-gray',answered:'badge-blue',generating:'badge-orange',ready:'badge-green',failed:'badge-red'};
+  const labelMap = {created:'已创建',answered:'已答题',generating:'生成中',ready:'已完成',failed:'失败'};
+  const body = document.getElementById('sessionsBody');
+  body.innerHTML = list.map(s => `<tr>
+    <td class="mono truncate" title="${s.session_id}">${s.session_id.substring(0,16)}...</td>
+    <td class="mono truncate" title="${s.openid}">${s.openid ? s.openid.substring(0,12)+'...' : '-'}</td>
+    <td><span class="badge ${badgeMap[s.status]||'badge-gray'}">${labelMap[s.status]||s.status}</span></td>
+    <td>${fmtTime(s.created_at)}</td>
+    <td>${fmtTime(s.updated_at)}</td>
+  </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-2);padding:24px">暂无数据</td></tr>';
+  renderPager('sessionsPager', sessionPage, Math.ceil((total||0)/PAGE_SIZE), loadSessions);
+}
+
+// ---- Pager ----
+function renderPager(elId, page, totalPages, loadFn) {
+  const el = document.getElementById(elId);
+  if (!el || totalPages <= 1) { if(el) el.innerHTML=''; return; }
+  el.innerHTML = `
+    <button onclick="${loadFn.name}(${page-1})" ${page<=1?'disabled':''}>上一页</button>
+    <span>第 ${page} / ${totalPages} 页</span>
+    <button onclick="${loadFn.name}(${page+1})" ${page>=totalPages?'disabled':''}>下一页</button>
+  `;
+}
+
+// ---- Redeem ----
+async function loadRedeem() {
+  try {
+    const d = await api('/api/admin/redeem/list');
+    allRedeem = d || [];
+    renderRedeem();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+function renderRedeem() {
+  const q = document.getElementById('redeemSearch').value.toUpperCase();
+  const sf = document.getElementById('redeemStatusFilter').value;
+  let list = allRedeem;
+  if (q) list = list.filter(r => r.code.includes(q));
+  if (sf) list = list.filter(r => r.status === sf);
+
+  // stats
+  const unused = allRedeem.filter(r => r.status === 'unused').length;
+  const used = allRedeem.filter(r => r.status === 'used').length;
+  const disabled = allRedeem.filter(r => r.status === 'disabled').length;
+  document.getElementById('redeemStats').innerHTML = `
+    <div class="stat-card"><div class="label">总数</div><div class="value">${allRedeem.length}</div></div>
+    <div class="stat-card"><div class="label">未使用</div><div class="value green">${unused}</div></div>
+    <div class="stat-card"><div class="label">已使用</div><div class="value orange">${used}</div></div>
+    <div class="stat-card"><div class="label">已停用</div><div class="value" style="color:var(--red)">${disabled}</div></div>
+  `;
+
+  const badgeMap = {unused:'badge-green',used:'badge-gray',disabled:'badge-red'};
+  const labelMap = {unused:'未使用',used:'已使用',disabled:'已停用'};
+  const body = document.getElementById('redeemBody');
+  const maxShow = 200;
+  const shown = list.slice(0, maxShow);
+  body.innerHTML = shown.map(r => `<tr>
+    <td class="mono">${r.code}</td>
+    <td>${r.batch_label || '-'}</td>
+    <td><span class="badge ${badgeMap[r.status]||'badge-gray'}">${labelMap[r.status]||r.status}</span></td>
+    <td class="mono truncate" title="${r.used_by_openid}">${r.used_by_openid ? r.used_by_openid.substring(0,12)+'...' : '-'}</td>
+    <td>${fmtTime(r.used_at)}</td>
+    <td>${fmtTime(r.created_at)}</td>
+    <td>${r.status === 'unused' ? `<button class="btn btn-sm btn-disable" onclick="toggleRedeem('${r.code}')">停用</button>` : r.status === 'disabled' ? `<button class="btn btn-sm btn-enable" onclick="toggleRedeem('${r.code}')">启用</button>` : '-'}</td>
+  </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:24px">暂无数据</td></tr>';
+  if (list.length > maxShow) {
+    body.innerHTML += `<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:8px">仅显示前 ${maxShow} 条，共 ${list.length} 条</td></tr>`;
+  }
+}
+async function toggleRedeem(code) {
+  try {
+    await api('/api/admin/redeem/disable', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({code, username:ADMIN_USER, password:ADMIN_PASS})
+    });
+    showToast('操作成功');
+    loadRedeem();
+    loadStats();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+function showGenModal() { document.getElementById('genModal').classList.add('show'); }
+function hideGenModal() { document.getElementById('genModal').classList.remove('show'); }
+async function doGenerate() {
+  const count = parseInt(document.getElementById('genCount').value) || 1;
+  const label = document.getElementById('genLabel').value.trim();
+  const expires = parseInt(document.getElementById('genExpires').value) || 0;
+  try {
+    const d = await api('/api/admin/redeem/generate', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({count, batch_label:label, expires_days:expires, username:ADMIN_USER, password:ADMIN_PASS})
+    });
+    showToast(`已生成 ${d.codes.length} 个兑换码`);
+    hideGenModal();
+    loadRedeem();
+    loadStats();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+function exportRedeem() {
+  const lines = ['兑换码,批次,状态,使用时间,使用者\n'];
+  allRedeem.forEach(r => {
+    lines.push(`${r.code},${r.batch_label||''},${r.status},${fmtTime(r.used_at)},${r.used_by_openid}\n`);
+  });
+  const blob = new Blob(lines, {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '兑换码列表.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Enter key on login
+document.getElementById('loginPass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>

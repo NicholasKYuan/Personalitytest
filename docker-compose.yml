@@ -6,7 +6,7 @@ services:
     container_name: personality-api
     restart: always
     ports:
-      - "8000:8000"
+      - "8000:80"
     volumes:
       # Persist database & sessions to a data volume
       - app-data:/data

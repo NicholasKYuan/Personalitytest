@@ -24,6 +24,16 @@ const BENEFITS = [
   'AI 生成内容仅供参考，不构成任何专业诊断'
 ]
 
+/** 等待时的温馨提示，轮播展示 */
+const GEN_TIPS = [
+  '正在分析您的九型人格特质…',
+  '正在解读您的 MBTI 认知功能…',
+  '正在匹配您的霍兰德职业方向…',
+  '正在挖掘您的盖洛普优势主题…',
+  '正在进行四体系交叉分析…',
+  '即将完成，正在整理报告…'
+]
+
 Page({
   data: {
     chapters: CHAPTERS,
@@ -33,7 +43,11 @@ Page({
     price: config.PRICE_CN,
     originalPrice: config.PRICE_ORIGINAL_CN,
     redeemInput: '',
-    redeeming: false
+    redeeming: false,
+    generating: false,
+    genProgress: 0,
+    genTimeText: '预计需要 1-2 分钟',
+    genTip: GEN_TIPS[0]
   },
 
   onLoad(options) {
@@ -55,6 +69,7 @@ Page({
 
   onUnload() {
     this.stopPolling()
+    this._stopProgressTimer()
   },
 
   /* ============================================================
@@ -130,9 +145,34 @@ Page({
      报告生成状态轮询
      ============================================================ */
   startPolling() {
-    wx.showLoading({ title: 'AI 正在生成报告...', mask: true })
+    this.setData({ generating: true, genProgress: 0, genTip: GEN_TIPS[0] })
     this.pollCount = 0
+    this.genStartTime = Date.now()
+    this._startProgressTimer()
     this.pollTimer = setTimeout(() => this.pollOnce(), 500)
+  },
+
+  /** 模拟进度条：前 30 秒快速增长到 60%，之后缓慢爬升到 95% */
+  _startProgressTimer() {
+    this._progressTimer = setInterval(() => {
+      const elapsed = (Date.now() - this.genStartTime) / 1000
+      let pct
+      if (elapsed <= 30) {
+        pct = Math.min(60, Math.round(elapsed * 2))
+      } else {
+        pct = Math.min(95, 60 + Math.round((elapsed - 30) * 0.6))
+      }
+      const tipIdx = Math.min(Math.floor(elapsed / 15), GEN_TIPS.length - 1)
+      const remain = elapsed < 60 ? '预计需要 1-2 分钟' : '即将完成，请稍候…'
+      this.setData({ genProgress: pct, genTip: GEN_TIPS[tipIdx], genTimeText: remain })
+    }, 1000)
+  },
+
+  _stopProgressTimer() {
+    if (this._progressTimer) {
+      clearInterval(this._progressTimer)
+      this._progressTimer = null
+    }
   },
 
   pollOnce() {
@@ -145,9 +185,13 @@ Page({
             status.report_status === 'ready' ||
             status.report_status === 'failed')
         if (ready) {
-          this.stopPolling()
-          wx.hideLoading()
-          this.goReport()
+          this._stopProgressTimer()
+          this.setData({ genProgress: 100, genTimeText: '生成完成！' })
+          setTimeout(() => {
+            this.stopPolling()
+            this.setData({ generating: false })
+            this.goReport()
+          }, 600)
           return
         }
         this.scheduleNextPoll()
@@ -158,20 +202,20 @@ Page({
           this.scheduleNextPoll()
           return
         }
+        this._stopProgressTimer()
         this.stopPolling()
-        wx.hideLoading()
+        this.setData({ generating: false, paying: false })
         wx.showToast({ title: (err && err.message) || '报告生成失败，请稍后重试', icon: 'none' })
-        this.setData({ paying: false })
       })
   },
 
   scheduleNextPoll() {
     this.pollCount = (this.pollCount || 0) + 1
     if (this.pollCount >= config.POLL_MAX_COUNT) {
+      this._stopProgressTimer()
       this.stopPolling()
-      wx.hideLoading()
+      this.setData({ generating: false, paying: false })
       wx.showToast({ title: '生成超时，请稍后在结果页重试', icon: 'none' })
-      this.setData({ paying: false })
       return
     }
     this.pollTimer = setTimeout(() => this.pollOnce(), config.POLL_INTERVAL_MS)

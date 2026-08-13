@@ -34,3 +34,29 @@ Thumbs.db
 
 # WorkBuddy
 .workbuddy/
+
+# 部署产物
+*.zip
+*.tar.gz
+deploy_pkg/
+
+# 证书（敏感）
+certs/
+
+# 本地部署脚本
+deploy_admin*.py
+deploy_remote.py
+deploy_ssl_nginx.py
+prepare_push.py
+gen_codes_remote.py
+setup_domain.py
+
+# 兑换码（敏感）
+redeem_codes_cloud.txt
+redeem_gen.json
+redeem_raw.json
+兑换密钥清单.md
+
+# 测试数据库
+webapp/backend/test_e2e_verify.db
+webapp/backend/*.db

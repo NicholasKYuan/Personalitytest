@@ -1,16 +1,27 @@
 /**
  * config.js — 全局配置
  *
- * 开发期：
- *  - BASE_URL 指向本地后端，微信开发者工具需勾选「不校验合法域名」。
- *  - 后端未启动时可把 USE_MOCK 置为 true，前端用内置 mock 数据独立预览完整流程。
+ * 云托管模式（推荐）：
+ *  - 填入 CLOUD_ENV（云开发环境ID）后自动走 wx.cloud.callContainer()
+ *  - 无需域名备案、无需SSL证书、无需配置服务器域名白名单
+ *
+ * 传统模式（备用）：
+ *  - CLOUD_ENV 留空，走 wx.request() + BASE_URL
+ *  - 需 HTTPS + 已备案域名 + 服务器域名白名单
  */
 module.exports = {
-  // 后端 API 地址（权威定义见 BACKEND_SPEC.md §4）
-  BASE_URL: 'http://127.0.0.1:8000',
+  // === 云托管配置 ===
+  // 云开发环境ID（在开发者工具→云开发→设置 里查看）
+  CLOUD_ENV: 'xingyaoqicheng-d4gqkp52ef36b32dc',
+  // 云托管服务名（与 container.config.json 中 containerName 一致）
+  CLOUD_SERVICE: 'personality-api',
+
+  // === 传统模式配置（CLOUD_ENV 为空时使用） ===
+  // 后端 API 地址（HTTPS + 域名）
+  BASE_URL: 'https://api.xingyaoqicheng.cn',
 
   // true = 前端独立 mock（后端未启动时用）；false = 直连后端
-  USE_MOCK: true,
+  USE_MOCK: false,
 
   TOTAL_QUESTIONS: 120,
 

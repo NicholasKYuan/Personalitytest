@@ -95,7 +95,7 @@ def start_report_generation(session_id: str):
     """在后台线程中生成 AI 报告（支付回调成功后调用，幂等：generating/ready/failed 不再触发）。"""
     # 用 DB 状态做幂等保护：只有 answered 状态才能触发
     with get_db() as db:
-        row = db.execute("SELECT status FROM sessions WHERE session_id=?", (session_id,)).fetchone()
+        row = db.execute("SELECT status FROM sessions WHERE session_id=%s", (session_id,)).fetchone()
         if row is None or row["status"] != "answered":
             log.info("跳过报告生成: session=%s status=%s", session_id, row["status"] if row else None)
             return
@@ -109,15 +109,15 @@ def _generate_worker(session_id: str):
 
     # 把状态改为 generating（带重试保护：状态竞争时以先到者为准）
     with get_db() as db:
-        row = db.execute("SELECT status FROM sessions WHERE session_id=?", (session_id,)).fetchone()
+        row = db.execute("SELECT status FROM sessions WHERE session_id=%s", (session_id,)).fetchone()
         if row and row["status"] == "answered":
-            db.execute("UPDATE sessions SET status='generating', updated_at=? WHERE session_id=? AND status='answered'",
+            db.execute("UPDATE sessions SET status='generating', updated_at=%s WHERE session_id=%s AND status='answered'",
                        (now(), session_id))
         else:
             return
 
     with get_db() as db:
-        s = db.execute("SELECT results, profile FROM sessions WHERE session_id=?", (session_id,)).fetchone()
+        s = db.execute("SELECT results, profile FROM sessions WHERE session_id=%s", (session_id,)).fetchone()
     if s is None:
         return
     results = loads(s["results"], {})
@@ -132,7 +132,7 @@ def _generate_worker(session_id: str):
                 raise RuntimeError("AI 返回空章节")
             with get_db() as db:
                 db.execute(
-                    "UPDATE sessions SET ai_sections=?, status='ready', ai_error=NULL, updated_at=? WHERE session_id=?",
+                    "UPDATE sessions SET ai_sections=%s, status='ready', ai_error=NULL, updated_at=%s WHERE session_id=%s",
                     (dumps(sections), now(), session_id),
                 )
             log.info("报告生成成功: session=%s sections=%d", session_id, len(sections))
@@ -148,7 +148,7 @@ def _generate_worker(session_id: str):
     sections = _fallback_sections(results, profile)
     with get_db() as db:
         db.execute(
-            "UPDATE sessions SET ai_sections=?, status='failed', ai_error=?, updated_at=? WHERE session_id=?",
+            "UPDATE sessions SET ai_sections=%s, status='failed', ai_error=%s, updated_at=%s WHERE session_id=%s",
             (dumps(sections), last_err, now(), session_id),
         )
     log.error("AI 生成失败已降级: session=%s err=%s", session_id, last_err)
@@ -160,8 +160,8 @@ def _generate_worker(session_id: str):
 def get_report_status(session_id: str) -> dict:
     """返回支付/报告状态（供 GET /api/report/status 使用）。"""
     with get_db() as db:
-        s = db.execute("SELECT status FROM sessions WHERE session_id=?", (session_id,)).fetchone()
-        o = db.execute("SELECT status FROM orders WHERE session_id=? ORDER BY id DESC LIMIT 1", (session_id,)).fetchone()
+        s = db.execute("SELECT status FROM sessions WHERE session_id=%s", (session_id,)).fetchone()
+        o = db.execute("SELECT status FROM orders WHERE session_id=%s ORDER BY id DESC LIMIT 1", (session_id,)).fetchone()
 
     payment_status = o["status"] if o else "unpaid"
     report_status = s["status"] if s else "none"
@@ -178,7 +178,7 @@ def get_report_status(session_id: str) -> dict:
 def get_report(session_id: str) -> dict:
     """返回完整报告 JSON（需外部已校验 paid）。"""
     with get_db() as db:
-        s = db.execute("SELECT * FROM sessions WHERE session_id=?", (session_id,)).fetchone()
+        s = db.execute("SELECT * FROM sessions WHERE session_id=%s", (session_id,)).fetchone()
     if s is None:
         return None
     generated_at = s["updated_at"]

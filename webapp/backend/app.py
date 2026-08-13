@@ -29,6 +29,9 @@ import string as _string
 from pathlib import Path
 from typing import Optional, List
 
+from dotenv import load_dotenv
+load_dotenv()  # 加载 .env 环境变量（云托管/Docker 部署用）
+
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -137,7 +140,8 @@ class RedeemGenRequest(BaseModel):
     count: int = 1
     batch_label: str = ""
     expires_days: int = 0          # 0 = 永不过期
-    admin_secret: str = ""
+    username: str = ""
+    password: str = ""
 
 
 # ============================================================
@@ -159,12 +163,12 @@ def save_session(session_id: str, data: dict):
         db.execute(
             """INSERT INTO sessions (session_id, openid, profile, questions, answers, results,
                                     free_summary, status, ai_sections, ai_error, created_at, updated_at)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
-               ON CONFLICT(session_id) DO UPDATE SET
-                 openid=excluded.openid, profile=excluded.profile, questions=excluded.questions,
-                 answers=excluded.answers, results=excluded.results, free_summary=excluded.free_summary,
-                 status=excluded.status, ai_sections=excluded.ai_sections, ai_error=excluded.ai_error,
-                 updated_at=excluded.updated_at""",
+               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+               ON DUPLICATE KEY UPDATE
+                 openid=VALUES(openid), profile=VALUES(profile), questions=VALUES(questions),
+                 answers=VALUES(answers), results=VALUES(results), free_summary=VALUES(free_summary),
+                 status=VALUES(status), ai_sections=VALUES(ai_sections), ai_error=VALUES(ai_error),
+                 updated_at=VALUES(updated_at)""",
             (
                 session_id,
                 data.get("openid") or "",
@@ -185,7 +189,7 @@ def save_session(session_id: str, data: dict):
 def load_session(session_id: str) -> dict:
     """加载会话。优先 SQLite；遗留 JSON 文件作为只读回退。"""
     with database.get_db() as db:
-        row = db.execute("SELECT * FROM sessions WHERE session_id=?", (session_id,)).fetchone()
+        row = db.execute("SELECT * FROM sessions WHERE session_id=%s", (session_id,)).fetchone()
     if row is not None:
         return {
             "session_id": row["session_id"],
@@ -228,7 +232,7 @@ def _require_paid(session_id: str, openid: str):
     """校验该会话已支付（小程序会话必须付费才能取 AI 内容）。"""
     with database.get_db() as db:
         o = db.execute(
-            "SELECT status FROM orders WHERE session_id=? AND openid=? ORDER BY id DESC LIMIT 1",
+            "SELECT status FROM orders WHERE session_id=%s AND openid=%s ORDER BY id DESC LIMIT 1",
             (session_id, openid),
         ).fetchone()
     if o is None or o["status"] != "paid":
@@ -250,6 +254,8 @@ def login(req: LoginRequest):
         data = wxauth.login_with_code(req.code, req.nickname or "", req.avatar_url or "")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"登录内部错误: {e}")
     return {"code": 0, "message": "ok", "data": data}
 
 
@@ -421,7 +427,7 @@ def create_order(req: OrderRequest, request: Request):
 
     with database.get_db() as db:
         existing = db.execute(
-            "SELECT * FROM orders WHERE session_id=? ORDER BY id DESC LIMIT 1", (req.session_id,)
+            "SELECT * FROM orders WHERE session_id=%s ORDER BY id DESC LIMIT 1", (req.session_id,)
         ).fetchone()
 
         if existing is not None:
@@ -447,10 +453,10 @@ def create_order(req: OrderRequest, request: Request):
         prepay_id = pay_params.get("package", "").replace("prepay_id=", "")
         db.execute(
             "INSERT INTO orders (out_trade_no, session_id, openid, amount_fen, status, prepay_id, created_at) "
-            "VALUES (?,?,?,?,?,?,?)",
+            "VALUES (%s,%s,%s,%s,%s,%s,%s)",
             (out_trade_no, req.session_id, openid, amount_fen, "pending", prepay_id, database.now()),
         )
-        order_id = db.execute("SELECT last_insert_rowid() AS id").fetchone()["id"]
+        order_id = db.execute("SELECT LAST_INSERT_ID() AS id").fetchone()["id"]
 
     return {"code": 0, "message": "ok", "data": {
         "order_id": order_id, "out_trade_no": out_trade_no,
@@ -475,15 +481,15 @@ async def pay_notify(request: Request):
         transaction_id = data.get("transaction_id", "")
 
         with database.get_db() as db:
-            order = db.execute("SELECT * FROM orders WHERE out_trade_no=?", (out_trade_no,)).fetchone()
+            order = db.execute("SELECT * FROM orders WHERE out_trade_no=%s", (out_trade_no,)).fetchone()
             if order is None:
                 log_pay(f"[pay/notify] 未知订单 out_trade_no={out_trade_no}")
                 return {"code": "SUCCESS", "message": "成功"}  # 未知订单不阻塞微信
             if trade_state == "SUCCESS" and amount_total == order["amount_fen"]:
                 # 幂等更新：仅 pending → paid
                 cur = db.execute(
-                    "UPDATE orders SET status='paid', transaction_id=?, notify_raw=?, paid_at=? "
-                    "WHERE id=? AND status='pending'",
+                    "UPDATE orders SET status='paid', transaction_id=%s, notify_raw=%s, paid_at=%s "
+                    "WHERE id=%s AND status='pending'",
                     (transaction_id, raw, database.now(), order["id"]),
                 )
                 paid = cur.rowcount > 0
@@ -509,13 +515,13 @@ def mock_notify(req: OrderRequest):
         raise HTTPException(status_code=404, detail="仅开发模式可用")
     with database.get_db() as db:
         order = db.execute(
-            "SELECT * FROM orders WHERE session_id=? AND status='pending' ORDER BY id DESC LIMIT 1",
+            "SELECT * FROM orders WHERE session_id=%s AND status='pending' ORDER BY id DESC LIMIT 1",
             (req.session_id,),
         ).fetchone()
         if order is None:
             raise HTTPException(status_code=400, detail="未找到待支付订单")
         db.execute(
-            "UPDATE orders SET status='paid', transaction_id=?, paid_at=? WHERE id=? AND status='pending'",
+            "UPDATE orders SET status='paid', transaction_id=%s, paid_at=%s WHERE id=%s AND status='pending'",
             (f"MOCK_{int(time.time())}", database.now(), order["id"]),
         )
     report_service.start_report_generation(req.session_id)
@@ -538,11 +544,9 @@ def _gen_redeem_code() -> str:
 def admin_redeem_generate(req: RedeemGenRequest):
     """管理员批量生成兑换密钥。
 
-    需要 ADMIN_SECRET 环境变量匹配。每个密钥可替代一次付费解锁报告。
+    需要管理员账号密码验证。每个密钥可替代一次付费解锁报告。
     """
-    expected = os.getenv("ADMIN_SECRET", "")
-    if not expected or req.admin_secret != expected:
-        raise HTTPException(status_code=403, detail="管理员密钥错误")
+    _check_admin(req.username, req.password)
     if req.count < 1 or req.count > 500:
         raise HTTPException(status_code=400, detail="生成数量需在 1-500 之间")
 
@@ -556,12 +560,12 @@ def admin_redeem_generate(req: RedeemGenRequest):
             # 确保唯一
             while True:
                 code = _gen_redeem_code()
-                exists = db.execute("SELECT 1 FROM redeem_codes WHERE code=?", (code,)).fetchone()
+                exists = db.execute("SELECT 1 FROM redeem_codes WHERE code=%s", (code,)).fetchone()
                 if not exists:
                     break
             db.execute(
                 "INSERT INTO redeem_codes (code, batch_label, status, created_at, expires_at, created_by) "
-                "VALUES (?,?,?,?,?,?)",
+                "VALUES (%s,%s,%s,%s,%s,%s)",
                 (code, req.batch_label, "unused", database.now(), expires_at, "admin"),
             )
             codes.append(code)
@@ -573,16 +577,14 @@ def admin_redeem_generate(req: RedeemGenRequest):
 
 
 @app.get("/api/admin/redeem/list")
-def admin_redeem_list(admin_secret: str = Query(...), status: str = Query("")):
+def admin_redeem_list(username: str = Query(...), password: str = Query(...), status: str = Query("")):
     """管理员查询兑换密钥列表。"""
-    expected = os.getenv("ADMIN_SECRET", "")
-    if not expected or admin_secret != expected:
-        raise HTTPException(status_code=403, detail="管理员密钥错误")
+    _check_admin(username, password)
 
     with database.get_db() as db:
         if status:
             rows = db.execute(
-                "SELECT * FROM redeem_codes WHERE status=? ORDER BY created_at DESC", (status,)
+                "SELECT * FROM redeem_codes WHERE status=%s ORDER BY created_at DESC", (status,)
             ).fetchall()
         else:
             rows = db.execute(
@@ -620,7 +622,7 @@ def redeem_verify(req: RedeemRequest, request: Request):
 
     # 先检查兑换码状态（优先于会话状态检查，确保错误信息准确）
     with database.get_db() as db:
-        row = db.execute("SELECT * FROM redeem_codes WHERE code=?", (code,)).fetchone()
+        row = db.execute("SELECT * FROM redeem_codes WHERE code=%s", (code,)).fetchone()
         if row is None:
             raise HTTPException(status_code=404, detail="兑换码不存在")
         if row["status"] == "disabled":
@@ -632,7 +634,7 @@ def redeem_verify(req: RedeemRequest, request: Request):
 
         # 幂等：已有 paid 订单则跳过
         existing = db.execute(
-            "SELECT status FROM orders WHERE session_id=? AND openid=? ORDER BY id DESC LIMIT 1",
+            "SELECT status FROM orders WHERE session_id=%s AND openid=%s ORDER BY id DESC LIMIT 1",
             (req.session_id, openid),
         ).fetchone()
         if existing and existing["status"] == "paid":
@@ -648,15 +650,15 @@ def redeem_verify(req: RedeemRequest, request: Request):
         db.execute(
             "INSERT INTO orders (out_trade_no, session_id, openid, amount_fen, status, "
             "transaction_id, notify_raw, created_at, paid_at) "
-            "VALUES (?,?,?,?,?,?,?,?,?)",
+            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
             (out_trade_no, req.session_id, openid, 0, "paid",
              f"REDEEM-{code}", json.dumps({"redeem_code": code}), database.now(), database.now()),
         )
 
         # 标记兑换码已使用
         db.execute(
-            "UPDATE redeem_codes SET status='used', used_at=?, used_by_openid=?, used_session_id=? "
-            "WHERE code=? AND status='unused'",
+            "UPDATE redeem_codes SET status='used', used_at=%s, used_by_openid=%s, used_session_id=%s "
+            "WHERE code=%s AND status='unused'",
             (database.now(), openid, req.session_id, code),
         )
 
@@ -693,6 +695,157 @@ def log_pay(msg: str):
 
 
 # ============================================================
+# 管理后台 API
+# ============================================================
+def _check_admin(username: str, password: str):
+    if username != "admin" or password != "admin123":
+        raise HTTPException(status_code=403, detail="用户名或密码错误")
+
+
+@app.get("/api/admin/stats")
+def admin_stats(username: str = Query(...), password: str = Query(...)):
+    """总览统计：用户数、会话数、订单数、收入、兑换码使用情况。"""
+    _check_admin(username, password)
+    with database.get_db() as db:
+        total_users = db.execute("SELECT COUNT(*) AS c FROM users").fetchone()["c"]
+        total_sessions = db.execute("SELECT COUNT(*) AS c FROM sessions").fetchone()["c"]
+        total_orders = db.execute("SELECT COUNT(*) AS c FROM orders").fetchone()["c"]
+        paid_orders = db.execute("SELECT COUNT(*) AS c FROM orders WHERE status='paid'").fetchone()["c"]
+        total_revenue = db.execute(
+            "SELECT COALESCE(SUM(amount_fen),0) AS s FROM orders WHERE status='paid' AND amount_fen>0"
+        ).fetchone()["s"]
+        redeem_unused = db.execute("SELECT COUNT(*) AS c FROM redeem_codes WHERE status='unused'").fetchone()["c"]
+        redeem_used = db.execute("SELECT COUNT(*) AS c FROM redeem_codes WHERE status='used'").fetchone()["c"]
+        redeem_disabled = db.execute("SELECT COUNT(*) AS c FROM redeem_codes WHERE status='disabled'").fetchone()["c"]
+        # 最近7天每日新增用户
+        week_ago = time.time() - 7 * 86400
+        recent_users = db.execute(
+            "SELECT COUNT(*) AS c FROM users WHERE created_at > %s", (week_ago,)
+        ).fetchone()["c"]
+        # 会话状态分布
+        status_rows = db.execute(
+            "SELECT status, COUNT(*) AS c FROM sessions GROUP BY status"
+        ).fetchall()
+        status_dist = {r["status"]: r["c"] for r in status_rows}
+
+    return {"code": 0, "data": {
+        "total_users": total_users,
+        "total_sessions": total_sessions,
+        "total_orders": total_orders,
+        "paid_orders": paid_orders,
+        "total_revenue_yuan": round(total_revenue / 100, 2),
+        "redeem": {"unused": redeem_unused, "used": redeem_used, "disabled": redeem_disabled, "total": redeem_unused + redeem_used + redeem_disabled},
+        "recent_users_7d": recent_users,
+        "session_status_dist": status_dist,
+    }}
+
+
+@app.get("/api/admin/users")
+def admin_users(username: str = Query(...), password: str = Query(...), page: int = Query(1), size: int = Query(20)):
+    """用户列表（分页）。"""
+    _check_admin(username, password)
+    page = max(1, page)
+    size = min(max(1, size), 100)
+    offset = (page - 1) * size
+    with database.get_db() as db:
+        total = db.execute("SELECT COUNT(*) AS c FROM users").fetchone()["c"]
+        rows = db.execute(
+            "SELECT openid, nickname, avatar_url, created_at, last_login_at "
+            "FROM users ORDER BY created_at DESC LIMIT %s OFFSET %s",
+            (size, offset),
+        ).fetchall()
+    users = []
+    for r in rows:
+        users.append({
+            "openid": r["openid"],
+            "nickname": r["nickname"] or "",
+            "avatar_url": r["avatar_url"] or "",
+            "created_at": r["created_at"],
+            "last_login_at": r["last_login_at"],
+        })
+    return {"code": 0, "data": {"total": total, "page": page, "size": size, "users": users}}
+
+
+@app.get("/api/admin/sessions")
+def admin_sessions(username: str = Query(...), password: str = Query(...), page: int = Query(1), size: int = Query(20)):
+    """会话列表（分页）。"""
+    _check_admin(username, password)
+    page = max(1, page)
+    size = min(max(1, size), 100)
+    offset = (page - 1) * size
+    with database.get_db() as db:
+        total = db.execute("SELECT COUNT(*) AS c FROM sessions").fetchone()["c"]
+        rows = db.execute(
+            "SELECT session_id, openid, status, created_at, updated_at "
+            "FROM sessions ORDER BY created_at DESC LIMIT %s OFFSET %s",
+            (size, offset),
+        ).fetchall()
+    sessions = []
+    for r in rows:
+        sessions.append({
+            "session_id": r["session_id"],
+            "openid": r["openid"] or "",
+            "status": r["status"],
+            "created_at": r["created_at"],
+            "updated_at": r["updated_at"],
+        })
+    return {"code": 0, "data": {"total": total, "page": page, "size": size, "sessions": sessions}}
+
+
+@app.get("/api/admin/orders")
+def admin_orders(username: str = Query(...), password: str = Query(...), page: int = Query(1), size: int = Query(20)):
+    """订单列表（分页）。"""
+    _check_admin(username, password)
+    page = max(1, page)
+    size = min(max(1, size), 100)
+    offset = (page - 1) * size
+    with database.get_db() as db:
+        total = db.execute("SELECT COUNT(*) AS c FROM orders").fetchone()["c"]
+        rows = db.execute(
+            "SELECT id, out_trade_no, session_id, openid, amount_fen, status, "
+            "transaction_id, created_at, paid_at "
+            "FROM orders ORDER BY created_at DESC LIMIT %s OFFSET %s",
+            (size, offset),
+        ).fetchall()
+    orders = []
+    for r in rows:
+        orders.append({
+            "id": r["id"],
+            "out_trade_no": r["out_trade_no"],
+            "session_id": r["session_id"],
+            "openid": r["openid"],
+            "amount_yuan": round(r["amount_fen"] / 100, 2),
+            "status": r["status"],
+            "transaction_id": r["transaction_id"] or "",
+            "created_at": r["created_at"],
+            "paid_at": r["paid_at"],
+        })
+    return {"code": 0, "data": {"total": total, "page": page, "size": size, "orders": orders}}
+
+
+class RedeemDisableRequest(BaseModel):
+    code: str
+    username: str
+    password: str
+
+
+@app.post("/api/admin/redeem/disable")
+def admin_redeem_disable(req: RedeemDisableRequest):
+    """停用/启用兑换码。"""
+    _check_admin(req.username, req.password)
+    code = req.code.strip().upper()
+    with database.get_db() as db:
+        row = db.execute("SELECT status FROM redeem_codes WHERE code=%s", (code,)).fetchone()
+        if row is None:
+            raise HTTPException(status_code=404, detail="兑换码不存在")
+        if row["status"] == "used":
+            raise HTTPException(status_code=400, detail="已使用的兑换码不可变更")
+        new_status = "disabled" if row["status"] == "unused" else "unused"
+        db.execute("UPDATE redeem_codes SET status=%s WHERE code=%s", (new_status, code))
+    return {"code": 0, "message": f"已{'停用' if new_status == 'disabled' else '启用'}", "data": {"code": code, "status": new_status}}
+
+
+# ============================================================
 # 静态文件服务（前端页面，Web 兼容）
 # ============================================================
 @app.get("/", response_class=HTMLResponse)
@@ -720,8 +873,32 @@ def serve_js(filename: str):
 
 
 # ============================================================
-# 健康检查
+# 健康检查 & 公开统计
 # ============================================================
 @app.get("/api/health")
 def health():
     return {"code": 0, "message": "ok", "data": {"status": "ok", "bank_size": len(BANK), "pay_mock": wxpay.is_mock()}}
+
+
+@app.get("/api/stats")
+def public_stats():
+    """公开统计：返回完成测评人数（无需鉴权）。"""
+    with database.get_db() as db:
+        row = db.execute(
+            "SELECT COUNT(*) AS c FROM sessions WHERE status IN ('answered','generating','ready')"
+        ).fetchone()
+    completed = row["c"] if row else 0
+    # 基础偏移量，让数字有一定体量
+    display_count = 12580 + completed
+    return {"code": 0, "message": "ok", "data": {"completed_count": display_count}}
+
+
+# ============================================================
+# 管理后台页面
+# ============================================================
+@app.get("/admin", response_class=HTMLResponse)
+def admin_page():
+    admin_path = BACKEND_DIR / "admin.html"
+    if not admin_path.exists():
+        raise HTTPException(status_code=404, detail="管理后台页面未找到")
+    return HTMLResponse(content=admin_path.read_text(encoding="utf-8"))

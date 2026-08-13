@@ -12,10 +12,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.getenv("MINIMAX_API_KEY"),
-    base_url=os.getenv("MINIMAX_BASE_URL", "https://api.minimaxi.com/v1"),
-)
+_client = None
+
+def _get_client():
+    """延迟初始化 OpenAI 客户端，避免模块导入时因缺少 API Key 崩溃。"""
+    global _client
+    if _client is None:
+        _client = OpenAI(
+            api_key=os.getenv("MINIMAX_API_KEY", "mock-key"),
+            base_url=os.getenv("MINIMAX_BASE_URL", "https://api.minimaxi.com/v1"),
+        )
+    return _client
 
 MODEL = os.getenv("MINIMAX_MODEL", "MiniMax-M3")
 
@@ -160,7 +167,7 @@ def generate_detailed_analysis(results, profile):
     user_prompt = _build_user_prompt(results, profile)
 
     try:
-        response = client.chat.completions.create(
+        response = _get_client().chat.completions.create(
             model=MODEL,
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -247,6 +254,14 @@ def _split_sections(markdown_text):
             "title": "深度解读报告",
             "content": markdown_text.strip(),
         })
+
+    # 去重：AI 有时会输出两遍报告（简版+详版），同名章节保留内容更长的
+    seen = {}
+    for sec in sections:
+        key = sec["title"].strip()
+        if key not in seen or len(sec["content"]) > len(seen[key]["content"]):
+            seen[key] = sec
+    sections = list(seen.values())
 
     return sections
 

@@ -65,4 +65,24 @@
 
   <!-- 信任背书 -->
   <view class="trust-line">支付安全由微信支付保障 · 未支付可随时关闭</view>
+
+  <!-- AI 报告生成进度遮罩 -->
+  <view class="gen-overlay" wx:if="{{generating}}">
+    <view class="gen-card">
+      <view class="gen-icon">
+        <view class="gen-spinner"></view>
+      </view>
+      <view class="gen-title">AI 正在为您生成专属报告</view>
+      <view class="gen-subtitle">深度分析您的四体系测评结果</view>
+
+      <!-- 进度条 -->
+      <view class="gen-progress-wrap">
+        <view class="gen-progress-bar" style="width: {{genProgress}}%"></view>
+      </view>
+      <view class="gen-progress-text">{{genProgress}}%</view>
+
+      <view class="gen-time">{{genTimeText}}</view>
+      <view class="gen-tip">{{genTip}}</view>
+    </view>
+  </view>
 </view>

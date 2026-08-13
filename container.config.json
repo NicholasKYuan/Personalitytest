@@ -1,0 +1,13 @@
+{
+  "containerName": "personality-api",
+  "serviceType": "web",
+  "cpu": 0.5,
+  "mem": 1,
+  "minNum": 0,
+  "maxNum": 10,
+  "policyType": "cpu",
+  "policyThreshold": 10,
+  "port": 80,
+  "dockerfilePath": "Dockerfile",
+  "buildDir": "./"
+}
