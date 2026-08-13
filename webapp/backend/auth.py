@@ -31,9 +31,13 @@ def _code2session(code: str) -> dict:
     pay_mock = os.getenv("PAY_MOCK", "0") == "1"
 
     # PAY_MOCK 模式：直接返回 mock openid，不调用微信 API
-    # 注意：所有 mock 登录共用同一个 openid，避免 token 过期重登后 openid 变化导致 403
+    # 所有 mock 登录共用同一 openid（固定），避免 token 过期重登后 403
+    # 测试脚本用 e2e_ 前缀的 code 可获得独立 openid，不干扰小程序用户
     if pay_mock:
-        openid = "mock_openid_default_user"
+        if code.startswith("e2e_"):
+            openid = f"mock_openid_e2e_{code[4:16]}"
+        else:
+            openid = "mock_openid_default_user"
         return {"openid": openid, "session_key": "mock_session_key"}
 
     # 真实模式：调用微信 code2session
