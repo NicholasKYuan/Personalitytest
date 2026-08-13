@@ -176,7 +176,7 @@ Page({
       cards.push({
         key: 'mbti',
         icon: '🧩',
-        title: 'MBTI',
+        title: '人格类型',
         type: type,
         desc: labels.MBTI_DESC[type] || '独特的人格类型',
         color: '#3B9DEA'
@@ -202,7 +202,7 @@ Page({
       cards.push({
         key: 'holland',
         icon: '🎯',
-        title: '霍兰德',
+        title: '职业兴趣',
         type: code,
         desc: labels.HOLLAND_DESC[top] || '',
         color: '#F59E0B'
@@ -214,7 +214,7 @@ Page({
       cards.push({
         key: 'gallup',
         icon: '💪',
-        title: '盖洛普',
+        title: '优势领域',
         type: labels.GALLUP_DOMAINS[domain] || domain,
         desc: labels.GALLUP_DOMAIN_DESC[domain] || '',
         color: '#8B5CF6'

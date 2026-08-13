@@ -172,7 +172,7 @@
   display: flex;
   align-items: center;
   gap: 6rpx;
-  min-width: 80rpx;
+  min-width: 130rpx;
 }
 
 .mbti-letter {
@@ -184,6 +184,12 @@
 .mbti-letter--active {
   color: var(--brand-coral);
   font-weight: 800;
+}
+
+.mbti-cn {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .mbti-vs {

@@ -46,6 +46,7 @@
         <view class="mbti-bar" wx:for="{{mbtiBars}}" wx:key="left">
           <view class="mbti-label">
             <text class="mbti-letter {{item.left === item.dominant ? 'mbti-letter--active' : ''}}">{{item.left}}</text>
+            <text class="mbti-cn">{{item.leftLabel}}</text>
             <text class="mbti-vs">{{item.leftPct}}%</text>
           </view>
           <view class="mbti-track">
@@ -55,6 +56,7 @@
           </view>
           <view class="mbti-label">
             <text class="mbti-vs">{{item.rightPct}}%</text>
+            <text class="mbti-cn">{{item.rightLabel}}</text>
             <text class="mbti-letter {{item.right === item.dominant ? 'mbti-letter--active' : ''}}">{{item.right}}</text>
           </view>
         </view>
