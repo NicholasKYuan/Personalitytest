@@ -671,6 +671,7 @@ def admin_redeem_list(username: str = Query(...), password: str = Query(...), st
             "used_at": row["used_at"],
             "used_by_openid": row["used_by_openid"],
             "used_session_id": row["used_session_id"],
+            "reusable": bool(row["reusable"]) if "reusable" in row.keys() else False,
         }
     return {"code": 0, "data": [_fmt(r) for r in rows]}
 
