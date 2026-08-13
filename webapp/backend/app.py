@@ -1017,6 +1017,25 @@ def admin_redeem_create_custom(req: RedeemCustomRequest):
     }}
 
 
+class RedeemDeleteRequest(BaseModel):
+    code: str
+    username: str
+    password: str
+
+
+@app.post("/api/admin/redeem/delete")
+def admin_redeem_delete(req: RedeemDeleteRequest):
+    """管理员删除兑换码（彻底删除，非停用）。"""
+    _check_admin(req.username, req.password)
+    code = req.code.strip().upper()
+    with database.get_db() as db:
+        row = db.execute("SELECT status FROM redeem_codes WHERE code=%s", (code,)).fetchone()
+        if row is None:
+            raise HTTPException(status_code=404, detail="兑换码不存在")
+        db.execute("DELETE FROM redeem_codes WHERE code=%s", (code,))
+    return {"code": 0, "message": f"兑换码 {code} 已删除"}
+
+
 @app.post("/api/admin/redeem/disable")
 def admin_redeem_disable(req: RedeemDisableRequest):
     """停用/启用兑换码。"""
