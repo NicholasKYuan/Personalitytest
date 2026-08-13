@@ -917,12 +917,14 @@ def admin_delete_sessions(req: AdminDeleteSessionsRequest):
     with database.get_db() as db:
         # 找到要删的 session_id
         if req.keep_latest > 0:
-            rows = db.execute(
+            # 先查出最新的 N 条（要保留）
+            keep_rows = db.execute(
                 "SELECT session_id FROM sessions WHERE openid LIKE %s "
-                "ORDER BY created_at DESC LIMIT %s OFFSET %s",
-                (prefix + "%", 999999, req.keep_latest),
+                "ORDER BY created_at DESC LIMIT %s",
+                (prefix + "%", req.keep_latest),
             ).fetchall()
-            keep_ids = {r["session_id"] for r in rows}
+            keep_ids = {r["session_id"] for r in keep_rows}
+            # 其余的都删
             all_rows = db.execute(
                 "SELECT session_id FROM sessions WHERE openid LIKE %s",
                 (prefix + "%",),
