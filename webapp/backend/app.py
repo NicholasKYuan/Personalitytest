@@ -136,6 +136,10 @@ class RedeemRequest(BaseModel):
     code: str
 
 
+class RegenerateRequest(BaseModel):
+    session_id: str
+
+
 class RedeemGenRequest(BaseModel):
     count: int = 1
     batch_label: str = ""
@@ -753,6 +757,34 @@ def report_detail(req: StatusRequest, request: Request):
 
     report = report_service.get_report(req.session_id)
     return {"code": 0, "message": "ok", "data": {"report": report}}
+
+
+@app.post("/api/report/regenerate")
+def report_regenerate(req: RegenerateRequest, request: Request):
+    """重新生成 AI 报告（已付费会话可免费重试，不重复收费）。
+
+    适用场景：AI 生成内容不完整、用户对结果不满意想重新生成。
+    """
+    openid = _require_openid(request)
+    try:
+        session = load_session(req.session_id)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="会话不存在")
+    _owns_session(openid, session)
+
+    # 校验已付费
+    _require_paid(req.session_id, openid)
+
+    if session.get("status") == "generating":
+        raise HTTPException(status_code=409, detail="报告正在生成中，请稍候")
+
+    if session.get("status") not in ("ready", "failed", "answered"):
+        raise HTTPException(status_code=400, detail="当前状态不允许重新生成")
+
+    # 强制重新生成（不清除订单，不重复付费）
+    report_service.start_report_generation(req.session_id, force=True)
+
+    return {"code": 0, "message": "正在重新生成报告", "data": {"regenerating": True}}
 
 
 def log_pay(msg: str):

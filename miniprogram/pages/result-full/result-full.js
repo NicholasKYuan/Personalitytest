@@ -43,6 +43,8 @@ Page({
     hollandBars: [],     // 霍兰德六型条形图
     gallupBars: [],      // 盖洛普四领域条形图
     hasResults: false,   // 是否有可视化数据
+    hasIncomplete: false, // 是否有章节内容不完整
+    regenerating: false, // 正在重新生成
     posterW: 600,
     posterH: 900
   },
@@ -124,8 +126,12 @@ Page({
       index: String(i + 1).padStart(2, '0'),
       title: s.title || `章节 ${i + 1}`,
       icon: pickIcon(s.title),
-      html: markdown.render(s.content)
+      html: markdown.render(s.content),
+      incomplete: !!s.incomplete
     }))
+
+    // 检测是否有不完整章节
+    const hasIncomplete = sections.some(s => s.incomplete)
 
     // 类型标签
     const badges = []
@@ -163,7 +169,8 @@ Page({
       mbtiBars,
       hollandBars,
       gallupBars,
-      hasResults: snapshotCards.length > 0
+      hasResults: snapshotCards.length > 0,
+      hasIncomplete
     })
   },
 
@@ -416,6 +423,28 @@ Page({
         }
       }
     })
+  },
+
+  /* ============================================================
+     重新生成报告（已付费，不重复收费）
+     ============================================================ */
+  onRegenerate() {
+    if (this.data.regenerating) return
+    this.setData({ regenerating: true })
+
+    api
+      .regenerateReport(this.sessionId)
+      .then(() => {
+        // 清除本地缓存的旧报告
+        storage.setReport(null)
+        // 重新轮询
+        this.setData({ loading: true, regenerating: false })
+        this.fetchReport()
+      })
+      .catch((err) => {
+        this.setData({ regenerating: false })
+        wx.showToast({ title: (err && err.message) || '重新生成失败，请重试', icon: 'none' })
+      })
   },
 
   /* ============================================================

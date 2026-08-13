@@ -171,6 +171,12 @@ function getReportDetail(sessionId) {
   return request('POST', '/api/report/detail', { session_id: sessionId })
 }
 
+/** POST /api/report/regenerate — 重新生成报告（已付费，不重复收费） */
+function regenerateReport(sessionId) {
+  if (isMock()) return Promise.resolve({ regenerating: true })
+  return request('POST', '/api/report/regenerate', { session_id: sessionId })
+}
+
 /** POST /api/redeem/verify — 兑换密钥替代付费解锁报告 */
 function redeemCode(sessionId, code) {
   if (isMock()) {
@@ -217,6 +223,7 @@ module.exports = {
   createOrder,
   getReportStatus,
   getReportDetail,
+  regenerateReport,
   redeemCode,
   getHealth,
   getStats,

@@ -33,33 +33,29 @@ SYSTEM_PROMPT = """你是专业的心理测评分析师，精通九型人格、M
 
 1. 使用 Markdown 格式，分章节输出。
 
-2. **写作方式：禁止先列 outline 再展开**。不要在每个章节内先写"我会讲：动机、恐惧、成长方向"这种 outline 列表，请直接以完整中文段落（每段 80-150 字）开始阐述，让读者立刻进入深度解读。
+2. **写作方式：禁止先列 outline 再展开**。不要在每个章节内先写"我会讲：动机、恐惧、成长方向"这种 outline 列表，请直接以完整段落（每段 80-150 字）开始阐述，让读者立刻进入深度解读。
 
-3. 全程使用简体中文撰写。**严格禁止输出任何英文单词、短语、句式或标题**。
-   - 允许保留的极少量英文：MBTI/ISTP 等 4 字母类型代码、霍兰德 RIASEC 三字母代码（出现时必须是代码本身，不要附带英文释义如 "ISTP (Introversion...)"）
-   - **绝对禁止** 输出英文小标题（如 "Growth direction"、"Motivation and fears"、"EIS interpretation"、"Synergies and tensions"、"relationship_building domain" 等）
+3. 主要使用简体中文撰写，中英文混排可以接受（如保留 MBTI、ISTP 等类型代码），但章节小标题请优先使用中文。
 
-4. **所有小标题（##、###、####）、列表项、加粗强调必须使用中文**。
+4. 描述九型人格时，用"核心特质""内在动力""潜在盲区""成长方向"等中文小节标题。
 
-5. 描述九型人格时，用"核心特质""内在动力""潜在盲区""成长方向"等中文小节标题（如果一定要用小节标题的话），或直接用连续段落。
+5. 描述 MBTI 时，用"类型定位""认知功能栈""互动风格""发展建议"等中文。
 
-6. 描述 MBTI 时，用"类型定位""认知功能栈""互动风格""发展建议"等中文。
+6. 描述霍兰德时，用"代码解读""适合的职业方向""发展路径"等中文。
 
-7. 描述霍兰德时，用"代码解读""适合的职业方向""发展路径"等中文。
+7. 描述盖洛普时，用中文主题名（如"审慎""专注""成就"）。
 
-8. 描述盖洛普时，用中文主题名（如"审慎""专注""成就"），不要附英文原名。
+8. 描述综合解读时，用"协同点""张力点""融合洞察"等中文。
 
-9. 描述综合解读时，用"协同点""张力点""融合洞察"等中文。
+9. 语言温暖、专业、有共感力，避免生硬的术语堆砌。
 
-10. 语言温暖、专业、有共感力，避免生硬的术语堆砌。
+10. 每个体系的核心解读要直接进入深度分析（不是"该类型的特点是..."这种教科书腔），要结合用户的角色、目的、当下状态给出个性化洞察。
 
-11. 每个体系的核心解读要直接进入深度分析（不是"该类型的特点是..."这种教科书腔），要结合用户的角色、目的、当下状态给出个性化洞察。
+11. 四体系交叉解读要找出协同点和张力点，体现融合分析的价值。
 
-12. 四体系交叉解读要找出协同点和张力点，体现融合分析的价值。
+12. 总字数控制在 2000-3500 字。
 
-13. 总字数控制在 2000-3500 字。
-
-14. 如包含传统易学结合解读章节，用现代生涯规划语言表述，禁止出现八字、五行、紫微、占星等字眼，可使用"命理与心理的呼应"这一表述。
+13. 如包括传统易学结合解读章节，用现代生涯规划语言表述，禁止出现八字、五行、紫微、占星等字眼，可使用"命理与心理的呼应"这一表述。
 """
 
 
@@ -143,45 +139,22 @@ def _build_user_prompt(results, profile):
 
 ## 报告结构要求
 
-请按以下章节输出。**注意：每个章节内部使用的中文小标题示例如下，请严格用中文，禁止任何英文小标题。**
+请按以下章节输出。章节内的小标题优先用中文（中英文混排可接受）。
 
 ### 1. 九型人格深度解读
 解读 {enneagram['type_name']} 的核心特质、动机、恐惧、成长方向。
-可使用以下中文小节标题：
-- 核心画像（如"3号成就者"）
-- 核心特质与内在动力
-- 核心恐惧与盲区
-- 成长方向
 
 ### 2. MBTI深度分析
 分析 {mbti['type']} 的认知功能、思维模式、与他人的互动风格。
-可使用以下中文小节标题：
-- 类型定位
-- 认知功能栈解读
-- 互动风格分析
-- 发展建议
 
 ### 3. 霍兰德职业方向
 基于代码 {holland['code']}，推荐适合的职业方向和发展路径。
-可使用以下中文小节标题：
-- 代码解读（仅中文，不要 "R (Realistic...)" 这种格式）
-- 适合的职业路径
-- 相对不建议的方向
 
 ### 4. 盖洛普优势发挥
-解读主导领域 {gallup['top_domain']} 和核心主题 {gallup_themes_str}，给出优势发挥和补盲建议。
-**盖洛普的主题必须用其中文名**（如"审慎""专注""成就"），**禁止附带英文原名**（如不要写"Deliberative: 审慎"）。
-可使用以下中文小节标题：
-- 主导领域解读
-- 核心主题解读（用纯中文名称）
-- 补盲建议
+解读主导领域 {gallup['top_domain']} 和核心主题 {gallup_themes_str}，给出优势发挥和补盲建议。盖洛普主题用中文名称。
 
 ### 5. 四体系综合交叉解读
 找出四个体系之间的协同点和张力点，给出融合洞察。
-可使用以下中文小节标题：
-- 协同点
-- 张力点
-- 融合洞察
 """
 
     if birth_date:
@@ -242,11 +215,10 @@ def generate_detailed_analysis(results, profile):
     sections = _split_sections(content)
 
     # 第五步：检查章节内容质量。如果某个章节过滤后内容太短（< 100 字），
-    # 说明 AI 只列了要点没展开正文，标记为"待重试"，避免给用户看空章节。
+    # 标记 incomplete，前端会显示"重新生成"按钮。保留原始内容不替换。
     for sec in sections:
         if len(sec["content"]) < 100:
             sec["incomplete"] = True
-            sec["content"] = "（本章节深度解读生成不完整，请点击页面下方『重新生成报告』按钮重试。）"
 
     return {
         "detailed_analysis": content,
@@ -338,10 +310,8 @@ def _strip_preface(text):
 
 def _filter_english(text):
     """
-    过滤掉 AI 输出中的英文过程文本/英文小标题/英文短语。
-    移除纯英文行（允许 MBTI、霍兰德等缩写），保留中文内容。
-    也过滤混合语言行中英文占比过高的行（如 AI 推理过程）。
-    特别处理：LLM 有时只列英文 outline 不展开正文，这类"短英文行"需要识别并过滤。
+    过滤掉 AI 输出中的过程文本（如 "Here is..."、"I'll..." 等推理过程）。
+    中英文混排可以接受，不过滤英文小标题或短语。
     """
     lines = text.split('\n')
     filtered = []
@@ -351,57 +321,15 @@ def _filter_english(text):
             filtered.append(line)
             continue
 
-        # 跳过 Markdown 标题中的纯英文（### Growth direction）
-        if re.match(r'^#{1,6}\s+[A-Za-z]', stripped):
-            if not re.search(r'[\u4e00-\u9fff]', stripped):
-                continue
-
-        # 跳过列表项中的英文短语（- Growth direction 或 * Fear: ...）
-        if re.match(r'^[-*•]\s+[A-Za-z]', stripped):
-            if not re.search(r'[\u4e00-\u9fff]', stripped):
-                continue
-            # 列表项有中文但前半部分是英文短语（如"- Growth direction 成长方向"），裁掉英文部分
-            m = re.match(r'^[-*•]\s+([A-Za-z][A-Za-z\s\-,:&\(\)\.]+?)([\u4e00-\u9fff]|$)', stripped)
-            if m and len(m.group(1).strip()) > 3:
-                stripped = re.sub(r'^([-*•]\s+)[A-Za-z][A-Za-z\s\-,:&\(\)\.]+?(\s+)(?=[\u4e00-\u9fff])',
-                                  r'\1', stripped)
-                line = stripped
-
-        # 跳过加粗英文标题（**Growth direction**）
-        if re.match(r'^\*\*[A-Za-z][A-Za-z\s\-,:&\(\)\.]*\*\*$', stripped):
-            if not re.search(r'[\u4e00-\u9fff]', stripped):
-                continue
-
-        # 跳过 "Foo: Bar" 这种英文标签行
-        if re.match(r'^[A-Za-z][A-Za-z\s\-,:&\(\)\.]+:\s*[A-Za-z]', stripped):
-            if not re.search(r'[\u4e00-\u9fff]', stripped):
-                continue
-
-        # 跳过英文下划线标签（relationship_building domain、career_paths、thinking_patterns）
-        if re.match(r'^[a-z]+(_[a-z]+)+\s*$', stripped, re.IGNORECASE):
-            continue
-
-        # 计算中文字符数
-        chinese_chars = len(re.findall(r'[\u4e00-\u9fff]', stripped))
-        # 计算英文单词数（排除常见缩写）
-        clean = re.sub(r'\b(MBTI|RIASEC|ISTP|ISFP|INTJ|INFJ|ENTP|ENFP|ISTJ|ISFJ|ESTJ|ESFJ|ESTP|ESFP|ENTJ|ENFJ|RES|EIS|SIA|ASE|SEC|CSE|IA|SE|RE|RC|RI)\b', '', stripped)
-        english_words = len(re.findall(r'[a-zA-Z]+', clean))
-
-        # 如果一行几乎没有中文，且英文词较多，则判定为英文泄露
-        if chinese_chars < 5 and english_words > 2:
-            continue
-
-        # 如果英文词比中文字符多，也是英文泄露（混合语言行）
-        if english_words > chinese_chars and english_words > 3:
-            continue
-
-        # 跳过类似 "Here is..." "I'll..." "Let me..." 的过程文本
+        # 跳过 AI 推理过程文本（"Here is...", "I'll...", "Let me..." 等）
         if re.match(r'^(Here|I\'ll|Let me|Sure|Below|This is|The user|Now I|First|Second|Let\'s|I will|I need|I should|Birth date|Avoid|Note:|Important|The instruction|Since|Given)', stripped, re.IGNORECASE):
             continue
 
         # 跳过包含 AI 推理关键词的行
         if re.search(r'\b(avoid|forbidden|instruction|requirement|I can use|I\'ll talk|I should|mentioned|as allowed|says|allows|prompt|system prompt)\b', stripped, re.IGNORECASE):
-            continue
+            # 但保留包含中文字符的行（可能是正常内容碰巧包含这些词）
+            if not re.search(r'[\u4e00-\u9fff]{10,}', stripped):
+                continue
 
         filtered.append(line)
 

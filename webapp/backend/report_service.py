@@ -91,14 +91,28 @@ def _fallback_sections(results, profile) -> list:
 # ---------------------------------------------------------------------------
 # 异步生成入口
 # ---------------------------------------------------------------------------
-def start_report_generation(session_id: str):
-    """在后台线程中生成 AI 报告（支付回调成功后调用，幂等：generating/ready/failed 不再触发）。"""
-    # 用 DB 状态做幂等保护：只有 answered 状态才能触发
+def start_report_generation(session_id: str, force: bool = False):
+    """在后台线程中生成 AI 报告（支付回调成功后调用，幂等：generating/ready/failed 不再触发）。
+
+    force=True 时允许从 ready/failed 状态重新生成（用户手动重试）。
+    """
     with get_db() as db:
         row = db.execute("SELECT status FROM sessions WHERE session_id=%s", (session_id,)).fetchone()
-        if row is None or row["status"] != "answered":
-            log.info("跳过报告生成: session=%s status=%s", session_id, row["status"] if row else None)
+        if row is None:
             return
+        if not force and row["status"] != "answered":
+            log.info("跳过报告生成: session=%s status=%s", session_id, row["status"])
+            return
+        if force and row["status"] == "generating":
+            log.info("跳过强制重试: session=%s 正在生成中", session_id)
+            return
+
+        # force 模式下重置为 answered，让后续 _generate_worker 能正常执行
+        if force:
+            db.execute(
+                "UPDATE sessions SET status='answered', ai_sections=NULL, updated_at=%s WHERE session_id=%s",
+                (now(), session_id),
+            )
 
     t = threading.Thread(target=_generate_worker, args=(session_id,), daemon=True)
     t.start()
