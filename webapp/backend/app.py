@@ -725,12 +725,13 @@ def redeem_verify(req: RedeemRequest, request: Request):
              f"REDEEM-{code}", json.dumps({"redeem_code": code}), database.now(), database.now()),
         )
 
-        # 标记兑换码已使用
-        db.execute(
-            "UPDATE redeem_codes SET status='used', used_at=%s, used_by_openid=%s, used_session_id=%s "
-            "WHERE code=%s AND status='unused'",
-            (database.now(), openid, req.session_id, code),
-        )
+        # 标记兑换码已使用（可复用码除外）
+        if not row["reusable"]:
+            db.execute(
+                "UPDATE redeem_codes SET status='used', used_at=%s, used_by_openid=%s, used_session_id=%s "
+                "WHERE code=%s AND status='unused'",
+                (database.now(), openid, req.session_id, code),
+            )
 
     # 触发 AI 报告生成（与支付回调流程一致）
     report_service.start_report_generation(req.session_id)
@@ -984,6 +985,35 @@ class RedeemDisableRequest(BaseModel):
     code: str
     username: str
     password: str
+
+
+class RedeemCustomRequest(BaseModel):
+    code: str                      # 自定义兑换码
+    username: str
+    password: str
+    reusable: bool = False         # 是否可复用（长期测试码）
+    batch_label: str = ""
+
+
+@app.post("/api/admin/redeem/create-custom")
+def admin_redeem_create_custom(req: RedeemCustomRequest):
+    """管理员创建自定义兑换码（可设置可复用，用于长期测试）。"""
+    _check_admin(req.username, req.password)
+    code = req.code.strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="兑换码不能为空")
+    with database.get_db() as db:
+        exists = db.execute("SELECT 1 FROM redeem_codes WHERE code=%s", (code,)).fetchone()
+        if exists:
+            raise HTTPException(status_code=409, detail="该兑换码已存在")
+        db.execute(
+            "INSERT INTO redeem_codes (code, batch_label, status, created_at, expires_at, created_by, reusable) "
+            "VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            (code, req.batch_label or "custom", "unused", database.now(), 0, "admin", 1 if req.reusable else 0),
+        )
+    return {"code": 0, "message": f"兑换码已创建{'（可复用）' if req.reusable else ''}", "data": {
+        "code": code, "reusable": req.reusable, "batch_label": req.batch_label,
+    }}
 
 
 @app.post("/api/admin/redeem/disable")

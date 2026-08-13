@@ -1,5 +1,5 @@
 /**
- * app.js — 星耀启程人格测评小程序入口
+ * app.js — 星鉴人格测评小程序入口
  * 启动时初始化云开发 + 静默登录（wx.login → POST /api/login），token 存入本地缓存。
  */
 const auth = require('./utils/auth')

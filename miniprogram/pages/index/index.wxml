@@ -18,7 +18,7 @@
         <image src="/assets/logo.jpg" mode="aspectFit" />
       </view>
     </view>
-    <view class="hero-title">星耀启程</view>
+    <view class="hero-title">星鉴人格</view>
     <view class="hero-slogan">发现你的独特光芒</view>
     <view class="hero-desc">融合九型人格、MBTI、霍兰德职业兴趣、盖洛普优势识别四大权威体系，通过 120 道精心设计的场景题，全方位解码你的人格密码。</view>
   </view>

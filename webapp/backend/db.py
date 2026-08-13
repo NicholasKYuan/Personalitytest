@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS redeem_codes (
     used_by_openid   VARCHAR(128) DEFAULT '',
     used_session_id  VARCHAR(128) DEFAULT '',
     created_by       VARCHAR(128) DEFAULT '',
+    reusable         TINYINT DEFAULT 0,
     INDEX idx_redeem_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 """
@@ -140,6 +141,11 @@ def init_db():
         # 安全添加 regenerate_count 列（MySQL 不支持 ADD COLUMN IF NOT EXISTS）
         try:
             db.execute("ALTER TABLE sessions ADD COLUMN regenerate_count INT DEFAULT 0")
+        except Exception:
+            pass  # 列已存在，忽略
+        # 安全添加 reusable 列
+        try:
+            db.execute("ALTER TABLE redeem_codes ADD COLUMN reusable TINYINT DEFAULT 0")
         except Exception:
             pass  # 列已存在，忽略
 

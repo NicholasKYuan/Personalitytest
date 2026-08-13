@@ -1,4 +1,4 @@
-# 星耀启程人格测评 · 微信小程序后端技术方案（BACKEND_SPEC）
+# 星鉴人格测评 · 微信小程序后端技术方案（BACKEND_SPEC）
 
 > 版本：v1.0　作者：be-dev　日期：2026-08-12
 > 适用范围：小程序前端开发（Task #5）、支付集成（Task #3）、端到端测试（Task #4）
@@ -245,7 +245,7 @@ GET  /api/health
 2. **幂等**：查 `orders` 表，若该 session 已有 `pending/paid` 订单直接复用（已 paid 则直接返回已购状态）；
 3. 生成 `out_trade_no`（如 `SX` + 时间戳 + 随机串，≤32 位）；
 4. 调微信支付 v3 统一下单（JSAPI）：
-   - `appid=wx7a0e273595082f84`，`mchid=商户号`，`description=星耀启程人格测评深度报告`，
+   - `appid=wx7a0e273595082f84`，`mchid=商户号`，`description=星鉴人格测评深度报告`，
    - `amount.total=2990`（**分**），`notify_url=https://<域名>/api/pay/notify`，
    - `payer.openid=当前用户 openid`；
 5. 用返回的 `prepay_id` 生成 JSAPI 调起参数并签名；

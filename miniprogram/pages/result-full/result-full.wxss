@@ -493,6 +493,12 @@
   margin-bottom: 12rpx;
 }
 
+.end-producer {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin-bottom: 12rpx;
+}
+
 .end-text {
   font-size: 22rpx;
   color: var(--text-muted);

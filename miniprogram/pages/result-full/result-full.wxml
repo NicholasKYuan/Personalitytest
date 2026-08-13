@@ -145,8 +145,9 @@
           <image src="/assets/logo.jpg" mode="aspectFit" />
         </view>
       </view>
-      <view class="end-brand">星耀启程 · 发现你的独特光芒</view>
+      <view class="end-brand">星鉴人格 · 发现你的独特光芒</view>
       <view class="end-line"></view>
+      <view class="end-producer">星耀启程 出品</view>
       <view class="end-text">以上内容由 AI 根据你的测评结果生成，仅供自我探索与职业参考，不构成任何专业诊断。</view>
     </view>
   </block>

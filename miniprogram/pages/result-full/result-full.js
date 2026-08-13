@@ -394,7 +394,7 @@ Page({
     ctx.setTextAlign('center')
     ctx.setFillStyle(C.textMain)
     ctx.font = 'bold 30px sans-serif'
-    ctx.fillText('星耀启程', w / 2, y + 16)
+    ctx.fillText('星鉴人格', w / 2, y + 16)
 
     ctx.setFillStyle(C.textMuted)
     ctx.font = '15px sans-serif'
@@ -663,7 +663,7 @@ Page({
 
     ctx.setFillStyle(C.textMuted)
     ctx.font = '12px sans-serif'
-    ctx.fillText('星耀启程 · 人格深度测评', tx, qrY + 82)
+    ctx.fillText('星鉴人格 · 星耀启程出品', tx, qrY + 82)
   },
 
   /* 海报工具 · 半圆角横条（side='left' 左端圆角右端直角；'right' 反之） */
@@ -780,13 +780,13 @@ Page({
       return
     }
 
-    let md = '# 星耀启程 · 完整人格深度报告\n\n'
+    let md = '# 星鉴人格 · 完整人格深度报告\n\n'
     md += `生成时间：${report.generated_at || ''}\n\n---\n\n`
     report.sections.forEach((s) => {
       md += `${s.content}\n\n---\n\n`
     })
 
-    const filePath = `${wx.env.USER_DATA_PATH}/星耀启程人格报告.md`
+    const filePath = `${wx.env.USER_DATA_PATH}/星鉴人格测评报告.md`
     wx.getFileSystemManager().writeFile({
       filePath,
       data: md,
