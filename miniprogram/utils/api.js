@@ -84,8 +84,26 @@ function request(method, path, data, options = {}) {
     }
 
     const handleFail = (err) => {
-      console.error('[api] request fail:', method, path, err)
       const errMsg = (err && (err.errMsg || err.message)) || '网络异常'
+      console.error('[api] request fail:', method, path, errMsg)
+
+      // 云托管 102002 系统错误 → 降级直连
+      if (useCloud && errMsg.includes('102002') && config.CLOUD_FALLBACK_URL && !retried) {
+        console.log('[api] cloud.callContainer 失败，降级直连:', config.CLOUD_FALLBACK_URL + path)
+        wx.request({
+          url: config.CLOUD_FALLBACK_URL + path,
+          method,
+          data,
+          header,
+          success: handleSuccess,
+          fail: (e) => {
+            const msg2 = (e && (e.errMsg || e.message)) || '网络异常'
+            reject(new Error(msg2))
+          }
+        })
+        return
+      }
+
       reject(new Error(errMsg))
     }
 
@@ -104,8 +122,9 @@ function request(method, path, data, options = {}) {
       })
     } else {
       // 传统模式：wx.request
+      const baseUrl = config.BASE_URL || config.CLOUD_FALLBACK_URL || ''
       wx.request({
-        url: config.BASE_URL + path,
+        url: baseUrl + path,
         method,
         data,
         header,

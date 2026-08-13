@@ -16,6 +16,11 @@ module.exports = {
   // 云托管服务名（与 container.config.json 中 containerName 一致）
   CLOUD_SERVICE: 'personality-api',
 
+  // === 云托管备用直连 URL ===
+  // 当 cloud.callContainer 报 102002（系统错误）时，自动降级走 wx.request 直连
+  // 留空则不降级；填入直连地址则启用
+  CLOUD_FALLBACK_URL: 'https://personality-api-296151-5-1467524685.sh.run.tcloudbase.com',
+
   // === 传统模式配置（CLOUD_ENV 为空时使用） ===
   // 后端 API 地址（HTTPS + 域名）
   BASE_URL: 'https://api.xingyaoqicheng.cn',

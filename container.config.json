@@ -3,7 +3,7 @@
   "serviceType": "web",
   "cpu": 0.5,
   "mem": 1,
-  "minNum": 0,
+  "minNum": 1,
   "maxNum": 10,
   "policyType": "cpu",
   "policyThreshold": 10,
