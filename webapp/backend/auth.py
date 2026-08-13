@@ -60,6 +60,7 @@ def login_with_code(code: str, nickname: str = "", avatar_url: str = "") -> dict
     openid = data["openid"]
     t = now()
     is_new = False
+    pay_mock = os.getenv("PAY_MOCK", "0") == "1"
 
     with get_db() as db:
         row = db.execute("SELECT openid FROM users WHERE openid=%s", (openid,)).fetchone()
@@ -75,6 +76,15 @@ def login_with_code(code: str, nickname: str = "", avatar_url: str = "") -> dict
                 "avatar_url=CASE WHEN %s<>'' THEN %s ELSE avatar_url END WHERE openid=%s",
                 (t, nickname, nickname, avatar_url, avatar_url, openid),
             )
+
+        # mock 模式：复用已有有效 token，避免多客户端互相覆盖
+        if pay_mock:
+            existing = db.execute(
+                "SELECT token, token_expire_at FROM users WHERE openid=%s AND token IS NOT NULL AND token_expire_at>%s",
+                (openid, t),
+            ).fetchone()
+            if existing:
+                return {"token": existing["token"], "openid": openid, "is_new": is_new, "expires_in": int(existing["token_expire_at"] - t)}
 
         token = secrets.token_urlsafe(32)
         expire = t + TOKEN_TTL
