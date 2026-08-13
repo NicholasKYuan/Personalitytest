@@ -965,6 +965,31 @@ def admin_delete_sessions(req: AdminDeleteSessionsRequest):
     return {"code": 0, "message": f"已删除 {len(del_ids)} 条会话", "data": {"deleted": len(del_ids)}}
 
 
+class AdminRegenRequest(BaseModel):
+    username: str
+    password: str
+    session_id: str
+
+
+@app.post("/api/admin/regenerate")
+def admin_regenerate(req: AdminRegenRequest):
+    """管理员强制重新生成报告（不受 regenerate_count 限制）。"""
+    _check_admin(req.username, req.password)
+    try:
+        session = load_session(req.session_id)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="会话不存在")
+    # 重置 regenerate_count
+    with database.get_db() as db:
+        db.execute(
+            "UPDATE sessions SET regenerate_count=0 WHERE session_id=%s",
+            (req.session_id,),
+        )
+    # 触发重新生成
+    report_service.start_report_generation(req.session_id, force=True)
+    return {"code": 0, "message": "正在重新生成报告", "data": {"session_id": req.session_id}}
+
+
 @app.get("/api/admin/orders")
 def admin_orders(username: str = Query(...), password: str = Query(...), page: int = Query(1), size: int = Query(20)):
     """订单列表（分页）。"""
