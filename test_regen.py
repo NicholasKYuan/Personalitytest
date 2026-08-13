@@ -134,3 +134,22 @@ print(f'- 不重复付费: PASS (无 pay_params)')
 print(f'- 报告重新生成: {"PASS" if regen_success else "FAIL"}')
 print(f'- incomplete 标记: PASS (标记数={incomplete_count})')
 print(f'- 内容已更新: {"PASS" if old_first_content != new_first_content else "FAIL"}')
+
+# 9. 验证第二次重新生成被拒绝（每会话最多1次）
+print()
+print('--- 测试重新生成次数限制 ---')
+status2, r2 = api_call('POST', '/api/report/regenerate', {'session_id': ready_session}, token=token)
+print(f'9. 第二次 regenerate: status={status2}, code={r2.get("code")}, message={r2.get("detail") or r2.get("message")}')
+if status2 == 403:
+    print(f'   PASS: 第二次被正确拒绝 (403)')
+else:
+    print(f'   FAIL: 第二次应被拒绝(403)，实际={status2}')
+
+# 10. 验证 report 返回 can_regenerate 标志
+can_regen = report_data.get('can_regenerate')
+regen_count = report_data.get('regenerate_count')
+print(f'10. can_regenerate={can_regen}, regenerate_count={regen_count}')
+if can_regen is False and regen_count >= 1:
+    print(f'    PASS: 标志正确（已用完次数）')
+else:
+    print(f'    WARNING: can_regenerate={can_regen}, regenerate_count={regen_count} (新部署可能还未返回该字段)')

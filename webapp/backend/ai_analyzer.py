@@ -244,7 +244,8 @@ def _mock_sections(results, profile):
 
 def _split_sections(markdown_text):
     """
-    将 markdown 文本按 ## 或 ### 标题拆分为章节列表。
+    将 markdown 文本按 ## 标题拆分为章节列表。
+    只按二级标题（##）拆分，### 子标题保留在父章节内。
     """
     sections = []
     current_title = None
@@ -252,7 +253,7 @@ def _split_sections(markdown_text):
 
     for line in markdown_text.split("\n"):
         stripped = line.strip()
-        if stripped.startswith("### ") or stripped.startswith("## "):
+        if stripped.startswith("## ") and not stripped.startswith("### "):
             # 保存上一个章节
             if current_title is not None:
                 sections.append({
@@ -312,6 +313,7 @@ def _filter_english(text):
     """
     过滤掉 AI 输出中的过程文本（如 "Here is..."、"I'll..." 等推理过程）。
     中英文混排可以接受，不过滤英文小标题或短语。
+    但纯英文段落（无中文字符的连续多行英文）会被移除。
     """
     lines = text.split('\n')
     filtered = []
@@ -322,13 +324,23 @@ def _filter_english(text):
             continue
 
         # 跳过 AI 推理过程文本（"Here is...", "I'll...", "Let me..." 等）
-        if re.match(r'^(Here|I\'ll|Let me|Sure|Below|This is|The user|Now I|First|Second|Let\'s|I will|I need|I should|Birth date|Avoid|Note:|Important|The instruction|Since|Given)', stripped, re.IGNORECASE):
+        if re.match(r'^(Here|I\'ll|Let me|Sure|Below|This is|The user|Now I|First|Second|Let\'s|I will|I need|I should|Birth date|Avoid|Note:|Important|The instruction|Since|Given|For him|For her|For this|For the user|This user|The profile)', stripped, re.IGNORECASE):
             continue
 
         # 跳过包含 AI 推理关键词的行
         if re.search(r'\b(avoid|forbidden|instruction|requirement|I can use|I\'ll talk|I should|mentioned|as allowed|says|allows|prompt|system prompt)\b', stripped, re.IGNORECASE):
             # 但保留包含中文字符的行（可能是正常内容碰巧包含这些词）
             if not re.search(r'[\u4e00-\u9fff]{10,}', stripped):
+                continue
+
+        # 过滤纯英文段落：行中没有任何中文字符 + 英文单词 > 8 个
+        # 这能抓到 "For him as programmer, this is interesting - 7s can become..." 这种推理文本
+        has_chinese = bool(re.search(r'[\u4e00-\u9fff]', stripped))
+        if not has_chinese and not stripped.startswith('#'):
+            english_word_count = len(re.findall(r'[a-zA-Z]+', stripped))
+            # 排除 MBTI/霍兰德等类型代码行
+            is_code_line = bool(re.match(r'^(MBTI|RIASEC|ISTP|ISFP|INTJ|INFJ|ENTP|ENFP|ISTJ|ISFJ|ESTJ|ESFJ|ESTP|ESFP|ENTJ|ENFJ|RES|EIS|SIA|ASE|SEC|CSE|IA|SE|RE|RC|RI)\b', stripped))
+            if english_word_count > 8 and not is_code_line:
                 continue
 
         filtered.append(line)
