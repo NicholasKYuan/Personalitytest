@@ -223,18 +223,40 @@ def _require_openid(request: Request) -> str:
 
 
 def _owns_session(openid: str, session: dict):
-    """校验会话归属（仅当会话绑定了 openid 时校验）。"""
-    if session.get("openid") and session["openid"] != openid:
-        raise HTTPException(status_code=403, detail="无权访问该会话")
+    """校验会话归属（仅当会话绑定了 openid 时校验）。
+
+    PAY_MOCK 模式下，所有 mock_openid_* 视为同一用户，
+    避免旧 mock openid 的会话在新部署后 403。
+    """
+    sess_openid = session.get("openid")
+    if not sess_openid:
+        return
+    if sess_openid == openid:
+        return
+    # mock 模式：新旧 mock openid 都视为同一用户
+    pay_mock = os.getenv("PAY_MOCK", "0") == "1"
+    if pay_mock and sess_openid.startswith("mock_openid_") and openid.startswith("mock_openid_"):
+        return
+    raise HTTPException(status_code=403, detail="无权访问该会话")
 
 
 def _require_paid(session_id: str, openid: str):
-    """校验该会话已支付（小程序会话必须付费才能取 AI 内容）。"""
+    """校验该会话已支付（小程序会话必须付费才能取 AI 内容）。
+
+    PAY_MOCK 模式下，所有 mock_openid_* 视为同一用户。
+    """
+    pay_mock = os.getenv("PAY_MOCK", "0") == "1"
     with database.get_db() as db:
-        o = db.execute(
-            "SELECT status FROM orders WHERE session_id=%s AND openid=%s ORDER BY id DESC LIMIT 1",
-            (session_id, openid),
-        ).fetchone()
+        if pay_mock and openid.startswith("mock_openid_"):
+            o = db.execute(
+                "SELECT status FROM orders WHERE session_id=%s AND openid LIKE 'mock_openid_%%' ORDER BY id DESC LIMIT 1",
+                (session_id,),
+            ).fetchone()
+        else:
+            o = db.execute(
+                "SELECT status FROM orders WHERE session_id=%s AND openid=%s ORDER BY id DESC LIMIT 1",
+                (session_id, openid),
+            ).fetchone()
     if o is None or o["status"] != "paid":
         raise HTTPException(status_code=403, detail="请先完成支付解锁深度报告")
 
