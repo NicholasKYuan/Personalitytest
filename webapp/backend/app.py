@@ -206,6 +206,7 @@ def load_session(session_id: str) -> dict:
             "status": row["status"],
             "ai_sections": database.loads(row["ai_sections"]),
             "ai_error": row["ai_error"],
+            "regenerate_count": row["regenerate_count"] if "regenerate_count" in row.keys() else 0,
         }
 
     # 遗留 JSON 文件回退
@@ -780,6 +781,18 @@ def report_regenerate(req: RegenerateRequest, request: Request):
 
     if session.get("status") not in ("ready", "failed", "answered"):
         raise HTTPException(status_code=400, detail="当前状态不允许重新生成")
+
+    # 校验重新生成次数（每个会话最多1次）
+    regen_count = session.get("regenerate_count") or 0
+    if regen_count >= 1:
+        raise HTTPException(status_code=403, detail="每个测评报告最多重新生成1次")
+
+    # 标记已使用重试次数（在生成前写入，防止并发重复调用）
+    with database.get_db() as db:
+        db.execute(
+            "UPDATE sessions SET regenerate_count=regenerate_count+1 WHERE session_id=%s",
+            (req.session_id,),
+        )
 
     # 强制重新生成（不清除订单，不重复付费）
     report_service.start_report_generation(req.session_id, force=True)

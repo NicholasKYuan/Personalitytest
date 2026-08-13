@@ -451,6 +451,11 @@
   line-height: 1.6;
 }
 
+.regen-text--used {
+  margin-bottom: 0;
+  color: #78716C;
+}
+
 .regen-btn {
   display: inline-block;
   font-size: 28rpx;

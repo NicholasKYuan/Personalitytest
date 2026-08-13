@@ -44,9 +44,10 @@ Page({
     gallupBars: [],      // 盖洛普四领域条形图
     hasResults: false,   // 是否有可视化数据
     hasIncomplete: false, // 是否有章节内容不完整
+    canRegenerate: true, // 是否还能重新生成
     regenerating: false, // 正在重新生成
     posterW: 600,
-    posterH: 900
+    posterH: 1080
   },
 
   onLoad(options) {
@@ -132,6 +133,7 @@ Page({
 
     // 检测是否有不完整章节
     const hasIncomplete = sections.some(s => s.incomplete)
+    const canRegenerate = report.can_regenerate !== false && hasIncomplete
 
     // 类型标签
     const badges = []
@@ -170,7 +172,8 @@ Page({
       hollandBars,
       gallupBars,
       hasResults: snapshotCards.length > 0,
-      hasIncomplete
+      hasIncomplete,
+      canRegenerate
     })
   },
 
@@ -292,85 +295,340 @@ Page({
   },
 
   /* ============================================================
-     生成分享海报
+     生成分享海报（图表+解析+二维码预留位）
      ============================================================ */
   onPoster() {
     if (this.posting) return
     this.posting = true
     wx.showLoading({ title: '正在生成海报...', mask: true })
 
-    const w = this.data.posterW
-    const h = this.data.posterH
+    const w = 600
+    const h = 1080
     const ctx = wx.createCanvasContext('posterCanvas', this)
 
-    // 背景渐变（暖光）
+    // ---- 背景渐变 ----
     const grad = ctx.createLinearGradient(0, 0, 0, h)
-    grad.addColorStop(0, '#FFF3E8')
-    grad.addColorStop(0.4, '#FAF7F2')
-    grad.addColorStop(1, '#F5F0FF')
+    grad.addColorStop(0, '#FFF8F0')
+    grad.addColorStop(0.3, '#FAF5FF')
+    grad.addColorStop(0.7, '#F5F0FF')
+    grad.addColorStop(1, '#F0F4FF')
     ctx.setFillStyle(grad)
     ctx.fillRect(0, 0, w, h)
 
-    // 星光点缀（彩虹色）
+    // ---- 星光点缀 ----
     const starColors = ['245,158,11', '139,92,246', '242,84,91', '59,158,216']
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 45; i++) {
       const x = Math.random() * w
       const y = Math.random() * h
-      const r = Math.random() * 1.6 + 0.6
+      const r = Math.random() * 1.2 + 0.4
       ctx.beginPath()
       ctx.arc(x, y, r, 0, Math.PI * 2)
-      ctx.setFillStyle(`rgba(${starColors[i % 4]},${(Math.random() * 0.4 + 0.25).toFixed(2)})`)
+      ctx.setFillStyle(`rgba(${starColors[i % 4]},${(Math.random() * 0.35 + 0.15).toFixed(2)})`)
       ctx.fill()
     }
 
-    // 标题
+    // ---- 顶部品牌区 ----
+    // 装饰圆环
+    ctx.beginPath()
+    ctx.arc(w / 2, 80, 36, 0, Math.PI * 2)
+    ctx.setFillStyle('rgba(242,84,91,0.08)')
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(w / 2, 80, 24, 0, Math.PI * 2)
+    ctx.setFillStyle('rgba(139,92,246,0.12)')
+    ctx.fill()
+
     ctx.setTextAlign('center')
     ctx.setFillStyle('#2B2622')
-    ctx.setFontSize(44)
-    ctx.fillText('星耀启程 · 人格画像', w / 2, 130)
+    ctx.setFontSize(38)
+    ctx.font = 'bold 38px sans-serif'
+    ctx.fillText('星耀启程', w / 2, 90)
 
-    // 姓名
-    const name = (storage.getProfile() && storage.getProfile().name) || ''
-    ctx.setFillStyle('#6E665E')
-    ctx.setFontSize(34)
-    ctx.fillText(`${name ? name + '，' : ''}这是你的人格画像`, w / 2, 210)
-
-    // 四体系结果卡片
-    const badges = this.data.typeBadges
-    const cardW = 460
-    const cardH = 86
-    const startY = 290
-    const gap = 22
-    badges.forEach((b, i) => {
-      const y = startY + i * (cardH + gap)
-      // 圆角白卡
-      ctx.setFillStyle('#FFFFFF')
-      this.roundRectPath(ctx, (w - cardW) / 2, y, cardW, cardH, 18)
-      ctx.fill()
-      // 序号圆点
-      ctx.beginPath()
-      ctx.arc(w / 2 - 150, y + cardH / 2, 14, 0, Math.PI * 2)
-      ctx.setFillStyle('#F2545B')
-      ctx.fill()
-      ctx.setFillStyle('#FFFFFF')
-      ctx.setFontSize(22)
-      ctx.fillText(String(i + 1), w / 2 - 150, y + cardH / 2 + 8)
-      // 类型文字
-      ctx.setFontSize(28)
-      ctx.fillStyle = '#2B2622'
-      ctx.fillText(b, w / 2, y + cardH / 2 + 10)
-    })
-
-    // 底部 slogan
-    ctx.setFillStyle('#F2545B')
-    ctx.setFontSize(32)
-    ctx.fillText('发现你的独特光芒', w / 2, h - 160)
     ctx.setFillStyle('#A89F95')
-    ctx.setFontSize(22)
-    ctx.fillText('微信扫一扫 · 开启你的人格测评', w / 2, h - 110)
+    ctx.setFontSize(20)
+    ctx.font = '20px sans-serif'
+    ctx.fillText('人格深度测评报告', w / 2, 118)
+
+    // 装饰线
+    ctx.beginPath()
+    ctx.moveTo(w / 2 - 60, 135)
+    ctx.lineTo(w / 2 + 60, 135)
+    ctx.setStrokeStyle('rgba(242,84,91,0.3)')
+    ctx.setLineWidth(2)
+    ctx.stroke()
+
+    // ---- 姓名区 ----
+    const profile = storage.getProfile() || {}
+    const name = profile.name || '你'
+    ctx.setFillStyle('#2B2622')
+    ctx.setFontSize(30)
+    ctx.font = 'bold 30px sans-serif'
+    ctx.fillText(`${name} 的人格画像`, w / 2, 175)
+
+    // 四体系标签
+    const badges = this.data.typeBadges
+    if (badges.length) {
+      const tagY = 205
+      let tagX = w / 2 - (badges.length * 90) / 2
+      ctx.setFontSize(18)
+      ctx.font = '18px sans-serif'
+      badges.forEach((b, i) => {
+        const tw = ctx.measureText(b).width + 24
+        this._drawRoundRect(ctx, tagX, tagY, tw, 32, 16)
+        ctx.setFillStyle('rgba(242,84,91,0.08)')
+        ctx.fill()
+        ctx.setStrokeStyle('rgba(242,84,91,0.25)')
+        ctx.setLineWidth(1)
+        ctx.stroke()
+        ctx.setFillStyle('#F2545B')
+        ctx.setTextAlign('center')
+        ctx.fillText(b, tagX + tw / 2, tagY + 22)
+        tagX += tw + 10
+      })
+    }
+
+    // ---- 四体系快照卡片（2x2）----
+    const cards = this.data.snapshotCards
+    if (cards.length) {
+      const cardStartY = 260
+      const cardW = 250
+      const cardH = 80
+      const gap = 16
+      const startX = (w - cardW * 2 - gap) / 2
+
+      cards.forEach((c, i) => {
+        const col = i % 2
+        const row = Math.floor(i / 2)
+        const cx = startX + col * (cardW + gap)
+        const cy = cardStartY + row * (cardH + gap)
+
+        // 卡片背景
+        this._drawRoundRect(ctx, cx, cy, cardW, cardH, 12)
+        ctx.setFillStyle('#FFFFFF')
+        ctx.fill()
+        // 顶部色条
+        this._drawRoundRect(ctx, cx, cy, cardW, 5, 2)
+        ctx.setFillStyle(c.color)
+        ctx.fill()
+
+        // 图标
+        ctx.setFontSize(22)
+        ctx.font = '22px sans-serif'
+        ctx.setTextAlign('left')
+        ctx.setFillStyle('#2B2622')
+        ctx.fillText(c.icon, cx + 16, cy + 32)
+
+        // 标题
+        ctx.setFontSize(14)
+        ctx.font = '14px sans-serif'
+        ctx.setFillStyle('#A89F95')
+        ctx.fillText(c.title, cx + 44, cy + 30)
+
+        // 类型
+        ctx.setFontSize(22)
+        ctx.font = 'bold 22px sans-serif'
+        ctx.setFillStyle(c.color)
+        ctx.fillText(c.type, cx + 16, cy + 62)
+
+        // 描述（截断）
+        ctx.setFontSize(13)
+        ctx.font = '13px sans-serif'
+        ctx.setFillStyle('#6E665E')
+        const desc = c.desc && c.desc.length > 20 ? c.desc.substring(0, 20) + '...' : (c.desc || '')
+        ctx.fillText(desc, cx + 16, cy + 75)
+      })
+    }
+
+    // ---- MBTI 迷你条形图 ----
+    const mbtiBars = this.data.mbtiBars
+    if (mbtiBars.length) {
+      const chartY = 450
+      this._drawChartTitle(ctx, w, chartY, 'MBTI 认知维度')
+
+      mbtiBars.forEach((bar, i) => {
+        const y = chartY + 30 + i * 32
+        // 左标签
+        ctx.setFontSize(16)
+        ctx.font = 'bold 16px sans-serif'
+        ctx.setTextAlign('left')
+        ctx.setFillStyle(bar.left === bar.dominant ? '#3B9DEA' : '#C0B8AE')
+        ctx.fillText(bar.left, 60, y + 14)
+        ctx.setFontSize(11)
+        ctx.font = '11px sans-serif'
+        ctx.setFillStyle('#A89F95')
+        ctx.fillText(bar.leftLabel, 78, y + 14)
+
+        // 进度条
+        const barX = 150
+        const barW = 240
+        const barH = 10
+        this._drawRoundRect(ctx, barX, y + 6, barW, barH, 5)
+        ctx.setFillStyle('#F0EAE2')
+        ctx.fill()
+        // 左侧蓝色
+        this._drawRoundRect(ctx, barX, y + 6, barW * bar.leftPct / 100, barH, 5)
+        ctx.setFillStyle('#3B9DEA')
+        ctx.fill()
+        // 右侧红色
+        const rightX = barX + barW * bar.leftPct / 100
+        this._drawRoundRect(ctx, rightX, y + 6, barW * bar.rightPct / 100, barH, 5)
+        ctx.setFillStyle('#F2545B')
+        ctx.fill()
+
+        // 百分比
+        ctx.setFontSize(11)
+        ctx.font = '11px sans-serif'
+        ctx.setFillStyle('#A89F95')
+        ctx.setTextAlign('right')
+        ctx.fillText(bar.leftPct + '%', barX - 6, y + 14)
+        ctx.setTextAlign('left')
+        ctx.fillText(bar.rightPct + '%', barX + barW + 6, y + 14)
+
+        // 右标签
+        ctx.setFontSize(16)
+        ctx.font = 'bold 16px sans-serif'
+        ctx.setFillStyle(bar.right === bar.dominant ? '#F2545B' : '#C0B8AE')
+        ctx.fillText(bar.right, 420, y + 14)
+        ctx.setFontSize(11)
+        ctx.font = '11px sans-serif'
+        ctx.setFillStyle('#A89F95')
+        ctx.fillText(bar.rightLabel, 438, y + 14)
+      })
+    }
+
+    // ---- 霍兰德迷你条形图 ----
+    const hollandBars = this.data.hollandBars
+    if (hollandBars.length) {
+      const chartY = 600
+      this._drawChartTitle(ctx, w, chartY, '霍兰德职业兴趣')
+
+      hollandBars.forEach((bar, i) => {
+        const y = chartY + 30 + i * 24
+        ctx.setFontSize(15)
+        ctx.font = 'bold 15px sans-serif'
+        ctx.setTextAlign('left')
+        ctx.setFillStyle(i === 0 ? '#F59E0B' : '#C0B8AE')
+        ctx.fillText(bar.code, 60, y + 12)
+        ctx.setFontSize(12)
+        ctx.font = '12px sans-serif'
+        ctx.setFillStyle('#6E665E')
+        ctx.fillText(bar.name, 82, y + 12)
+
+        const barX = 150
+        const barW = 300
+        const barH = 8
+        this._drawRoundRect(ctx, barX, y + 4, barW, barH, 4)
+        ctx.setFillStyle('#F5F0E8')
+        ctx.fill()
+        this._drawRoundRect(ctx, barX, y + 4, barW * bar.pct / 100, barH, 4)
+        ctx.setFillStyle('#F59E0B')
+        ctx.fill()
+
+        ctx.setFontSize(12)
+        ctx.font = 'bold 12px sans-serif'
+        ctx.setTextAlign('right')
+        ctx.setFillStyle('#2B2622')
+        ctx.fillText(String(bar.score), 500, y + 12)
+      })
+    }
+
+    // ---- 盖洛普迷你条形图 ----
+    const gallupBars = this.data.gallupBars
+    if (gallupBars.length) {
+      const chartY = 770
+      this._drawChartTitle(ctx, w, chartY, '盖洛普优势领域')
+
+      gallupBars.forEach((bar, i) => {
+        const y = chartY + 30 + i * 24
+        // 色点
+        ctx.beginPath()
+        ctx.arc(66, y + 8, 5, 0, Math.PI * 2)
+        ctx.setFillStyle(bar.color)
+        ctx.fill()
+
+        ctx.setFontSize(12)
+        ctx.font = '12px sans-serif'
+        ctx.setTextAlign('left')
+        ctx.setFillStyle('#6E665E')
+        ctx.fillText(bar.name, 76, y + 12)
+
+        const barX = 200
+        const barW = 250
+        const barH = 8
+        this._drawRoundRect(ctx, barX, y + 4, barW, barH, 4)
+        ctx.setFillStyle('#F5F0E8')
+        ctx.fill()
+        this._drawRoundRect(ctx, barX, y + 4, barW * bar.pct / 100, barH, 4)
+        ctx.setFillStyle(bar.color)
+        ctx.fill()
+
+        ctx.setFontSize(12)
+        ctx.font = 'bold 12px sans-serif'
+        ctx.setTextAlign('right')
+        ctx.setFillStyle('#2B2622')
+        ctx.fillText(String(bar.score), 500, y + 12)
+      })
+    }
+
+    // ---- 简要解析文案 ----
+    const summary = (storage.getResults() || {}).free_summary || ''
+    if (summary) {
+      const sumY = 900
+      // 背景卡片
+      this._drawRoundRect(ctx, 40, sumY, w - 80, 70, 12)
+      ctx.setFillStyle('rgba(255,255,255,0.7)')
+      ctx.fill()
+
+      ctx.setFontSize(13)
+      ctx.font = '13px sans-serif'
+      ctx.setTextAlign('left')
+      ctx.setFillStyle('#6E665E')
+      // 自动换行
+      const maxLen = 38
+      const lines = []
+      let text = summary.replace(/\n/g, ' ')
+      while (text.length > maxLen && lines.length < 3) {
+        lines.push(text.substring(0, maxLen))
+        text = text.substring(maxLen)
+      }
+      if (text.length > 0 && lines.length < 3) lines.push(text)
+      lines.forEach((line, i) => {
+        ctx.fillText(line, 56, sumY + 20 + i * 18)
+      })
+    }
+
+    // ---- 底部：二维码预留位 + slogan ----
+    const qrY = 990
+    // 二维码占位框
+    this._drawRoundRect(ctx, w / 2 - 50, qrY, 100, 80, 10)
+    ctx.setFillStyle('#F0EBE3')
+    ctx.fill()
+    ctx.setStrokeStyle('rgba(139,92,246,0.2)')
+    ctx.setLineWidth(1)
+    ctx.stroke()
+
+    // 占位文字
+    ctx.setFontSize(12)
+    ctx.font = '12px sans-serif'
+    ctx.setTextAlign('center')
+    ctx.setFillStyle('#C0B8AE'
+    )
+    ctx.fillText('小程序码', w / 2, qrY + 35)
+    ctx.fillText('（上线后补充）', w / 2, qrY + 52)
+
+    // slogan
+    ctx.setFillStyle('#F2545B')
+    ctx.setFontSize(24)
+    ctx.font = 'bold 24px sans-serif'
+    ctx.fillText('发现你的独特光芒', w / 2, h - 55)
+
+    ctx.setFillStyle('#A89F95'
+    )
+    ctx.setFontSize(14)
+    ctx.font = '14px sans-serif'
+    ctx.fillText('星耀启程 · 人格深度测评', w / 2, h - 30)
 
     ctx.draw(false, () => {
-      // 等绘制完成再导出
       setTimeout(() => {
         wx.canvasToTempFilePath({
           canvasId: 'posterCanvas',
@@ -383,11 +641,12 @@ Page({
             wx.showToast({ title: '海报生成失败，请重试', icon: 'none' })
           }
         }, this)
-      }, 250)
+      }, 300)
     })
   },
 
-  roundRectPath(ctx, x, y, w, h, r) {
+  /* 绘制圆角矩形路径 */
+  _drawRoundRect(ctx, x, y, w, h, r) {
     ctx.beginPath()
     ctx.moveTo(x + r, y)
     ctx.arcTo(x + w, y, x + w, y + h, r)
@@ -395,6 +654,23 @@ Page({
     ctx.arcTo(x, y + h, x, y, r)
     ctx.arcTo(x, y, x + w, y, r)
     ctx.closePath()
+  },
+
+  /* 绘制图表标题 */
+  _drawChartTitle(ctx, canvasW, y, title) {
+    // 左侧装饰线
+    ctx.beginPath()
+    ctx.moveTo(50, y + 8)
+    ctx.lineTo(60, y + 8)
+    ctx.setStrokeStyle('#F2545B')
+    ctx.setLineWidth(3)
+    ctx.stroke()
+
+    ctx.setTextAlign('left')
+    ctx.setFillStyle('#2B2622')
+    ctx.setFontSize(18)
+    ctx.font = 'bold 18px sans-serif'
+    ctx.fillText(title, 68, y + 13)
   },
 
   savePoster(filePath) {

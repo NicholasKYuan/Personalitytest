@@ -127,10 +127,15 @@
 
     <!-- 重新生成提示（有不完整章节时显示） -->
     <view class="regen-banner fade-in" wx:if="{{hasIncomplete}}">
-      <view class="regen-text">部分章节内容偏短，建议重新生成以获得更完整的深度分析</view>
-      <button class="regen-btn" bindtap="onRegenerate" loading="{{regenerating}}" disabled="{{regenerating}}">
-        重新生成报告
-      </button>
+      <block wx:if="{{canRegenerate}}">
+        <view class="regen-text">部分章节内容偏短，建议重新生成以获得更完整的深度分析（仅限1次）</view>
+        <button class="regen-btn" bindtap="onRegenerate" loading="{{regenerating}}" disabled="{{regenerating}}">
+          重新生成报告
+        </button>
+      </block>
+      <view class="regen-text regen-text--used" wx:else>
+        部分章节内容偏短，重新生成机会已使用。如需帮助请联系客服。
+      </view>
     </view>
 
     <!-- 结尾 -->

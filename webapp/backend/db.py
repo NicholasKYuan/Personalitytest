@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     status       VARCHAR(32) DEFAULT 'created',
     ai_sections  MEDIUMTEXT,
     ai_error     TEXT,
+    regenerate_count INT DEFAULT 0,
     created_at   DOUBLE DEFAULT 0,
     updated_at   DOUBLE DEFAULT 0,
     INDEX idx_sessions_openid (openid)
@@ -133,9 +134,14 @@ def now() -> float:
 
 
 def init_db():
-    """建表（幂等）。"""
+    """建表（幂等）+ 安全添加新列（兼容已有数据库）。"""
     with get_db() as db:
         db.executescript(SCHEMA)
+        # 安全添加 regenerate_count 列（MySQL 不支持 ADD COLUMN IF NOT EXISTS）
+        try:
+            db.execute("ALTER TABLE sessions ADD COLUMN regenerate_count INT DEFAULT 0")
+        except Exception:
+            pass  # 列已存在，忽略
 
 
 # ---------------------------------------------------------------------------

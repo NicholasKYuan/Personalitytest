@@ -198,6 +198,7 @@ def get_report(session_id: str) -> dict:
     generated_at = s["updated_at"]
     if generated_at:
         generated_at = datetime.fromtimestamp(generated_at).strftime("%Y-%m-%d %H:%M:%S")
+    regen_count = s["regenerate_count"] if "regenerate_count" in s.keys() else 0
     return {
         "session_id": session_id,
         "profile": loads(s["profile"], {}),
@@ -205,4 +206,6 @@ def get_report(session_id: str) -> dict:
         "sections": loads(s["ai_sections"], []),
         "generated_at": generated_at,
         "fallback_used": s["status"] == "failed",
+        "regenerate_count": regen_count,
+        "can_regenerate": regen_count < 1,
     }
