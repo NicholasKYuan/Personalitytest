@@ -15,7 +15,7 @@
   <view class="hero fade-in">
     <view class="hero-logo">
       <view class="logo-wrap logo-wrap--hero">
-        <image src="/assets/logo.jpg" mode="aspectFit" />
+        <image src="/assets/logo.png" mode="aspectFit" />
       </view>
     </view>
     <view class="hero-title">星鉴人格</view>

@@ -2,7 +2,7 @@
   <view class="profile-header fade-in">
     <view class="ph-head-row">
       <view class="logo-wrap logo-wrap--sm">
-        <image src="/assets/logo.jpg" mode="aspectFit" />
+        <image src="/assets/logo.png" mode="aspectFit" />
       </view>
       <view class="ph-title">关于你</view>
     </view>

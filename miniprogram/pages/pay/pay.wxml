@@ -2,7 +2,7 @@
   <!-- 顶部 logo + 标题 -->
   <view class="pay-logo fade-in">
     <view class="logo-wrap logo-wrap--md">
-      <image src="/assets/logo.jpg" mode="aspectFit" />
+      <image src="/assets/logo.png" mode="aspectFit" />
     </view>
   </view>
   <view class="pay-title fade-in">解锁你的完整人格报告</view>

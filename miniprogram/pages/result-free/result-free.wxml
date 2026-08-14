@@ -3,7 +3,7 @@
   <view class="rf-header fade-in">
     <view class="rf-logo">
       <view class="logo-wrap logo-wrap--md">
-        <image src="/assets/logo.jpg" mode="aspectFit" />
+        <image src="/assets/logo.png" mode="aspectFit" />
       </view>
     </view>
     <view class="rf-title">你的人格画像</view>

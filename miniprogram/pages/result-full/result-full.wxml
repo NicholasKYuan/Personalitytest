@@ -13,7 +13,7 @@
     <view class="report-header fade-in">
       <view class="rh-logo">
         <view class="logo-wrap logo-wrap--sm">
-          <image src="/assets/logo.jpg" mode="aspectFit" />
+          <image src="/assets/logo.png" mode="aspectFit" />
         </view>
       </view>
       <view class="rh-greet">{{greet}}</view>
@@ -142,7 +142,7 @@
     <view class="report-end fade-in">
       <view class="end-logo">
         <view class="logo-wrap logo-wrap--xs">
-          <image src="/assets/logo.jpg" mode="aspectFit" />
+          <image src="/assets/logo.png" mode="aspectFit" />
         </view>
       </view>
       <view class="end-brand">星鉴人格 · 发现你的独特光芒</view>

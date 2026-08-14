@@ -433,22 +433,23 @@ Page({
     })
   },
 
-  /* ---- 海报 · 品牌区 ---- */
+  /* ---- 海报 · 品牌区（Logo 图形标 + 品牌名横向组合，整体居中） ---- */
   _pBrand(ctx, w, y, C) {
-    // 顶部装饰双环
-    ctx.beginPath()
-    ctx.arc(w / 2, y + 6, 30, 0, Math.PI * 2)
-    ctx.setFillStyle('rgba(242,84,91,0.07)')
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc(w / 2, y + 6, 20, 0, Math.PI * 2)
-    ctx.setFillStyle('rgba(139,92,246,0.10)')
-    ctx.fill()
+    const brand = '星鉴人格'
+    ctx.font = 'bold 30px sans-serif'
+    const tw = ctx.measureText(brand).width
+    const logoSize = 36
+    const gap = 10
+    const startX = (w - logoSize - gap - tw) / 2
+
+    // Logo 图形标（透明底 PNG；视觉中心与文字光学中心对齐）
+    ctx.drawImage('/assets/logo.png', startX, y - 12, logoSize, logoSize)
+
+    ctx.setTextAlign('left')
+    ctx.setFillStyle(C.textMain)
+    ctx.fillText(brand, startX + logoSize + gap, y + 16)
 
     ctx.setTextAlign('center')
-    ctx.setFillStyle(C.textMain)
-    ctx.font = 'bold 30px sans-serif'
-    ctx.fillText('星鉴人格', w / 2, y + 16)
 
     ctx.setFillStyle(C.textMuted)
     ctx.font = '15px sans-serif'

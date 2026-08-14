@@ -393,7 +393,7 @@ button[disabled] {
 
 ### 4.1 容器方案
 
-logo.jpg 为白底 JPG（无透明通道），需通过容器让"白底"变成设计的一部分而非缺陷：
+logo.png 为透明底 PNG（B2 流光环设计，母版 logo.svg；旧 logo.jpg 已弃用），透明底可直接放入白卡容器：
 
 **方案：白底圆角矩形容器（推荐）**
 
@@ -417,7 +417,7 @@ logo 本身白底，直接放入白色圆角卡片中，视觉上 logo 与容器
 }
 ```
 
-WXSS 中 `<image src="/assets/logo.jpg" mode="aspectFit" />`。
+WXSS 中 `<image src="/assets/logo.png" mode="aspectFit" />`。
 
 > 注意：新浅色背景下容器阴影极浅，logo 看起来就像"印在页面上"。若后续能拿到透明底 PNG/SVG，可去掉容器直接放置，样式已预留兼容（背景白色与页面卡片一致，不突兀）。
 
@@ -438,7 +438,7 @@ WXSS 中 `<image src="/assets/logo.jpg" mode="aspectFit" />`。
 
 1. `app.wxss`：整体替换变量区与 page 背景；`.glass-card` 重定义为白卡（类名保留，改动最小）；按钮三件套替换；`.star` 改浅色星光。
 2. 各页 wxss 中所有 `#fff`/`rgba(255,255,255,…)` 文字色替换为 §2.1 文字变量。
-3. index.wxml：`.logo-circle` 节点替换为 `<view class="logo-wrap"><image src="/assets/logo.jpg" mode="aspectFit"/></view>`。
+3. index.wxml：`.logo-circle` 节点替换为 `<view class="logo-wrap"><image src="/assets/logo.png" mode="aspectFit"/></view>`。
 4. quiz 徽章按体系加修饰类（badge--enneagram / badge--mbti / badge--holland / badge--gallup）。
 5. 雷达图 JS 配色同步更新（result-free.js 中 canvas 绘制色值）。
 6. 逐页对照 §3 调整间距与组件。
