@@ -152,7 +152,7 @@
     </view>
   </block>
 
-  <!-- 分享海报画布（离屏渲染） -->
+  <!-- 分享缩略图画布（离屏渲染，预生成四卡片海报供转发 imageUrl） -->
   <canvas
     wx:if="{{!loading}}"
     canvas-id="posterCanvas"
@@ -160,10 +160,16 @@
     style="width:{{posterW}}px;height:{{posterH}}px;position:fixed;left:9999px;top:0;"
   ></canvas>
 
-  <!-- 底部操作栏 -->
+  <!-- 完整报告长图画布（离屏渲染） -->
+  <canvas
+    wx:if="{{!loading}}"
+    canvas-id="longCanvas"
+    style="width:750px;height:{{longCanvasH}}px;position:fixed;left:9999px;top:0;"
+  ></canvas>
+
+  <!-- 底部操作栏（付费版：长图 + 转发） -->
   <view class="action-bar" wx:if="{{!loading}}">
-    <button class="ab-btn hover-press" bindtap="onPoster">生成海报</button>
-    <button class="ab-btn hover-press" open-type="share">转发好友</button>
-    <button class="ab-btn ab-btn--ghost hover-press" bindtap="onSaveReport">保存报告</button>
+    <button class="ab-btn hover-press" bindtap="onLongImage">下载长图</button>
+    <button class="ab-btn ab-btn--ghost hover-press" open-type="share">转发好友</button>
   </view>
 </view>

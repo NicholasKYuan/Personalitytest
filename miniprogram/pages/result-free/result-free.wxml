@@ -67,5 +67,14 @@
     <view class="cta-trust">{{paid ? '报告已解锁，点击查看你的完整人格画像' : '已有 8,200+ 人解锁了深度报告'}}</view>
   </view>
 
+  <!-- 生成海报按钮 -->
+  <button class="poster-btn hover-press" bindtap="onPoster">生成分享海报</button>
+
   <button class="share-btn" open-type="share">分享给好友，免费测评</button>
+
+  <!-- 海报画布（离屏渲染） -->
+  <canvas
+    canvas-id="posterCanvas"
+    style="width:600px;height:1080px;position:fixed;left:9999px;top:0;"
+  ></canvas>
 </view>

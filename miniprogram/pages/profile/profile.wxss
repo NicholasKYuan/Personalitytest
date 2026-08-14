@@ -97,6 +97,13 @@
   color: var(--color-error);
 }
 
+.form-hint {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: var(--brand-coral);
+  font-weight: 500;
+}
+
 /* ---------- 底部 ---------- */
 .profile-footer {
   text-align: center;

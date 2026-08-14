@@ -63,7 +63,9 @@ MIN_ENNEAGRAM_PER_TYPE = 5
 MIN_MBTI_PER_POLE = 4
 MIN_HOLLAND_PER_TYPE = 2  # RIASEC各型题库均≥268题，2/100足够
 MIN_HOLLAND_R = 2  # R型题库现有268题，与其他型持平
-MIN_GALLUP_PER_DOMAIN = 8
+MIN_GALLUP_PER_DOMAIN = 15  # 下限提高：原8→15，确保4领域都有足够样本量
+MAX_GALLUP_PER_DOMAIN = 65  # 新增上限：120题里单个领域不超过65题，避免strategic_thinking等过载
+MIN_GALLUP_INFLUENCING = 20  # influencing题库较少(839题)，单独设更高下限确保不被边缘化
 MIN_REVERSE = 10
 DIFF_TARGET = {2: 36, 3: 54, 4: 24, 5: 6}  # 难度1不进卷，120题按比例
 
@@ -338,6 +340,102 @@ def select(profile, bank, seed=None):
         selected.append(best_holland)
         selected_ids.add(best_holland['id'])
 
+    # Step 3.6: 盖洛普4领域平衡 —— 防止 strategic_thinking 过载、influencing 不足
+    # 用户反馈"战略思维容易测出来"，实测120题里 strategic_thinking 高达74题、influencing 仅46题
+    # 该步骤会：1. 把超过MAX的领域题换成不足MIN的领域题；2. 单独补足influencing
+    def gallup_domain_count_in_item(it):
+        """题目含哪些gallup领域"""
+        return set(k.split('.')[1] for o in it['options'] for k in o.get('score', {}) if k.startswith('gallup.'))
+
+    def _gallup_protected(it):
+        """盖洛普平衡步骤中判断题是否受保护（不应被移除）"""
+        # reverse题不移除（reverse题少）
+        if it.get('reverse'):
+            return True
+        # 新量表题不移除（题库少，已被Step 4强制选入）
+        if it.get('scale', '') in ('likert-5', 'likert-7', 'ranking'):
+            return True
+        return False
+
+    GALLUP_DOMAINS = ['executing', 'influencing', 'relationship_building', 'strategic_thinking']
+
+    # 3.6a: 上限约束 - 超过MAX的领域题换成"不超MAX且不过载"的领域题
+    # 关键修正：只要某领域超MAX就替换，不再要求其他领域必须低于MIN
+    for over_domain in GALLUP_DOMAINS:
+        *_, ga_now = coverage_of(selected)
+        safety = 0
+        while ga_now.get(over_domain, 0) > MAX_GALLUP_PER_DOMAIN and safety < 60:
+            safety += 1
+            # 找含over_domain的、可替换的题
+            replaceable = [
+                it for it in selected
+                if over_domain in gallup_domain_count_in_item(it)
+                and not _gallup_protected(it)
+            ]
+            if not replaceable:
+                break
+            # 优先替换只含over_domain不含其他过载领域的题
+            replaceable.sort(key=lambda it: (
+                state_match_score(it, ts, dh),
+                -len(gallup_domain_count_in_item(it) - {over_domain})  # 含其他领域越多越优先保留
+            ))
+            worst = replaceable[0]
+            # 找一个含"非over_domain且非过载"领域、不含over_domain的候选题
+            other_domains = [d for d in GALLUP_DOMAINS if d != over_domain and ga_now.get(d, 0) < MAX_GALLUP_PER_DOMAIN]
+            if not other_domains:
+                other_domains = [d for d in GALLUP_DOMAINS if d != over_domain]
+            cands = [
+                it for it in bank
+                if it['id'] not in selected_ids
+                and any(d in gallup_domain_count_in_item(it) for d in other_domains)
+                and over_domain not in gallup_domain_count_in_item(it)
+                and not any(_is_near_duplicate(sel['stem'], it['stem']) for sel in selected)
+            ]
+            cands.sort(key=lambda it: -state_match_score(it, ts, dh))
+            if not cands:
+                break
+            best = cands[0]
+            selected.remove(worst)
+            selected_ids.discard(worst['id'])
+            selected.append(best)
+            selected_ids.add(best['id'])
+            *_, ga_now = coverage_of(selected)
+
+    # 3.6b: influencing 单独补足（题库839题最少，需保证至少20题）
+    while True:
+        *_, ga_now = coverage_of(selected)
+        if ga_now.get('influencing', 0) >= MIN_GALLUP_INFLUENCING:
+            break
+        # 找含influencing、未选入的题
+        cands = [
+            it for it in bank
+            if it['id'] not in selected_ids
+            and 'influencing' in gallup_domain_count_in_item(it)
+            and not any(_is_near_duplicate(sel['stem'], it['stem']) for sel in selected)
+        ]
+        cands.sort(key=lambda it: -state_match_score(it, ts, dh))
+        if not cands:
+            break
+        best = cands[0]
+        # 找可替换的题：不含influencing的，优先strategic_thinking（之前已经过载）
+        replaceable = [
+            it for it in selected
+            if 'influencing' not in gallup_domain_count_in_item(it)
+            and not _gallup_protected(it)
+        ]
+        if not replaceable:
+            break
+        # 优先替换含strategic_thinking的题（平衡4领域）
+        replaceable.sort(key=lambda it: (
+            'strategic_thinking' not in gallup_domain_count_in_item(it),  # strategic_thinking题优先替换
+            state_match_score(it, ts, dh)  # 状态分低的优先替换
+        ))
+        worst = replaceable[0]
+        selected.remove(worst)
+        selected_ids.discard(worst['id'])
+        selected.append(best)
+        selected_ids.add(best['id'])
+
     # Step 4: 量表多样性补足 —— 确保新量表类型(likert-5/likert-7/ranking)进入试卷
     # （放在reverse之前，避免reverse步骤把新量表题挤掉）
     for scale_type, min_count in MIN_SCALE_DIVERSITY.items():
@@ -478,11 +576,18 @@ def select(profile, bank, seed=None):
         under_cats = [c for c in CATEGORIES if cat_counts.get(c, 0) < CAT_MIN]
         if not over_cats or not under_cats:
             break
+        # 计算当前gallup领域分布，用于在类别均衡时保持领域平衡
+        *_, ga_current = coverage_of(selected)
+        over_domains = {d for d in GALLUP_DOMAINS if ga_current.get(d, 0) > MAX_GALLUP_PER_DOMAIN}
         swapped = False
         for over_cat in over_cats:
+            # 优先替换含过载gallup领域的题
             over_qs = sorted(
                 [it for it in selected if it['category'] == over_cat and not _is_protected(it)],
-                key=lambda it: state_match_score(it, ts)
+                key=lambda it: (
+                    -len(gallup_domain_count_in_item(it) & over_domains),  # 含过载领域越多越优先替换
+                    state_match_score(it, ts)
+                )
             )
             for q_over in over_qs:
                 if cat_counts.get(over_cat, 0) <= CAT_MAX:
@@ -496,7 +601,11 @@ def select(profile, bank, seed=None):
                         if it['id'] not in selected_ids
                         and it['category'] == under_cat
                     ]
-                    cands.sort(key=lambda it: -state_match_score(it, ts))
+                    # 排序：优先选不含过载领域的候选题，状态分高的优先
+                    cands.sort(key=lambda it: (
+                        len(gallup_domain_count_in_item(it) & over_domains),  # 含过载领域越少越优先
+                        -state_match_score(it, ts)
+                    ))
                     for c in cands:
                         is_dup = any(_is_near_duplicate(sel['stem'], c['stem']) for sel in selected)
                         if not is_dup:
@@ -579,6 +688,52 @@ def select(profile, bank, seed=None):
                             break
                     if found_replacement:
                         break
+
+    # Step 5.5: 最终盖洛普4领域平衡 —— 多轮修正，确保所有步骤完成后4领域不超MAX
+    # 单轮处理时修复A可能把B推过MAX，所以循环到稳定
+    for _round in range(5):
+        changed = False
+        for over_domain in GALLUP_DOMAINS:
+            *_, ga_now = coverage_of(selected)
+            safety = 0
+            while ga_now.get(over_domain, 0) > MAX_GALLUP_PER_DOMAIN and safety < 40:
+                safety += 1
+                replaceable = [
+                    it for it in selected
+                    if over_domain in gallup_domain_count_in_item(it)
+                    and not it.get('reverse')
+                ]
+                if not replaceable:
+                    break
+                replaceable.sort(key=lambda it: (
+                    state_match_score(it, ts, dh),
+                    -len(gallup_domain_count_in_item(it) - {over_domain})
+                ))
+                worst = replaceable[0]
+                # 候选：不含over_domain；优先选不会把其他领域推过MAX的题
+                cands = [
+                    it for it in bank
+                    if it['id'] not in selected_ids
+                    and over_domain not in gallup_domain_count_in_item(it)
+                    and any(k.startswith('gallup.') for o in it['options'] for k in o.get('score', {}))
+                    and not any(_is_near_duplicate(sel['stem'], it['stem']) for sel in selected)
+                ]
+                # 排序：① 不含其他已过载领域优先 ② 状态分高优先
+                cands.sort(key=lambda it: (
+                    sum(1 for d in GALLUP_DOMAINS if d != over_domain and d in gallup_domain_count_in_item(it) and ga_now.get(d, 0) >= MAX_GALLUP_PER_DOMAIN),
+                    -state_match_score(it, ts, dh)
+                ))
+                if not cands:
+                    break
+                best = cands[0]
+                selected.remove(worst)
+                selected_ids.discard(worst['id'])
+                selected.append(best)
+                selected_ids.add(best['id'])
+                *_, ga_now = coverage_of(selected)
+                changed = True
+        if not changed:
+            break
 
     # Step 6: 排序 —— 类别交错 + 难度递增
     by_cat2 = defaultdict(list)

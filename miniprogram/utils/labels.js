@@ -20,7 +20,10 @@ const CATEGORY_LABELS = {
 /* ---------- 题型 ---------- */
 const SCALE_LABELS = {
   'forced-choice': '场景选择',
-  'likert-4': '程度选择'
+  'likert-4': '程度选择',
+  'likert-5': '程度选择',
+  'likert-7': '程度选择',
+  'ranking': '排序题'
 }
 
 /* ---------- 九型人格 ---------- */

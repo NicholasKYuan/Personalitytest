@@ -16,11 +16,14 @@
       <input class="form-input {{focusField === 'name' ? 'form-input--focus' : ''}}" type="text" placeholder="用于报告中称呼你" maxlength="20" value="{{name}}" bindinput="onNameInput" data-field="name" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder-class="ph" />
     </view>
 
-    <!-- 年龄（必填） -->
+    <!-- 出生年月日（必填，自动识别年龄） -->
     <view class="form-row">
-      <view class="form-label">年龄<text class="form-required"> *</text></view>
-      <input class="form-input {{focusField === 'age' ? 'form-input--focus' : ''}}" type="number" placeholder="12 - 80 岁" maxlength="2" value="{{age}}" bindinput="onAgeInput" data-field="age" bindfocus="onInputFocus" bindblur="onInputBlur" placeholder-class="ph" />
-      <view class="form-error" wx:if="{{errors.age}}">{{errors.age}}</view>
+      <view class="form-label">出生年月日<text class="form-required"> *</text></view>
+      <picker mode="date" start="1940-01-01" end="{{todayDate}}" value="{{birthDate}}" bindchange="onBirthChange">
+        <view class="form-picker {{birthDate ? '' : 'form-picker--placeholder'}}">{{birthDate || '请选择出生日期'}}</view>
+      </picker>
+      <view class="form-hint" wx:if="{{age}}">自动识别年龄：{{age}} 岁</view>
+      <view class="form-error" wx:if="{{errors.birthDate}}">{{errors.birthDate}}</view>
     </view>
 
     <!-- 性别（可选） -->
@@ -62,14 +65,6 @@
       <view class="form-label">决策时间窗口<text class="form-optional">（可选）</text></view>
       <picker mode="selector" range="{{horizons}}" range-key="label" value="{{horizonIndex}}" bindchange="onHorizonChange">
         <view class="form-picker {{horizonIndex === 0 ? 'form-picker--placeholder' : ''}}">{{horizons[horizonIndex].label || '请选择（可选）'}}</view>
-      </picker>
-    </view>
-
-    <!-- 出生年月日（可选） -->
-    <view class="form-row">
-      <view class="form-label">出生年月日<text class="form-optional">（可选，用于传统易学结合解读）</text></view>
-      <picker mode="date" start="1940-01-01" end="2020-12-31" value="{{birthDate}}" bindchange="onBirthChange">
-        <view class="form-picker {{birthDate ? '' : 'form-picker--placeholder'}}">{{birthDate || '请选择（可选）'}}</view>
       </picker>
     </view>
   </view>

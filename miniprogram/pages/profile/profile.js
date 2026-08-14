@@ -1,16 +1,31 @@
 /**
  * pages/profile/profile.js — 个人信息填写
- * 校验必填项（年龄/身份/目的）→ POST /api/session 创建会话并获取 120 题 → 缓存后跳转答题页。
+ * 校验必填项（出生日期/身份/目的）→ POST /api/session 创建会话并获取 120 题 → 缓存后跳转答题页。
+ * 出生日期必填，年龄自动从出生日期计算。
  */
 const api = require('../../utils/api')
 const storage = require('../../utils/storage')
 const labels = require('../../utils/labels')
+
+/** 从出生日期字符串（YYYY-MM-DD）计算年龄 */
+function calcAge(birthStr) {
+  if (!birthStr) return 0
+  const birth = new Date(birthStr)
+  const now = new Date()
+  let age = now.getFullYear() - birth.getFullYear()
+  const mDiff = now.getMonth() - birth.getMonth()
+  if (mDiff < 0 || (mDiff === 0 && now.getDate() < birth.getDate())) {
+    age--
+  }
+  return age
+}
 
 Page({
   data: {
     name: '',
     age: '',
     birthDate: '',
+    todayDate: '',
 
     // 选择器：第一项为占位项（value 为空表示未选）
     genders: [{ label: '请选择（可选）', value: '' }].concat(labels.GENDER_OPTIONS),
@@ -30,6 +45,15 @@ Page({
     focusField: ''
   },
 
+  onLoad() {
+    // 日期选择器上限为今天
+    const now = new Date()
+    const yyyy = now.getFullYear()
+    const mm = String(now.getMonth() + 1).padStart(2, '0')
+    const dd = String(now.getDate()).padStart(2, '0')
+    this.setData({ todayDate: `${yyyy}-${mm}-${dd}` })
+  },
+
   onInputFocus(e) {
     this.setData({ focusField: e.currentTarget.dataset.field || '' })
   },
@@ -40,10 +64,6 @@ Page({
 
   onNameInput(e) {
     this.setData({ name: e.detail.value })
-  },
-
-  onAgeInput(e) {
-    this.setData({ age: e.detail.value })
   },
 
   onGenderChange(e) {
@@ -67,14 +87,20 @@ Page({
   },
 
   onBirthChange(e) {
-    this.setData({ birthDate: e.detail.value })
+    const birthDate = e.detail.value
+    const age = calcAge(birthDate)
+    this.setData({ birthDate, age: age > 0 ? String(age) : '' })
   },
 
   validate() {
     const errors = {}
-    const age = parseInt(this.data.age, 10)
-    if (!this.data.age || isNaN(age) || age < 12 || age > 80) {
-      errors.age = '请输入有效的年龄（12-80 岁）'
+    if (!this.data.birthDate) {
+      errors.birthDate = '请选择出生年月日'
+    } else {
+      const age = calcAge(this.data.birthDate)
+      if (age < 12 || age > 80) {
+        errors.birthDate = '年龄需在 12-80 岁之间'
+      }
     }
     if (this.data.roleIndex === 0) {
       errors.role = '请选择你的当前身份'
@@ -88,7 +114,8 @@ Page({
   buildProfile() {
     const d = this.data
     const profile = {
-      age: parseInt(d.age, 10),
+      age: calcAge(d.birthDate),
+      birth_date: d.birthDate,
       role: d.roles[d.roleIndex].value,
       purpose: d.purposes[d.purposeIndex].value
     }
@@ -96,7 +123,6 @@ Page({
     if (d.genderIndex > 0) profile.gender = d.genders[d.genderIndex].value
     if (d.stateIndex > 0) profile.current_state = d.states[d.stateIndex].value
     if (d.horizonIndex > 0) profile.decision_horizon = d.horizons[d.horizonIndex].value
-    if (d.birthDate) profile.birth_date = d.birthDate
     return profile
   },
 

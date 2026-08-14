@@ -75,6 +75,7 @@ Page({
     regenerating: false, // 正在重新生成
     posterW: 600,
     posterH: 1080,
+    longCanvasH: 2000,   // 长图画布高度（动态计算）
     shareImagePath: '',  // 预生成的海报本地路径，用于转发 imageUrl
   },
 
@@ -150,12 +151,13 @@ Page({
   renderReport(report) {
     const r = report.results || {}
 
-    // 章节渲染（加图标）
+    // 章节渲染（加图标）；rawContent 保留原始 markdown 供长图导出
     const sections = (report.sections || []).map((s, i) => ({
       index: String(i + 1).padStart(2, '0'),
       title: s.title || `章节 ${i + 1}`,
       icon: pickIcon(s.title),
       html: markdown.render(s.content),
+      rawContent: s.content || '',
       incomplete: !!s.incomplete
     }))
 
@@ -212,14 +214,14 @@ Page({
   },
 
   /**
-   * 静默预生成分享海报（不弹 loading、不保存到相册）
-   * 失败时静默忽略：分享时 WeChat 会自动用页面截图兜底
+   * 静默预生成分享缩略图（600×480 紧凑版：品牌 + 问候 + 四卡片 + 一句解读）
+   * 适配微信分享卡 5:4 比例；失败时静默忽略，WeChat 自动用页面截图兜底
    */
   _preGenerateSharePoster() {
     if (this._posterPreparing) return
     this._posterPreparing = true
     const w = 600
-    const h = 1080
+    const h = 480
     const ctx = wx.createCanvasContext('posterCanvas', this)
     const C = POSTER_COLORS
 
@@ -237,19 +239,17 @@ Page({
       ctx.fill()
     })
 
-    let y = 58
+    let y = 40
     y = this._pBrand(ctx, w, y, C)
     y = this._pGreeting(ctx, w, y, C)
     y = this._pSystemGrid(ctx, w, y, C)
-    y = this._pInsight(ctx, w, y, C)
-    y = this._pMbtiBars(ctx, w, y, C)
-    y = this._pHollandTop(ctx, w, y, C)
-    this._pFooter(ctx, w, h, C)
+    y = this._pInsightCompact(ctx, w, y, C)
 
     ctx.draw(false, () => {
       setTimeout(() => {
         wx.canvasToTempFilePath({
           canvasId: 'posterCanvas',
+          x: 0, y: 0, width: w, height: h,
           success: (res) => {
             this.setData({ shareImagePath: res.tempFilePath })
           },
@@ -259,6 +259,38 @@ Page({
         }, this)
       }, 300)
     })
+  },
+
+  /* 分享缩略图 · 紧凑版融合解读（最多 2 行） */
+  _pInsightCompact(ctx, w, y, C) {
+    const insight = this._buildInsight()
+    if (!insight) return y
+    const mx = 40
+    const maxW = w - mx * 2 - 40
+    ctx.font = '14px sans-serif'
+    const allLines = this._wrapText(ctx, insight, maxW)
+    const lines = allLines.slice(0, 2)
+    if (allLines.length > 2) {
+      let last = lines[lines.length - 1] || ''
+      while (last.length > 0 && ctx.measureText(last + '…').width > maxW) { last = last.slice(0, -1) }
+      lines[lines.length - 1] = last + '…'
+    }
+    const cardH = 28 + lines.length * 22 + 12
+
+    this._drawRoundRect(ctx, mx, y, w - mx * 2, cardH, 12)
+    ctx.setFillStyle('rgba(255,249,244,0.92)')
+    ctx.fill()
+    ctx.setStrokeStyle('rgba(242,84,91,0.16)')
+    ctx.setLineWidth(1)
+    ctx.stroke()
+
+    ctx.setTextAlign('left')
+    ctx.setFillStyle(C.textSub)
+    ctx.font = '14px sans-serif'
+    lines.forEach((line, i) => {
+      ctx.fillText(line, mx + 20, y + 26 + i * 22)
+    })
+    return y + cardH + 16
   },
 
   /* ---- 四体系快照卡片 ---- */
@@ -831,8 +863,349 @@ Page({
   },
 
   /* ============================================================
-     重新生成报告（已付费，不重复收费）
+     下载完整报告长图（付费版）
+     将品牌头 + 问候 + 标签 + 六大章节完整内容渲染为一张长图
      ============================================================ */
+  onLongImage() {
+    if (this._longImaging) return
+    this._longImaging = true
+    wx.showLoading({ title: '正在生成长图...', mask: true })
+
+    const w = 750
+    const C = POSTER_COLORS
+    const sections = this.data.sections || []
+
+    // 用 posterCanvas 做文字测量（measureText 与画布尺寸无关）
+    const mCtx = wx.createCanvasContext('posterCanvas', this)
+
+    // 第一遍：计算总高度
+    const totalH = this._calcLongHeight(mCtx, w, sections, C)
+
+    // 设置长图画布高度，等渲染后再绘制
+    this.setData({ longCanvasH: totalH }, () => {
+      setTimeout(() => {
+        const ctx = wx.createCanvasContext('longCanvas', this)
+        const endY = this._drawLongImage(ctx, w, totalH, C)
+        ctx.draw(false, () => {
+          setTimeout(() => {
+            wx.canvasToTempFilePath({
+              canvasId: 'longCanvas',
+              x: 0, y: 0, width: w, height: endY,
+              destWidth: w * 2,
+              destHeight: endY * 2,
+              success: (res) => {
+                this._saveLongImage(res.tempFilePath)
+              },
+              fail: () => {
+                wx.hideLoading()
+                this._longImaging = false
+                wx.showToast({ title: '长图生成失败，请重试', icon: 'none' })
+              }
+            }, this)
+          }, 300)
+        })
+      }, 100)
+    })
+  },
+
+  /* 计算长图总高度 */
+  _calcLongHeight(ctx, w, sections, C) {
+    const mx = 40
+    const contentW = w - mx * 2
+    let y = 50
+
+    // 品牌区
+    y += 44  // logo
+    y += 36  // brand name
+    y += 26  // subtitle
+    y += 28  // divider
+
+    // 问候区
+    y += 40  // greeting text
+    y += 44  // badges
+
+    // 章节分割线
+    y += 56
+
+    // 各章节
+    for (const sec of sections) {
+      y += 52 // section header
+      const segs = this._mdToSegments(sec.rawContent)
+      for (const seg of segs) {
+        if (seg.type === 'h') {
+          y += seg.level <= 2 ? 40 : 34
+        } else {
+          const indent = seg.type === 'li' ? 28 : 0
+          const maxW = contentW - indent
+          ctx.font = seg.type === 'quote' ? 'italic 14px sans-serif' : '14px sans-serif'
+          const lines = this._wrapText(ctx, seg.text, maxW)
+          y += lines.length * 22 + (seg.type === 'li' ? 6 : 10)
+        }
+      }
+      y += 24 // section bottom margin
+    }
+
+    // 页脚（小程序码 + 品牌信息 + 声明）
+    y += 150
+
+    return y + 40
+  },
+
+  /* 绘制长图全部内容，返回实际结束 y */
+  _drawLongImage(ctx, w, h, C) {
+    const mx = 40
+    const contentW = w - mx * 2
+    const sections = this.data.sections || []
+    const badges = this.data.typeBadges || []
+    const name = this._userName || '你'
+
+    // 背景
+    ctx.setFillStyle('#FDF8F3')
+    ctx.fillRect(0, 0, w, h)
+
+    let y = 50
+
+    // ---- 品牌区 ----
+    const logoSize = 40
+    ctx.drawImage('/assets/logo.png', w / 2 - logoSize / 2, y, logoSize, logoSize)
+    y += logoSize + 6
+    ctx.setTextAlign('center')
+    ctx.setFillStyle(C.textMain)
+    ctx.font = 'bold 30px sans-serif'
+    ctx.fillText('星鉴人格', w / 2, y + 20)
+    y += 36
+    ctx.setFillStyle(C.textMuted)
+    ctx.font = '14px sans-serif'
+    ctx.fillText('完整人格深度测评报告', w / 2, y + 10)
+    y += 26
+
+    // 分隔线
+    ctx.beginPath()
+    ctx.moveTo(w / 2 - 60, y)
+    ctx.lineTo(w / 2 + 60, y)
+    ctx.setStrokeStyle('rgba(242,84,91,0.30)')
+    ctx.setLineWidth(2)
+    ctx.stroke()
+    y += 28
+
+    // ---- 问候区 ----
+    ctx.setFillStyle(C.textMain)
+    ctx.font = 'bold 26px sans-serif'
+    ctx.fillText(`${name}的完整人格画像`, w / 2, y + 18)
+    y += 40
+
+    // 标签
+    if (badges.length) {
+      ctx.font = '13px sans-serif'
+      const badgeWidths = badges.map(b => ctx.measureText(b).width + 24)
+      const totalBW = badgeWidths.reduce((a, b) => a + b + 8, -8)
+      let bx = w / 2 - totalBW / 2
+      badges.forEach((b, i) => {
+        const bw = badgeWidths[i]
+        this._drawRoundRect(ctx, bx, y, bw, 28, 14)
+        ctx.setFillStyle('rgba(242,84,91,0.08)')
+        ctx.fill()
+        ctx.setFillStyle(C.coralDeep)
+        ctx.setTextAlign('center')
+        ctx.fillText(b, bx + bw / 2, y + 18)
+        bx += bw + 8
+      })
+      y += 44
+    }
+
+    // ---- 章节分割线 ----
+    y += 16
+    ctx.beginPath()
+    ctx.moveTo(mx, y)
+    ctx.lineTo(w / 2 - 60, y)
+    ctx.moveTo(w / 2 + 60, y)
+    ctx.lineTo(w - mx, y)
+    ctx.setStrokeStyle('#E0D8CC')
+    ctx.setLineWidth(1)
+    ctx.stroke()
+    ctx.setFillStyle(C.textMuted)
+    ctx.font = '14px sans-serif'
+    ctx.setTextAlign('center')
+    ctx.fillText('AI 深度分析', w / 2, y + 5)
+    y += 40
+
+    // ---- 各章节 ----
+    ctx.setTextAlign('left')
+    for (const sec of sections) {
+      // 章节标题行
+      ctx.setFillStyle(C.coral)
+      ctx.font = 'bold 16px sans-serif'
+      ctx.fillText(sec.index, mx, y + 15)
+      ctx.setFillStyle(C.textMain)
+      ctx.font = 'bold 17px sans-serif'
+      ctx.fillText(sec.title, mx + 36, y + 15)
+      y += 44
+
+      // 章节内容
+      const segs = this._mdToSegments(sec.rawContent)
+      for (const seg of segs) {
+        if (seg.type === 'h') {
+          ctx.setFillStyle(C.textMain)
+          ctx.font = seg.level <= 2 ? 'bold 16px sans-serif' : 'bold 15px sans-serif'
+          ctx.fillText(seg.text, mx, y + (seg.level <= 2 ? 15 : 13))
+          y += seg.level <= 2 ? 32 : 28
+        } else if (seg.type === 'li') {
+          ctx.setFillStyle(C.coral)
+          ctx.font = '14px sans-serif'
+          ctx.fillText(seg.num ? seg.num + '.' : '•', mx + 4, y + 13)
+          ctx.setFillStyle(C.textSub)
+          ctx.font = '14px sans-serif'
+          const lines = this._wrapText(ctx, seg.text, contentW - 28)
+          for (const line of lines) {
+            ctx.fillText(line, mx + 28, y + 13)
+            y += 22
+          }
+          y += 4
+        } else if (seg.type === 'quote') {
+          ctx.font = '14px sans-serif'
+          const lines = this._wrapText(ctx, seg.text, contentW - 32)
+          const qH = lines.length * 22 + 16
+          this._drawRoundRect(ctx, mx, y, contentW, qH, 8)
+          ctx.setFillStyle('rgba(242,84,91,0.06)')
+          ctx.fill()
+          ctx.setFillStyle(C.textMain)
+          ctx.font = '14px sans-serif'
+          let qy = y + 14
+          for (const line of lines) {
+            ctx.fillText(line, mx + 16, qy)
+            qy += 22
+          }
+          y += qH + 8
+        } else {
+          ctx.setFillStyle(C.textSub)
+          ctx.font = '14px sans-serif'
+          const lines = this._wrapText(ctx, seg.text, contentW)
+          for (const line of lines) {
+            ctx.fillText(line, mx, y + 13)
+            y += 22
+          }
+          y += 8
+        }
+      }
+      y += 24
+    }
+
+    // ---- 页脚（小程序码 + 品牌信息） ----
+    y += 20
+    const qrSize = 96
+    const qrX = mx + 8
+    const qrY = y
+
+    // 白卡底框
+    this._drawRoundRect(ctx, qrX - 8, qrY - 8, qrSize + 16, qrSize + 16, 16)
+    ctx.setFillStyle('#FFFFFF')
+    ctx.fill()
+    ctx.setStrokeStyle('rgba(139,92,246,0.18)')
+    ctx.setLineWidth(1)
+    ctx.stroke()
+
+    // 小程序码
+    ctx.drawImage('/assets/miniprogram-code.jpg', qrX, qrY, qrSize, qrSize)
+
+    // 右侧文案
+    const tx = qrX + qrSize + 28
+    ctx.setTextAlign('left')
+    ctx.setFillStyle(C.textSub)
+    ctx.font = '14px sans-serif'
+    ctx.fillText('长按扫码，开启你的人格探索', tx, qrY + 26)
+
+    ctx.setFillStyle(C.coralDeep)
+    ctx.font = 'bold 22px sans-serif'
+    ctx.fillText('发现你的独特光芒', tx, qrY + 56)
+
+    ctx.setFillStyle(C.textMuted)
+    ctx.font = '12px sans-serif'
+    ctx.fillText('星鉴人格 · 星耀启程出品', tx, qrY + 80)
+
+    y = qrY + qrSize + 20
+
+    // 底部声明（居中）
+    ctx.setTextAlign('center')
+    ctx.setFillStyle(C.textMuted)
+    ctx.font = '11px sans-serif'
+    ctx.fillText('以上内容由 AI 根据你的测评结果生成，仅供自我探索与职业参考。', w / 2, y + 8)
+    y += 30
+
+    return y
+  },
+
+  /* Markdown → 纯文本段落（供 Canvas 绘制） */
+  _mdToSegments(md) {
+    const segs = []
+    const lines = String(md || '').split('\n')
+    let inCode = false
+    for (const line of lines) {
+      const t = line.trim()
+      if (/^```/.test(t)) { inCode = !inCode; continue }
+      if (inCode) { segs.push({ type: 'p', text: t }); continue }
+      if (!t) continue
+      if (/^(-{3,}|\*{3,}|_{3,})$/.test(t)) continue
+
+      const h = t.match(/^(#{1,4})\s+(.+)/)
+      if (h) {
+        segs.push({ type: 'h', level: h[1].length, text: this._stripMd(h[2]) })
+        continue
+      }
+      const bq = t.match(/^>\s?(.*)/)
+      if (bq) {
+        segs.push({ type: 'quote', text: this._stripMd(bq[1]) })
+        continue
+      }
+      const ul = t.match(/^[-*+]\s+(.+)/)
+      if (ul) {
+        segs.push({ type: 'li', text: this._stripMd(ul[1]) })
+        continue
+      }
+      const ol = t.match(/^(\d+)[.、)\s]\s*(.*)/)
+      if (ol) {
+        segs.push({ type: 'li', text: this._stripMd(ol[2]), num: ol[1] })
+        continue
+      }
+      segs.push({ type: 'p', text: this._stripMd(t) })
+    }
+    return segs
+  },
+
+  /* 去除 markdown 行内格式符号 */
+  _stripMd(s) {
+    return String(s)
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/\*([^*]+)\*/g, '$1')
+      .replace(/`([^`]+)`/g, '$1')
+  },
+
+  _saveLongImage(filePath) {
+    wx.saveImageToPhotosAlbum({
+      filePath,
+      success: () => {
+        wx.hideLoading()
+        this._longImaging = false
+        wx.showToast({ title: '长图已保存到相册', icon: 'success' })
+      },
+      fail: (err) => {
+        wx.hideLoading()
+        this._longImaging = false
+        const msg = (err && err.errMsg) || ''
+        if (msg.indexOf('auth') > -1 || msg.indexOf('deny') > -1) {
+          wx.showModal({
+            title: '需要相册权限',
+            content: '保存长图需要访问你的相册，请在设置中开启权限',
+            confirmText: '去设置',
+            success: (res) => {
+              if (res.confirm) wx.openSetting()
+            }
+          })
+        } else {
+          wx.showToast({ title: '保存失败，请重试', icon: 'none' })
+        }
+      }
+    })
+  },
   onRegenerate() {
     if (this.data.regenerating) return
     this.setData({ regenerating: true })
