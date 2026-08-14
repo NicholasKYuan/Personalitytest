@@ -15,7 +15,10 @@ Page({
   },
 
   onShow() {
-    this.loadRecords()
+    const app = getApp()
+    app.ensureLogin()
+      .then(() => this.loadRecords())
+      .catch(() => this.loadRecords())
   },
 
   loadRecords() {

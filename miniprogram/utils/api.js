@@ -71,6 +71,11 @@ function request(method, path, data, options = {}) {
       }
 
       // HTTP 层错误
+      // HTTP 401 也触发重新登录重试（后端未登录时返回 HTTP 401 而非业务码 401）
+      if (res.statusCode === 401 && auth && !retried) {
+        return reloginAndRetry(method, path, data, resolve, reject)
+      }
+
       let msg = body && (body.message || body.detail)
       if (Array.isArray(msg)) {
         msg = msg.map((d) => (d && d.msg) || JSON.stringify(d)).join('；')
