@@ -5,7 +5,6 @@ report_generator.py — 填充详细报告模板，生成可下载的 HTML 报�
 接收评分结果 + AI 分析章节，填充 report-detailed.html 模板。
 """
 import json
-import math
 import re
 from pathlib import Path
 from datetime import datetime
@@ -71,62 +70,6 @@ def _pct(score, max_score):
     if max_score == 0:
         return 5
     return max(5, min(100, round(score / max_score * 100)))
-
-
-def _radar_points(results):
-    """计算雷达图 SVG 坐标点（使用归一化值，与类型判断逻辑一致）"""
-    en = results.get("enneagram", {})
-    mb = results.get("mbti", {})
-    ho = results.get("holland", {})
-    ga = results.get("gallup", {})
-
-    # 九型：主型的归一化值
-    en_norm = en.get("normalized", {})
-    en_main_key = f"type{en.get('main_type', 1)}"
-    en_val = en_norm.get(en_main_key, 0)
-
-    # MBTI：4 对维度中胜出极的归一化值平均
-    mb_norm = mb.get("normalized", {})
-    mbti_type = mb.get("type", "")
-    mb_pairs = [("E", "I"), ("S", "N"), ("T", "F"), ("J", "P")]
-    mb_winning_vals = []
-    for a, b in mb_pairs:
-        na = mb_norm.get(a, 0)
-        nb = mb_norm.get(b, 0)
-        winner = a if a in mbti_type else b
-        mb_winning_vals.append(mb_norm.get(winner, 0))
-    mb_val = sum(mb_winning_vals) / len(mb_winning_vals) if mb_winning_vals else 0
-
-    # 霍兰德：前1高分型的归一化值
-    ho_norm = ho.get("normalized", {})
-    holland_code = ho.get("code", "")
-    ho_val = ho_norm.get(holland_code[0], 0) if holland_code else 0
-
-    # 盖洛普：主导领域的归一化值
-    ga_norm = ga.get("normalized", {})
-    ga_val = ga_norm.get(ga.get("top_domain", ""), 0)
-
-    # 综合分 = 四体系平均归一化
-    composite = (en_val + mb_val + ho_val + ga_val) / 4
-
-    # 归一化到 0-1（除以理论最大值 3.0，因为 score 范围 -3..3，归一化后最大约 3.0）
-    MAX_NORM = 3.0
-    vals = [en_val, mb_val, ho_val, ga_val, composite]
-    normalized = [min(1.0, v / MAX_NORM) if v > 0 else 0 for v in vals]
-
-    # 雷达图五个顶点坐标 (正五边形)
-    cx, cy = 150, 150
-    radius = 120
-    angles = [-90, -90 + 72, -90 + 144, -90 + 216, -90 + 288]
-    points = []
-    for i, angle in enumerate(angles):
-        rad = math.radians(angle)
-        r = radius * normalized[i]
-        x = cx + r * math.cos(rad)
-        y = cy + r * math.sin(rad)
-        points.append(f"{x:.1f},{y:.1f}")
-
-    return " ".join(points)
 
 
 def _markdown_to_html(md):
@@ -308,6 +251,72 @@ def _extract_section_content_only(sections, keywords):
     return ""
 
 
+# 四体系卡片配置：(体系关键词, 结果函数, css_class, 中文名, 图标)
+_CROSS_SYSTEMS = [
+    ("九型",   lambda r: f"{r.get('enneagram', {}).get('main_type', '')}号 {r.get('enneagram', {}).get('type_name', '')}".strip(), "en",  "九型人格", "🎭"),
+    ("MBTI",  lambda r: r.get("mbti", {}).get("type", ""),                              "mbti", "MBTI", "🧩"),
+    ("霍兰德", lambda r: r.get("holland", {}).get("code", ""),                           "ho",  "霍兰德", "🧭"),
+    ("盖洛普", lambda r: GALLUP_DOMAIN_CN.get(r.get("gallup", {}).get("top_domain", ""), r.get("gallup", {}).get("top_domain", "未识别")), "ga", "盖洛普", "🏆"),
+]
+
+
+def _extract_synergy_tension(md_text, system_kw):
+    """
+    从交叉解读 markdown 中提取指定体系的协同信号和张力提示。
+    格式：### 九型\n- 协同信号：...\n- 张力提示：...
+    """
+    if not md_text:
+        return "", ""
+    # 找到 ### 体系名 段落
+    pattern = rf'###\s*{re.escape(system_kw)}[^\n]*\n(.*?)(?=###|\Z)'
+    m = re.search(pattern, md_text, re.DOTALL)
+    if not m:
+        return "", ""
+    block = m.group(1)
+    synergy = ""
+    tension = ""
+    for line in block.split("\n"):
+        line = line.strip()
+        if "协同信号" in line:
+            synergy = re.sub(r'^[-*]\s*协同信号[：:]\s*', '', line).strip()
+        elif "张力提示" in line:
+            tension = re.sub(r'^[-*]\s*张力提示[：:]\s*', '', line).strip()
+    return synergy, tension
+
+
+def _build_cross_cards(cross_md, results):
+    """
+    从交叉解读 markdown 生成 4 张体系卡片 HTML。
+    每张卡包含：图标 + 体系名 + 主结果徽章 + 协同信号 + 张力提示。
+    """
+    if not cross_md:
+        return ""
+
+    cards = []
+    for kw, result_fn, css_class, label, icon in _CROSS_SYSTEMS:
+        main_value = result_fn(results)
+        synergy, tension = _extract_synergy_tension(cross_md, kw)
+
+        if not synergy and not tension:
+            continue
+
+        synergy_html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', synergy) if synergy else ""
+        tension_html = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', tension) if tension else ""
+
+        card = f'''<div class="cross-sys-card">
+    <div class="sys-head">
+        <div class="sys-icon sys-icon--{css_class}">{icon}</div>
+        <span class="sys-name">{label}</span>
+        <span class="sys-badge sys-badge--{css_class}">{main_value}</span>
+    </div>
+    <div class="sys-synergy"><strong>✓ 协同信号</strong>{synergy_html}</div>
+    <div class="sys-tension"><strong>⚠ 张力提示</strong>{tension_html}</div>
+</div>'''
+        cards.append(card)
+
+    return "\n".join(cards)
+
+
 # 霍兰德代码对应的默认职业方向（当 AI 输出无法提取职业列表时使用）
 HOLLAND_DEFAULT_CAREERS = {
     "R": ["工程师", "技术员", "建筑师", "农艺师", "运动员"],
@@ -454,15 +463,16 @@ def generate_report_html(results, profile, ai_sections):
 
     # 综合交叉解读：提取章节原始 markdown，用于后续子章节提取
     cross_section_md = _extract_section_content_only(ai_sections, ["交叉", "综合", "cross"])
-    cross_analysis = _markdown_to_html(cross_section_md) if cross_section_md else _extract_section(ai_sections, ["交叉", "综合", "cross"])
+    cross_analysis = _markdown_to_html(cross_section_md) if cross_section_md else ""
 
-    # 协同点与张力点：从综合交叉解读章节内部提取 ### 子标题
-    synergy = _extract_subsection_from_content(cross_section_md, ["协同", "synergy"]) if cross_section_md else ""
-    tension = _extract_subsection_from_content(cross_section_md, ["张力", "tension"]) if cross_section_md else ""
-    if not synergy:
-        synergy = "详见综合交叉解读"
-    if not tension:
-        tension = "详见综合交叉解读"
+    # 四体系交叉解读卡片 + 融合洞察
+    cross_cards_html = ""
+    insight_html = ""
+    if cross_section_md:
+        cross_cards_html = _build_cross_cards(cross_section_md, results)
+        insight_md = _extract_subsection_from_content(cross_section_md, ["融合洞察", "insight", "洞察"])
+        if insight_md:
+            insight_html = insight_md
 
     # 易学/生涯发展时机建议章节
     lifecycle_content = ""
@@ -504,7 +514,6 @@ def generate_report_html(results, profile, ai_sections):
         "{{HOLLAND_LABEL}}": holland_label,
 
         "{{GALLUP_DOMAIN_CN}}": ga_domain_cn,
-        "{{RADAR_POINTS}}": _radar_points(results),
 
         "{{CAREER_LIST}}": career_list_html,
         "{{GALLUP_THEME_TAGS}}": theme_tags,
@@ -514,8 +523,12 @@ def generate_report_html(results, profile, ai_sections):
         "{{HOLLAND_ANALYSIS}}": holland_analysis,
         "{{GALLUP_ANALYSIS}}": gallup_analysis,
         "{{CROSS_ANALYSIS}}": cross_analysis,
-        "{{SYNERGY_POINTS}}": synergy,
-        "{{TENSION_POINTS}}": tension,
+        "{{CROSS_CARDS}}": cross_cards_html,
+        "{{INSIGHT_POINTS}}": insight_html,
+        # 旧版兼容（保留为空，不再被模板使用）
+        "{{CROSS_TABLE}}": "",
+        "{{SYNERGY_POINTS}}": "",
+        "{{TENSION_POINTS}}": "",
 
         "{{LIFECYCLE_CURRENT}}": lifecycle_content if lifecycle_content else "",
         "{{LIFECYCLE_FOCUS}}": lifecycle_focus if lifecycle_focus else "",

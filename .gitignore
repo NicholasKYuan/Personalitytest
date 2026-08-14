@@ -60,3 +60,7 @@ redeem_raw.json
 # 测试数据库
 webapp/backend/test_e2e_verify.db
 webapp/backend/*.db
+
+# 测试产物
+test_report_view.py
+webapp/测试报告_预览.html

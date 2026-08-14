@@ -195,41 +195,6 @@
         .ov-card--holland .ov-value { color: var(--success); }
         .ov-card--gallup .ov-value { color: var(--secondary); }
 
-        /* ---- 雷达图 ---- */
-        .radar-container {
-            display: flex;
-            justify-content: center;
-            padding: 1rem 0;
-        }
-        .radar-container svg {
-            max-width: 100%;
-            height: auto;
-        }
-        .radar-label {
-            font-size: 0.7rem;
-            fill: var(--text-2);
-            font-weight: 600;
-            text-anchor: middle;
-        }
-        .radar-value {
-            font-size: 0.65rem;
-            fill: var(--text-3);
-            text-anchor: middle;
-        }
-        .radar-polygon {
-            fill-opacity: 0.25;
-            stroke-width: 2;
-        }
-        .radar-grid {
-            fill: none;
-            stroke: var(--border);
-            stroke-width: 0.5;
-        }
-        .radar-axis {
-            stroke: var(--border);
-            stroke-width: 0.5;
-        }
-
         /* ---- 得分条 ---- */
         .bar-row {
             display: flex;
@@ -296,7 +261,81 @@
             font-weight: 600;
         }
 
-        /* ---- 交叉解读卡片 ---- */
+        /* ---- 四体系交叉解读卡片 ---- */
+        .cross-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .cross-sys-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.85rem;
+            background: var(--surface);
+        }
+        .cross-sys-card .sys-head {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 0.55rem;
+        }
+        .cross-sys-card .sys-icon {
+            width: 2rem; height: 2rem;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .cross-sys-card .sys-icon--en  { background: #FEF3C7; }
+        .cross-sys-card .sys-icon--mbti { background: #DBEAFE; }
+        .cross-sys-card .sys-icon--ho  { background: #D1FAE5; }
+        .cross-sys-card .sys-icon--ga  { background: #EDE9FE; }
+        .cross-sys-card .sys-name {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .cross-sys-card .sys-badge {
+            display: inline-block;
+            padding: 0.12rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-left: auto;
+        }
+        .cross-sys-card .sys-badge--en  { background: #FEF3C7; color: #92400E; }
+        .cross-sys-card .sys-badge--mbti { background: #DBEAFE; color: #1E40AF; }
+        .cross-sys-card .sys-badge--ho  { background: #D1FAE5; color: #065F46; }
+        .cross-sys-card .sys-badge--ga  { background: #EDE9FE; color: #5B21B6; }
+        .cross-sys-card .sys-synergy,
+        .cross-sys-card .sys-tension {
+            font-size: 0.78rem;
+            line-height: 1.6;
+            color: var(--text-2);
+            padding: 0.35rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.3rem;
+        }
+        .cross-sys-card .sys-synergy {
+            background: #F0FDF4;
+            border-left: 3px solid var(--success);
+        }
+        .cross-sys-card .sys-tension {
+            background: #FFFBEB;
+            border-left: 3px solid var(--warning);
+        }
+        .cross-sys-card .sys-synergy strong,
+        .cross-sys-card .sys-tension strong {
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.1rem;
+        }
+        .cross-sys-card .sys-synergy strong { color: #166534; }
+        .cross-sys-card .sys-tension strong { color: #92400E; }
+
+        /* ---- 融合洞察卡 ---- */
         .cross-card {
             border: 1px solid var(--border);
             border-radius: var(--radius);
@@ -317,8 +356,12 @@
             color: var(--text-2);
             line-height: 1.7;
         }
-        .cross-card--synergy { border-left: 3px solid var(--success); }
-        .cross-card--tension { border-left: 3px solid var(--warning); }
+        /* ---- 融合洞察卡 ---- */
+        .cross-card--insight {
+            border-left: 3px solid var(--primary);
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+        }
+        .cross-card--insight .cross-title { color: var(--primary); }
 
         /* ---- 职业推荐 ---- */
         .career-list {
@@ -353,6 +396,7 @@
         /* ---- 响应式 ---- */
         @media (max-width: 640px) {
             .overview-grid { grid-template-columns: repeat(2, 1fr); }
+            .cross-grid { grid-template-columns: 1fr; }
             .cover h1 { font-size: 1.35rem; }
             .bar-row .bar-label { width: 4rem; font-size: 0.72rem; }
         }
@@ -428,32 +472,7 @@
                 </div>
             </div>
 
-            <!-- 四体系雷达图 -->
-            <div class="radar-container">
-                <svg viewBox="0 0 300 300" width="280" height="280">
-                    <!-- 网格 -->
-                    <polygon class="radar-grid" points="150,30 254,105 214,240 86,240 46,105"/>
-                    <polygon class="radar-grid" points="150,70 219,118 194,205 106,205 81,118"/>
-                    <polygon class="radar-grid" points="150,110 185,130 175,170 125,170 115,130"/>
-                    <!-- 轴 -->
-                    <line class="radar-axis" x1="150" y1="150" x2="150" y2="30"/>
-                    <line class="radar-axis" x1="150" y1="150" x2="254" y2="105"/>
-                    <line class="radar-axis" x1="150" y1="150" x2="214" y2="240"/>
-                    <line class="radar-axis" x1="150" y1="150" x2="86" y2="240"/>
-                    <line class="radar-axis" x1="150" y1="150" x2="46" y2="105"/>
-                    <!-- 数据多边形 (示例值，由AI填充) -->
-                    <polygon class="radar-polygon" fill="#4F46E5" stroke="#4F46E5"
-                        points="{{RADAR_POINTS}}"/>
-                    <!-- 标签 -->
-                    <text class="radar-label" x="150" y="22">九型</text>
-                    <text class="radar-label" x="268" y="100">MBTI</text>
-                    <text class="radar-label" x="228" y="258">霍兰德</text>
-                    <text class="radar-label" x="72" y="258">盖洛普</text>
-                    <text class="radar-label" x="32" y="100">综合</text>
-                </svg>
-            </div>
-            <p style="text-align:center;font-size:0.78rem;color:var(--text-3);">四体系得分雷达图（面积越大代表各体系特征越鲜明）</p>
-            <p style="font-size:0.75rem;color:var(--text-3);margin-top:0.5rem;padding:0.5rem 0.75rem;background:var(--bg);border-radius:var(--radius);line-height:1.6;">
+            <p style="font-size:0.75rem;color:var(--text-3);margin-top:0;padding:0.5rem 0.75rem;background:var(--bg);border-radius:var(--radius);line-height:1.6;">
                 💡 <strong>关于得分说明</strong>：各体系类型判定采用<strong>归一化得分</strong>（即该维度总分 ÷ 该维度在试卷中出现的题数），以消除不同维度题目数量不均带来的偏差。因此，您在下方看到的<strong>原始得分条</strong>可能与最终类型判定不完全对应——例如某型原始分较低但因出现题数少，归一化后反而排名靠前。这是测评科学性的体现，非计算错误。
             </p>
         </div>
@@ -685,27 +704,24 @@
             <h2>四体系综合交叉解读</h2>
         </div>
         <div class="section-body">
-            <!-- 协同点 -->
-            <div class="cross-card cross-card--synergy">
-                <div class="cross-title">✨ 协同亮点</div>
-                <div class="cross-body">
-                    <!-- {{SYNERGY_POINTS}} -->
-                    {{SYNERGY_POINTS}}
-                </div>
+            <p style="font-size:0.82rem;color:var(--text-3);margin-bottom:0.75rem;padding-bottom:0.6rem;border-bottom:1px dashed var(--border);">
+                把九型人格、MBTI、霍兰德职业兴趣和盖洛普优势识别器四套体系放在同一张图里看，相互印证与张力一目了然。
+            </p>
+
+            <!-- 4 体系交叉解读卡片 -->
+            <div class="cross-grid">
+                <!-- {{CROSS_CARDS}} -->
+                {{CROSS_CARDS}}
             </div>
 
-            <!-- 张力点 -->
-            <div class="cross-card cross-card--tension">
-                <div class="cross-title">⚡ 关键张力</div>
+            <!-- 融合洞察卡 -->
+            <div class="cross-card cross-card--insight">
+                <div class="cross-title">🧬 融合洞察</div>
                 <div class="cross-body">
-                    <!-- {{TENSION_POINTS}} -->
-                    {{TENSION_POINTS}}
+                    <!-- {{INSIGHT_POINTS}} -->
+                    {{INSIGHT_POINTS}}
                 </div>
             </div>
-
-            <!-- AI 生成的综合解读 -->
-            <!-- {{CROSS_ANALYSIS}} -->
-            {{CROSS_ANALYSIS}}
         </div>
     </section>
 

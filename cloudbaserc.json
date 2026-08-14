@@ -1,0 +1,8 @@
+{
+  "version": "2.0",
+  "envId": "xingyaoqicheng-d4gqkp52ef36b32dc",
+  "$schema": "https://framework-1258016615.tcloudbaseapp.com/schema/latest.json",
+  "cloudrun": {
+    "name": "personality-api"
+  }
+}
