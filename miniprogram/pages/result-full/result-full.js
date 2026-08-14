@@ -281,7 +281,7 @@ Page({
         key: 'enneagram',
         icon: '🔢',
         title: '九型人格',
-        type: `${num}号 ${name}`,
+        type: `${num}号·${name}`,
         desc: labels.ENNEAGRAM_DESC[num] || '',
         color: '#F2545B'
       })

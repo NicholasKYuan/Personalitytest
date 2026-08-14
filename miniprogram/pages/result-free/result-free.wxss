@@ -86,10 +86,12 @@
 }
 
 .rc-type {
-  font-size: 40rpx;
+  font-size: 34rpx;
   font-weight: 800;
-  letter-spacing: 2rpx;
+  letter-spacing: 1rpx;
   margin-bottom: 12rpx;
+  /* 九型最长"4号·个人主义者"约 9 字，34rpx 在 48.5% 卡宽内单行放下 */
+  white-space: nowrap;
 }
 
 .rc-desc {
@@ -225,6 +227,11 @@
   text-align: center;
   font-size: 24rpx;
   color: var(--text-muted);
+}
+
+/* CTA 按钮字号略降，保证"解锁完整报告 ¥29.9"在大字体模式下单行放下 */
+.cta-card .btn-primary {
+  font-size: 30rpx;
 }
 
 /* ---------- 分享 ---------- */

@@ -177,7 +177,7 @@ Page({
       key: 'enneagram',
       title: '九型人格',
       color: '#F2545B',
-      type: `${enNum}号 · ${en.type_name || labels.ENNEAGRAM_NAMES[enNum] || ''}`,
+      type: `${enNum}号·${en.type_name || labels.ENNEAGRAM_NAMES[enNum] || ''}`,
       desc: labels.ENNEAGRAM_DESC[enNum] || ''
     })
 

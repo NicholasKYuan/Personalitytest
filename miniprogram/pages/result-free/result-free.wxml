@@ -63,9 +63,9 @@
         <view class="cv-text">{{item}}</view>
       </view>
     </view>
-    <button class="btn-primary btn-block" bindtap="onUnlock">{{paid ? '查看完整深度报告' : '解锁完整深度报告 ¥29.9'}}</button>
+    <button class="btn-primary btn-block" bindtap="onUnlock">{{paid ? '查看完整深度报告' : '解锁完整报告 ¥29.9'}}</button>
     <view class="cta-trust">{{paid ? '报告已解锁，点击查看你的完整人格画像' : '已有 8,200+ 人解锁了深度报告'}}</view>
   </view>
 
-  <button class="share-btn" open-type="share">分享给好友，TA 也能免费测评</button>
+  <button class="share-btn" open-type="share">分享给好友，免费测评</button>
 </view>
