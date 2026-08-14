@@ -472,8 +472,10 @@ def get_report(session_id: str, request: Request):
     if session.get("openid"):
         _require_paid(session_id, session["openid"])
 
-    results = session["results"]
-    profile = session["profile"]
+    results = session.get("results", {})
+    profile = session.get("profile", {})
+    if not profile:
+        raise HTTPException(status_code=400, detail="会话缺少用户信息，请重新答题")
 
     # 如果已缓存 AI 分析，使用缓存；否则实时生成
     ai_sections = session.get("ai_sections", [])
