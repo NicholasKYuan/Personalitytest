@@ -2,8 +2,11 @@
  * pages/result-free/result-free.js — 免费结果页
  *
  * 展示四体系核心结论 + 雷达图 + 免费简述 + 模糊预览，引导付费解锁完整报告。
- * 数据来源：utils/storage 中 KEYS.RESULTS（quiz 提交后写入的 submit 返回）。
+ * 数据来源（二选一）：
+ *   1. quiz 提交后 → utils/storage 中 KEYS.RESULTS（本地缓存）
+ *   2. 测评记录点入 → URL ?session_id=xxx → GET /api/report/free 拉取
  */
+const api = require('../../utils/api')
 const storage = require('../../utils/storage')
 const labels = require('../../utils/labels')
 
@@ -46,8 +49,44 @@ Page({
     paid: false
   },
 
-  onLoad() {
-    const data = storage.getResults()
+  onLoad(options) {
+    const optSid = (options && options.session_id) || ''
+    const cached = storage.getResults()
+
+    // 本地缓存恰好是该会话 → 直接渲染（答题后跳转的常规路径）
+    if (cached && cached.results && (!optSid || cached.session_id === optSid)) {
+      this._initFromData(cached)
+      return
+    }
+
+    // 测评记录点入 / 缓存是其他会话 → 按 session_id 从服务端拉取
+    if (optSid) {
+      api
+        .getFreeResult(optSid)
+        .then((res) => {
+          const data = {
+            session_id: optSid,
+            results: res.results,
+            free_summary: res.free_summary,
+            paid: !!res.paid
+          }
+          this._initFromData(data)
+          // 同步本地缓存，供 pay 页 / result-full 页兜底使用
+          storage.setResults(data)
+        })
+        .catch((err) => {
+          wx.showToast({ title: (err && err.message) || '加载失败', icon: 'none' })
+          setTimeout(() => wx.redirectTo({ url: '/pages/index/index' }), 1200)
+        })
+      return
+    }
+
+    // 既无缓存也无 session_id → 回首页
+    wx.redirectTo({ url: '/pages/index/index' })
+  },
+
+  /** 用统一数据初始化页面（雷达图 + 卡片 + 简述） */
+  _initFromData(data) {
     if (!data || !data.results) {
       wx.redirectTo({ url: '/pages/index/index' })
       return
@@ -73,9 +112,10 @@ Page({
   },
 
   onShow() {
-    // 从支付页返回时刷新付费状态（若已支付则更新 CTA）
+    // 从支付页返回时刷新付费状态（仅当缓存属于当前会话，避免串号）
     const data = storage.getResults()
-    if (data && data.paid && !this.data.paid) {
+    const curSid = this.submitData && this.submitData.session_id
+    if (data && data.paid && !this.data.paid && data.session_id === curSid) {
       this.setData({ paid: true })
     }
   },
@@ -202,12 +242,14 @@ Page({
 
   /* ---------- 付费引导 ---------- */
   onUnlock() {
-    if (this.data.paid || (this.submitData && this.submitData.paid)) {
-      // 已支付 → 直接进完整报告
-      wx.redirectTo({ url: '/pages/result-full/result-full' })
+    const sessionId = (this.submitData && this.submitData.session_id) || ''
+    if (this.data.paid) {
+      // 已支付 → 直接进完整报告（带 session_id，避免 result-full 读错缓存）
+      wx.redirectTo({
+        url: `/pages/result-full/result-full${sessionId ? `?session_id=${encodeURIComponent(sessionId)}` : ''}`
+      })
       return
     }
-    const sessionId = (this.submitData && this.submitData.session_id) || ''
     wx.navigateTo({
       url: `/pages/pay/pay${sessionId ? `?session_id=${encodeURIComponent(sessionId)}` : ''}`
     })

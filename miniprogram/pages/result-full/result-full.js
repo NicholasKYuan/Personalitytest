@@ -89,9 +89,9 @@ Page({
     this.sessionId = sessionId
     this.posting = false
 
-    // 已缓存的完整报告直接渲染
+    // 已缓存的完整报告直接渲染（必须属于当前会话，避免串号显示别人的报告）
     const cached = storage.getReport()
-    if (cached && cached.sections && cached.sections.length) {
+    if (cached && cached.session_id === sessionId && cached.sections && cached.sections.length) {
       this.renderReport(cached)
       return
     }

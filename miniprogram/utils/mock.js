@@ -257,6 +257,16 @@ const mockApi = {
     }))
   },
 
+  getFreeResult(sessionId) {
+    return delay(300).then(() => ({
+      session_id: sessionId,
+      results: MOCK_RESULTS,
+      free_summary: buildFreeSummary(MOCK_RESULTS, {}),
+      profile: { name: '你', age: 22, role: 'student-undergrad', purpose: 'career-planning' },
+      paid: false
+    }))
+  },
+
   getReportDetail(sessionId) {
     return delay(600).then(() => ({
       session_id: sessionId,

@@ -184,6 +184,12 @@ function getReportStatus(sessionId) {
   return request('GET', `/api/report/status?session_id=${encodeURIComponent(sessionId)}`)
 }
 
+/** GET /api/report/free — 获取免费预览结果（四体系分数+简述，无需付费） */
+function getFreeResult(sessionId) {
+  if (isMock()) return mockApi.getFreeResult(sessionId)
+  return request('GET', `/api/report/free?session_id=${encodeURIComponent(sessionId)}`)
+}
+
 /** POST /api/report/detail — 付费后获取完整 AI 报告（markdown 章节） */
 function getReportDetail(sessionId) {
   if (isMock()) return mockApi.getReportDetail(sessionId)
@@ -241,6 +247,7 @@ module.exports = {
   submitAnswers,
   createOrder,
   getReportStatus,
+  getFreeResult,
   getReportDetail,
   regenerateReport,
   redeemCode,

@@ -2,7 +2,7 @@
  * pages/records/records.js — 我的测评记录
  *
  * 展示用户7天内（未付费）/ 30天内（已付费）的测评记录。
- * 未付费 → 点击跳转支付页继续解锁
+ * 未付费 → 点击跳转免费预览页（含解锁入口）
  * 已付费 → 点击跳转完整报告页查看
  */
 const api = require('../../utils/api')
@@ -59,8 +59,8 @@ Page({
       // 已付费 → 查看完整报告
       wx.navigateTo({ url: `/pages/result-full/result-full?session_id=${id}` })
     } else {
-      // 未付费 → 跳转支付页继续解锁
-      wx.navigateTo({ url: `/pages/pay/pay?session_id=${id}` })
+      // 未付费 → 先看免费预览页（四体系分数+简述），底部再引导付费/兑换码解锁
+      wx.navigateTo({ url: `/pages/result-free/result-free?session_id=${id}` })
     }
   },
 

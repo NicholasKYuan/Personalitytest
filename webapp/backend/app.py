@@ -401,6 +401,39 @@ def report_status(session_id: str = Query(...), request: Request = None):
     return {"code": 0, "message": "ok", "data": report_service.get_report_status(session_id)}
 
 
+@app.get("/api/report/free")
+def report_free(session_id: str = Query(...), request: Request = None):
+    """获取免费预览结果（四体系分数 + 简述），无需付费。
+
+    供测评记录页点入未付费会话时展示简要版报告。
+    注意：本路由必须定义在 /api/report/{session_id} 之前。
+    """
+    openid = _require_openid(request)
+    try:
+        session = load_session(session_id)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="会话不存在")
+    _owns_session(openid, session)
+
+    if not session.get("results"):
+        raise HTTPException(status_code=400, detail="请先完成答题并提交")
+
+    with database.get_db() as db:
+        o = db.execute(
+            "SELECT status FROM orders WHERE session_id=%s ORDER BY id DESC LIMIT 1",
+            (session_id,),
+        ).fetchone()
+    paid = bool(o and o["status"] == "paid")
+
+    return {"code": 0, "message": "ok", "data": {
+        "session_id": session_id,
+        "results": session["results"],
+        "free_summary": session.get("free_summary", ""),
+        "profile": session.get("profile", {}),
+        "paid": paid,
+    }}
+
+
 SESSION_TTL_UNPAID = 7 * 24 * 3600   # 未付费保留7天
 SESSION_TTL_PAID = 30 * 24 * 3600    # 已付费保留30天
 

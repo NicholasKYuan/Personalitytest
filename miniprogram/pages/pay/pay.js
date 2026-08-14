@@ -61,10 +61,21 @@ Page({
     }
     this.sessionId = sessionId
 
-    // 已支付过 → 直接进入报告页
-    if (results.paid) {
-      this.setData({ paid: true })
-    }
+    // 付费状态以服务端为准：本地缓存可能是其他会话的 paid 标记，
+    // 直接信任会导致未付费会话的按钮显示灰色「已解锁」无法付款。
+    this.setData({ paid: false })
+    api
+      .getReportStatus(sessionId)
+      .then((st) => {
+        if (st && st.paid) {
+          this.setData({ paid: true })
+          // 同步本地标记（仅当前会话）
+          storage.setResults({ ...results, session_id: sessionId, paid: true })
+        }
+      })
+      .catch(() => {
+        // 状态查询失败时保持未付费态，用户仍可正常发起支付
+      })
   },
 
   onUnload() {
@@ -260,7 +271,9 @@ Page({
      跳转
      ============================================================ */
   goReport() {
-    wx.redirectTo({ url: '/pages/result-full/result-full' })
+    wx.redirectTo({
+      url: `/pages/result-full/result-full?session_id=${encodeURIComponent(this.sessionId)}`
+    })
   },
 
   onShareAppMessage() {
