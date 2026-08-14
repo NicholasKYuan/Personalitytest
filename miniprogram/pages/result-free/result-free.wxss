@@ -66,12 +66,14 @@
 .cards-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 22rpx;
-  margin-bottom: 28rpx;
+  /* 不用 gap：calc(50%) + gap 恰好凑满 100%，亚像素进位会导致换行 */
+  justify-content: space-between;
+  margin-bottom: 6rpx; /* 卡片自带下间距 22rpx，合计 28rpx */
 }
 
 .result-card {
-  width: calc(50% - 11rpx);
+  width: 48.5%;
+  margin-bottom: 22rpx;
   box-sizing: border-box;
   padding: 30rpx 26rpx;
   text-align: center;

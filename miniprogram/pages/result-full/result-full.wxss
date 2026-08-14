@@ -87,14 +87,16 @@
 .snapshot-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20rpx;
-  margin-bottom: 32rpx;
+  /* 不用 gap：calc(50%) + gap 恰好凑满 100%，rpx→px 亚像素进位会导致换行。
+     改用 space-between 分配列间距，卡片宽度留 3% 余量。 */
+  justify-content: space-between;
+  margin-bottom: 12rpx; /* 卡片自带下间距 20rpx，合计 32rpx */
 }
 
 .snapshot-card {
-  /* 用 flex-basis 强制 50% 列宽，绕开长文本把 width 撑开的问题 */
-  flex: 0 0 calc(50% - 10rpx);
+  flex: 0 0 48.5%;
   min-width: 0;
+  margin-bottom: 20rpx;
   box-sizing: border-box;
   padding: 28rpx 24rpx;
   background: #FFFFFF;
