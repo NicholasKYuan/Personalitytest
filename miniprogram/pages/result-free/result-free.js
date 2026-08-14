@@ -96,6 +96,8 @@ Page({
             session_id: optSid,
             results: res.results,
             free_summary: res.free_summary,
+            // 会话级姓名：后端返回的 profile 属于该会话，优先于全局 storage
+            profile_name: (res.profile && res.profile.name) || '',
             paid: !!res.paid
           }
           this._initFromData(data)
@@ -477,8 +479,10 @@ Page({
 
   /* ---- 海报 · 用户标题 ---- */
   _pGreeting(ctx, w, y, C) {
-    const profile = storage.getProfile() || {}
-    const name = profile.name || '你'
+    // 优先用会话级姓名（绑定该次测评），兜底全局 profile
+    const sessionName = (this.submitData && this.submitData.profile_name) || ''
+    const globalName = (storage.getProfile() || {}).name || ''
+    const name = sessionName || globalName || '你'
     ctx.setTextAlign('center')
     ctx.setFillStyle(C.textMain)
     ctx.font = 'bold 28px sans-serif'

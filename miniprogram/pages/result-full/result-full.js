@@ -176,10 +176,12 @@ Page({
       badges.push(labels.GALLUP_DOMAINS[r.gallup.top_domain] || r.gallup.top_domain)
     }
 
-    // 优先用本地存储的姓名（用户自己填写的），后端 profile 仅做兜底
-    const localProfile = storage.getProfile() || {}
+    // 姓名优先级：后端会话 profile > 会话缓存的 profile_name > 全局 storage
+    // （全局 storage 会被新测评覆盖，看旧会话/分享报告时会串名，所以放最后）
     const reportProfile = report.profile || {}
-    const name = localProfile.name || reportProfile.name || '你'
+    const sessionName = (storage.getResults() || {}).profile_name || ''
+    const localProfile = storage.getProfile() || {}
+    const name = reportProfile.name || sessionName || localProfile.name || '你'
     this._userName = name // 缓存供海报使用
 
     // 四体系快照卡片

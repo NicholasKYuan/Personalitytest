@@ -223,8 +223,9 @@ Page({
     api
       .submitAnswers(this.sessionId, answers)
       .then((data) => {
-        // 结果缓存 + 清空答题进度
-        storage.setResults(data)
+        // 结果缓存 + 清空答题进度；profile_name 绑定到会话，避免全局 profile 被新测评覆盖后串名
+        const profileName = (storage.getProfile() || {}).name || ''
+        storage.setResults({ ...data, profile_name: profileName })
         storage.setSession(null)
         storage.setAnswers(null)
         storage.clearQuizIndex()
