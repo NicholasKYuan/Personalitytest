@@ -87,18 +87,22 @@
 .snapshot-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20rpx;
+  justify-content: space-between;
   margin-bottom: 32rpx;
 }
 
 .snapshot-card {
-  width: calc(50% - 10rpx);
+  /* 用 flex-basis 强制 50% 列宽，绕开长文本把 width 撑开的问题 */
+  flex: 0 0 calc(50% - 10rpx);
+  min-width: 0;
   box-sizing: border-box;
   padding: 28rpx 24rpx;
   background: #FFFFFF;
   border-radius: 20rpx;
   border-top: 6rpx solid var(--brand-coral);
   box-shadow: 0 4rpx 20rpx rgba(43, 38, 34, 0.05);
+  overflow: hidden;
+  margin-bottom: 20rpx;
 }
 
 .sc-icon {
@@ -118,12 +122,22 @@
   font-weight: 800;
   margin-bottom: 10rpx;
   line-height: 1.3;
+  /* 卡片宽度受限时允许长标题换行（如 "4号个人主义者"） */
+  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 .sc-desc {
   font-size: 23rpx;
   line-height: 1.6;
   color: var(--text-sub);
+  /* 描述文字超长时强制换行，避免撑开卡片 */
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ===== 可视化卡片通用 ===== */

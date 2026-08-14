@@ -74,7 +74,8 @@ Page({
     canRegenerate: true, // 是否还能重新生成
     regenerating: false, // 正在重新生成
     posterW: 600,
-    posterH: 1080
+    posterH: 1080,
+    shareImagePath: '',  // 预生成的海报本地路径，用于转发 imageUrl
   },
 
   onLoad(options) {
@@ -201,6 +202,59 @@ Page({
       hasResults: snapshotCards.length > 0,
       hasIncomplete,
       canRegenerate
+    })
+
+    // 报告就绪后静默预生成海报，用于分享时的 imageUrl（避免白色空白截图）
+    this._preGenerateSharePoster()
+  },
+
+  /**
+   * 静默预生成分享海报（不弹 loading、不保存到相册）
+   * 失败时静默忽略：分享时 WeChat 会自动用页面截图兜底
+   */
+  _preGenerateSharePoster() {
+    if (this._posterPreparing) return
+    this._posterPreparing = true
+    const w = 600
+    const h = 1080
+    const ctx = wx.createCanvasContext('posterCanvas', this)
+    const C = POSTER_COLORS
+
+    const grad = ctx.createLinearGradient(0, 0, 0, h)
+    grad.addColorStop(0, '#FFF6EC')
+    grad.addColorStop(0.35, '#FDF8F3')
+    grad.addColorStop(1, '#F6F1FA')
+    ctx.setFillStyle(grad)
+    ctx.fillRect(0, 0, w, h)
+
+    POSTER_STARS.forEach((s) => {
+      ctx.beginPath()
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
+      ctx.setFillStyle(`rgba(${s.c},${s.a})`)
+      ctx.fill()
+    })
+
+    let y = 58
+    y = this._pBrand(ctx, w, y, C)
+    y = this._pGreeting(ctx, w, y, C)
+    y = this._pSystemGrid(ctx, w, y, C)
+    y = this._pInsight(ctx, w, y, C)
+    y = this._pMbtiBars(ctx, w, y, C)
+    y = this._pHollandTop(ctx, w, y, C)
+    this._pFooter(ctx, w, h, C)
+
+    ctx.draw(false, () => {
+      setTimeout(() => {
+        wx.canvasToTempFilePath({
+          canvasId: 'posterCanvas',
+          success: (res) => {
+            this.setData({ shareImagePath: res.tempFilePath })
+          },
+          complete: () => {
+            this._posterPreparing = false
+          }
+        }, this)
+      }, 300)
     })
   },
 
@@ -629,26 +683,14 @@ Page({
     return by + 8
   },
 
-  /* ---- 海报 · 页脚（二维码 + Slogan，锚定底部） ---- */
+  /* ---- 海报 · 页脚（小程序码 + Slogan，锚定底部） ---- */
   _pFooter(ctx, w, h, C) {
     const qrSize = 96
     const qrX = 48
     const qrY = h - 40 - qrSize
 
-    // 二维码占位框
-    this._drawRoundRect(ctx, qrX, qrY, qrSize, qrSize, 12)
-    ctx.setFillStyle('#F4EFE8')
-    ctx.fill()
-    ctx.setStrokeStyle('rgba(139,92,246,0.25)')
-    ctx.setLineWidth(1)
-    ctx.stroke()
-
-    ctx.setTextAlign('center')
-    ctx.setFillStyle(C.textMuted)
-    ctx.font = '12px sans-serif'
-    ctx.fillText('小程序码', qrX + qrSize / 2, qrY + 42)
-    ctx.font = '10px sans-serif'
-    ctx.fillText('（上线后替换）', qrX + qrSize / 2, qrY + 60)
+    // 小程序码图片
+    ctx.drawImage('/assets/miniprogram-code.jpg', qrX, qrY, qrSize, qrSize)
 
     // 右侧文案块
     const tx = qrX + qrSize + 28
@@ -804,9 +846,14 @@ Page({
      转发
      ============================================================ */
   onShareAppMessage() {
-    return {
+    const share = {
       title: '我的人格画像已生成，一起来发现你的独特光芒',
       path: '/pages/index/index'
     }
+    // 优先使用预生成的"四体系卡片海报"作为分享图（包含 2x2 卡片，无白底）
+    if (this.data.shareImagePath) {
+      share.imageUrl = this.data.shareImagePath
+    }
+    return share
   }
 })
