@@ -271,7 +271,7 @@ const mockApi = {
     return delay(600).then(() => ({
       session_id: sessionId,
       report: {
-        profile: { name: '你', age: 22, role: 'student-undergrad', purpose: 'career-planning' },
+        // 不返回 profile，让 result-full 页回退到 storage.getProfile() 取真实用户数据
         results: MOCK_RESULTS,
         sections: MOCK_SECTIONS,
         generated_at: '2026-08-12 12:00:00',

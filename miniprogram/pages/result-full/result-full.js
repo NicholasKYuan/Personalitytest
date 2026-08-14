@@ -174,8 +174,11 @@ Page({
       badges.push(labels.GALLUP_DOMAINS[r.gallup.top_domain] || r.gallup.top_domain)
     }
 
-    const profile = report.profile || storage.getProfile() || {}
-    const name = profile.name || '你'
+    // 优先用本地存储的姓名（用户自己填写的），后端 profile 仅做兜底
+    const localProfile = storage.getProfile() || {}
+    const reportProfile = report.profile || {}
+    const name = localProfile.name || reportProfile.name || '你'
+    this._userName = name // 缓存供海报使用
 
     // 四体系快照卡片
     const snapshotCards = this._buildSnapshotCards(r)
@@ -436,23 +439,25 @@ Page({
   /* ---- 海报 · 品牌区（Logo 图形标 + 品牌名横向组合，整体居中） ---- */
   _pBrand(ctx, w, y, C) {
     const brand = '星鉴人格'
-    ctx.font = 'bold 30px sans-serif'
+    ctx.font = 'bold 32px sans-serif'
     const tw = ctx.measureText(brand).width
-    const logoSize = 36
-    const gap = 10
+    const logoSize = 38
+    const gap = 11
     const startX = (w - logoSize - gap - tw) / 2
 
     // Logo 图形标（透明底 PNG；视觉中心与文字光学中心对齐）
-    ctx.drawImage('/assets/logo.png', startX, y - 12, logoSize, logoSize)
+    ctx.drawImage('/assets/logo.png', startX, y - 14, logoSize, logoSize)
 
     ctx.setTextAlign('left')
+    ctx.setTextBaseline('alphabetic')
     ctx.setFillStyle(C.textMain)
-    ctx.fillText(brand, startX + logoSize + gap, y + 16)
+    ctx.font = 'bold 32px sans-serif'
+    ctx.fillText(brand, startX + logoSize + gap, y + 17)
 
     ctx.setTextAlign('center')
 
     ctx.setFillStyle(C.textMuted)
-    ctx.font = '15px sans-serif'
+    ctx.font = '13px sans-serif'
     ctx.fillText('人格深度测评报告', w / 2, y + 42)
 
     // 分隔线
@@ -468,11 +473,12 @@ Page({
 
   /* ---- 海报 · 用户标题 ---- */
   _pGreeting(ctx, w, y, C) {
+    // 优先用 renderReport 缓存的姓名，兜底读 storage
     const profile = storage.getProfile() || {}
-    const name = profile.name || '你'
+    const name = this._userName || profile.name || '你'
     ctx.setTextAlign('center')
     ctx.setFillStyle(C.textMain)
-    ctx.font = 'bold 26px sans-serif'
+    ctx.font = 'bold 28px sans-serif'
     ctx.fillText(`${name}的人格画像`, w / 2, y + 20)
     return y + 44
   },
@@ -506,10 +512,11 @@ Page({
       ctx.setFillStyle(C.textMuted)
       ctx.font = '12px sans-serif'
       ctx.fillText(c.title, cx + 16, cy + 30)
-      // 类型值（体系色大字）
+      // 类型值（体系色大字，超长截断）
       ctx.setFillStyle(c.color)
-      ctx.font = 'bold 20px sans-serif'
-      ctx.fillText(c.type, cx + 16, cy + 62)
+      ctx.font = 'bold 19px sans-serif'
+      const maxTypeW = cw - 32
+      ctx.fillText(this._truncateText(ctx, c.type, maxTypeW), cx + 16, cy + 62)
     })
 
     const rows = Math.ceil(cards.length / 2)
@@ -522,8 +529,21 @@ Page({
     if (!insight) return y
 
     const mx = 40
+    const maxW = w - mx * 2 - 56
     ctx.font = '15px sans-serif'
-    const lines = this._wrapText(ctx, insight, w - mx * 2 - 56).slice(0, 3)
+    const allLines = this._wrapText(ctx, insight, maxW)
+    const maxLines = 4
+    const lines = allLines.slice(0, maxLines)
+
+    // 超出行数时末尾加省略号
+    if (allLines.length > maxLines) {
+      let last = lines[lines.length - 1] || ''
+      while (last.length > 0 && ctx.measureText(last + '…').width > maxW) {
+        last = last.slice(0, -1)
+      }
+      lines[lines.length - 1] = last + '…'
+    }
+
     const cardH = 44 + lines.length * 24 + 16
 
     // 柔和卡片底 + 浅珊瑚描边
@@ -758,6 +778,17 @@ Page({
     }
     if (line) lines.push(line)
     return lines
+  },
+
+  /* 海报工具 · 单行文本超长截断（需先设置 ctx.font） */
+  _truncateText(ctx, text, maxWidth) {
+    if (!text) return ''
+    if (ctx.measureText(text).width <= maxWidth) return text
+    let t = String(text)
+    while (t.length > 0 && ctx.measureText(t + '…').width > maxWidth) {
+      t = t.slice(0, -1)
+    }
+    return t + '…'
   },
 
   /* 绘制圆角矩形路径 */
