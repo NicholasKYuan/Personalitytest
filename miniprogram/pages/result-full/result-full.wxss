@@ -551,6 +551,8 @@
   line-height: 1.4;
   border: none;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .ab-btn--ghost {

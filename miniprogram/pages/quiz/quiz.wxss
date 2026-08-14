@@ -221,6 +221,8 @@
   font-weight: 600;
   text-align: center;
   box-shadow: var(--shadow-brand);
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .swipe-hint {

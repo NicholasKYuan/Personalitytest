@@ -690,6 +690,14 @@ Page({
     const qrX = 48
     const qrY = h - 40 - qrSize
 
+    // 白卡底框（码图为白底方形，垫圆角白卡与暖色背景融合）
+    this._drawRoundRect(ctx, qrX - 8, qrY - 8, qrSize + 16, qrSize + 16, 16)
+    ctx.setFillStyle('#FFFFFF')
+    ctx.fill()
+    ctx.setStrokeStyle('rgba(139,92,246,0.18)')
+    ctx.setLineWidth(1)
+    ctx.stroke()
+
     // 小程序码图片
     ctx.drawImage('/assets/miniprogram-code.jpg', qrX, qrY, qrSize, qrSize)
 

@@ -59,7 +59,7 @@
       <view class="pb-original">¥49.9</view>
     </view>
     <button class="pb-btn" bindtap="onPay" loading="{{paying}}" disabled="{{paying || paid}}">
-      {{paid ? '已解锁 · 查看报告' : (paying ? '正在支付...' : '微信支付 29.9 元')}}
+      {{paid ? '已解锁 · 查看报告' : (paying ? '正在支付...' : '微信支付 ¥29.9')}}
     </button>
   </view>
 

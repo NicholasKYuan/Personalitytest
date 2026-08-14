@@ -239,4 +239,7 @@
   box-shadow: 0 4rpx 24rpx rgba(43, 38, 34, 0.06);
   color: var(--text-main);
   font-size: 28rpx;
+  /* 防止"评"字单独掉行 */
+  white-space: nowrap;
+  overflow: hidden;
 }

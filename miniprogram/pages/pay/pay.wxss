@@ -263,6 +263,8 @@
   border: none;
   box-shadow: var(--shadow-brand);
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .pb-btn[disabled] {

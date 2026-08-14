@@ -152,6 +152,9 @@ page {
   line-height: 1.4;
   border: none;
   box-shadow: var(--shadow-brand);
+  /* 防止长文案在系统字体放大/窄屏下换行（如"元"字单独掉行） */
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .btn-primary:active {
@@ -169,6 +172,8 @@ page {
   line-height: 1.4;
   border: 2rpx solid var(--border-light);
   box-shadow: var(--shadow-card);
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .btn-text {
