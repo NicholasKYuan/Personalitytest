@@ -39,7 +39,7 @@ function isMock() {
  * @param {object} options { auth: boolean, retried: boolean }
  */
 function request(method, path, data, options = {}) {
-  const { auth = true, retried = false, retriedCloud = false } = options
+  const { auth = true, retried = false, cloudRetries = 0 } = options
   return new Promise((resolve, reject) => {
     const header = { 'Content-Type': 'application/json' }
     if (auth) {
@@ -59,6 +59,12 @@ function request(method, path, data, options = {}) {
     }
 
     const useCloud = cloudConfigured && cloudReady
+
+    // 直连降级仅开发版（开发者工具勾选"不校验合法域名"时）可用；
+    // 体验版/正式版云托管默认域名无法加入 request 白名单（微信限制），
+    // 直连必然失败，所以正式环境只走 callContainer + 重试
+    const envVersion = (wx.getAccountInfoSync && wx.getAccountInfoSync().miniProgram.envVersion) || 'release'
+    const fallbackAllowed = envVersion === 'develop'
 
     const handleSuccess = (res) => {
       const body = res.data
@@ -126,24 +132,28 @@ function request(method, path, data, options = {}) {
       console.error('[api] request fail:', method, path, errMsg)
 
       // 云托管瞬时系统错误（102002 等，常见于服务冷启动/部署中）：
-      // 先延迟重试一次 callContainer，仍失败再降级直连
-      if (useCloud && !retriedCloud) {
+      // 最多重试 2 次 callContainer（延迟递增），多数瞬时错误自愈
+      if (useCloud && cloudRetries < 2) {
         setTimeout(() => {
-          request(method, path, data, { auth, retried, retriedCloud: true })
+          request(method, path, data, { auth, retried, cloudRetries: cloudRetries + 1 })
             .then(resolve)
             .catch(reject)
-        }, 800)
+        }, 800 * (cloudRetries + 1))
         return
       }
 
-      // 重试后仍失败 → 降级直连（域名需在小程序后台 request 白名单内）
-      if (useCloud && config.CLOUD_FALLBACK_URL) {
+      // 重试耗尽 → 开发版降级直连（工具有"不校验合法域名"）；
+      // 体验版/正式版直连必然被白名单拦截，直接报友好错误
+      if (useCloud && config.CLOUD_FALLBACK_URL && fallbackAllowed) {
         console.log('[api] cloud.callContainer 重试仍失败，降级直连:', config.CLOUD_FALLBACK_URL + path)
         directRequest()
         return
       }
 
-      reject(new Error(errMsg))
+      const finalMsg = useCloud
+        ? '服务暂时繁忙，请稍后重试'
+        : errMsg
+      reject(new Error(finalMsg))
     }
 
     if (useCloud) {
