@@ -667,63 +667,190 @@ def mock_notify(req: OrderRequest):
 
 
 @app.get("/api/xpay/notify")
-def xpay_notify_verify(signature: str = "", timestamp: str = "", nonce: str = "", echostr: str = ""):
-    """发货订阅 URL 校验。
+def xpay_notify_verify(
+    msg_signature: str = "",
+    timestamp: str = "",
+    nonce: str = "",
+    echostr: str = "",
+):
+    """消息推送 URL 校验。
 
-    在 MP 后台「虚拟支付 → 基本配置 → 发货订阅」填写本回调地址保存时，
-    微信会发 GET 请求校验（携带 signature/timestamp/nonce/echostr），
-    服务端需原样返回 echostr。消息格式选择「JSON + 明文」时不需验签 token。
+    在 MP 后台「开发管理 → 开发设置 → 消息推送」填写本回调地址并启用消息推送时，
+    微信会发 GET 请求验证 URL 可达性（携带 msg_signature/timestamp/nonce/echostr）。
+    服务端用 Token 校验后原样返回 echostr。
     """
+    log_pay(f"[xpay/notify GET] ts={timestamp} nonce={nonce}")
     if not echostr:
         return JSONResponse(content={"ErrCode": -1, "ErrMsg": "missing echostr"})
-    return PlainTextResponse(content=echostr)
+    verified = vpay.verify_url(msg_signature, timestamp, nonce, echostr)
+    if verified is None:
+        return JSONResponse(content={"ErrCode": -1, "ErrMsg": "signature mismatch"}, status_code=403)
+    return PlainTextResponse(content=verified)
 
 
 @app.post("/api/xpay/notify")
-async def xpay_notify(request: Request):
-    """虚拟支付发货推送 xpay_goods_deliver_notify。
+async def xpay_notify(
+    request: Request,
+    msg_signature: str = "",
+    timestamp: str = "",
+    nonce: str = "",
+):
+    """微信通用消息推送接收端（开发管理 → 开发设置 → 消息推送）。
 
-    用户通过现金购买道具且支付成功后，微信推送此回调。
-    必须 5 秒内返回 {"ErrCode": 0, "ErrMsg": "success"}（JSON对JSON / XML对XML）。
+    本端点接收两类消息：
+    1. msgType=text         — 用户客服消息（当前业务不接客服，回复 success 即可）
+    2. msgType=event        — 虚拟支付事件，重点处理 xpay_goods_deliver_notify 发货推送
+    其他消息类型一律返回 success（不让微信重试）。
+
+    消息默认走加密模式（MSG_AES_KEY 已配置时）：
+    body XML 结构: <xml><ToUserName>...</ToUserName><Encrypt>...</Encrypt></xml>
+    解密后再按 msgType 分发。
+
+    简化规则（微信官方）：
+    - 返回空 / "success" / {"success":true} 均视为处理成功
     """
     raw = (await request.body()).decode("utf-8")
-    content_type = request.headers.get("content-type", "")
-    is_xml = raw.lstrip().startswith("<")
-    respond = lambda: vpay.make_callback_response(0, "success", xml=is_xml)  # noqa: E731
+    log_pay(f"[xpay/notify POST] ts={timestamp} nonce={nonce} body_len={len(raw)}")
 
+    def ok():
+        # 响应：明文模式 → 字符串 "success"；加密模式 → 加密的 success XML
+        if vpay.msg_push_ready():
+            reply_inner = "<xml><Content><![CDATA[success]]></Content></xml>"
+            return Response(
+                content=vpay.build_encrypted_reply_xml(reply_inner),
+                media_type="application/xml",
+            )
+        return PlainTextResponse(content="success")
+
+    # --- 1. 解密（加密模式下） ---
+    body_for_parse = raw
+    if vpay.msg_push_ready() and raw.lstrip().startswith("<"):
+        try:
+            import xml.etree.ElementTree as _ET
+            root = _ET.fromstring(raw)
+            enc = root.findtext("Encrypt", "") or ""
+            if not enc:
+                log_pay("[xpay/notify] 加密消息但 Encrypt 字段为空")
+                return ok()
+            if not vpay.verify_msg_signature(msg_signature, timestamp, nonce, enc):
+                log_pay(f"[xpay/notify] 签名校验失败 msg_sig={msg_signature[:16]}")
+                return ok()
+            body_for_parse = vpay.decrypt_message(enc)
+            log_pay(f"[xpay/notify] 解密成功 明文={body_for_parse[:200]}")
+        except Exception as e:
+            log_pay(f"[xpay/notify] 解密失败: {e}")
+            return ok()
+
+    # --- 2. 解析 msgType ---
+    msg_type = ""
+    event_type = ""
+    out_trade_no = ""
     try:
-        data = vpay.parse_callback(raw, content_type)
-        out_trade_no = data["out_trade_no"]
-        transaction_id = data.get("transaction_id", "")
-        actual_price = data.get("actual_price", 0)
+        if body_for_parse.lstrip().startswith("<"):
+            import xml.etree.ElementTree as _ET
+            root = _ET.fromstring(body_for_parse)
+            msg_type = (root.findtext("MsgType") or "").strip()
+            event_type = (root.findtext("Event") or "").strip()
+            out_trade_no = (root.findtext("OutTradeNo") or "").strip()
+        else:
+            data = json.loads(body_for_parse)
+            msg_type = (data.get("MsgType") or "").strip()
+            event_type = (data.get("Event") or "").strip()
+            out_trade_no = (data.get("OutTradeNo") or "").strip()
+    except Exception as e:
+        log_pay(f"[xpay/notify] 解析失败: {e} body={body_for_parse[:200]}")
+        return ok()
 
-        log_pay(f"[xpay/notify] out_trade_no={out_trade_no} price={actual_price} txn={transaction_id}")
+    log_pay(f"[xpay/notify] msg_type={msg_type} event={event_type} out_trade_no={out_trade_no}")
 
+    # --- 3. 分发处理 ---
+    # 仅处理道具发货推送
+    if msg_type == "event" and event_type == "xpay_goods_deliver_notify":
+        try:
+            return _handle_xpay_goods_deliver(body_for_parse)
+        except Exception as e:
+            log_pay(f"[xpay/notify] 发货处理异常: {e}")
+            return ok()
+
+    # 退款 / 投诉 / 风控事件 —— 当前业务暂不处理，仅记录
+    if msg_type == "event" and event_type in (
+        "xpay_refund_notify", "xpay_complaint_notify",
+        "xpay_wxpay_callback_notify", "xpay_coin_pay_notify",
+        "xpay_subscribe_ios_refund_query_notify",
+    ):
+        log_pay(f"[xpay/notify] 收到事件 {event_type}（暂不处理）")
+        return ok()
+
+    # 客服消息 (msgType=text/event 且不是虚拟支付事件) —— 当前不接入，回复 success
+    return ok()
+
+
+def _handle_xpay_goods_deliver(body: str):
+    """处理虚拟支付道具发货推送 xpay_goods_deliver_notify。"""
+    out_trade_no = ""
+    transaction_id = ""
+    actual_price = 0
+    try:
+        if body.lstrip().startswith("<"):
+            import xml.etree.ElementTree as _ET
+            root = _ET.fromstring(body)
+            out_trade_no = (root.findtext("OutTradeNo") or "").strip()
+            transaction_id = (root.findtext("TransactionId") or "").strip()
+            ap = (root.findtext("ActualPrice") or "0").strip()
+            actual_price = int(ap) if ap.isdigit() else 0
+        else:
+            data = json.loads(body)
+            out_trade_no = (data.get("OutTradeNo") or "").strip()
+            wpi = data.get("WeChatPayInfo") or {}
+            transaction_id = (wpi.get("TransactionId") or "").strip()
+            gi = data.get("GoodsInfo") or {}
+            ap = gi.get("ActualPrice", 0)
+            actual_price = int(ap) if ap else 0
+    except Exception as e:
+        log_pay(f"[xpay/notify] 解析发货消息失败: {e}")
+        return PlainTextResponse(content="success")
+
+    if not out_trade_no:
+        log_pay("[xpay/notify] 发货消息缺 OutTradeNo")
+        return PlainTextResponse(content="success")
+
+    log_pay(f"[xpay/notify] 发货 out_trade_no={out_trade_no} price={actual_price} txn={transaction_id}")
+
+    paid = False
+    session_id_for_report = None
+    try:
         with database.get_db() as db:
             order = db.execute(
                 "SELECT * FROM orders WHERE out_trade_no=%s", (out_trade_no,)
             ).fetchone()
             if order is None:
                 log_pay(f"[xpay/notify] 未知订单 out_trade_no={out_trade_no}")
-                return respond()  # 未知订单不阻塞微信
-
-            # 幂等更新：仅 pending → paid
-            cur = db.execute(
-                "UPDATE orders SET status='paid', transaction_id=%s, notify_raw=%s, paid_at=%s "
-                "WHERE id=%s AND status='pending'",
-                (transaction_id or f"XPAY_{int(time.time())}", raw, database.now(), order["id"]),
-            )
-            paid = cur.rowcount > 0
-
-        if paid:
-            report_service.start_report_generation(order["session_id"])
-
-        return respond()
-
+            else:
+                # 幂等更新：仅 pending → paid
+                cur = db.execute(
+                    "UPDATE orders SET status='paid', transaction_id=%s, notify_raw=%s, paid_at=%s "
+                    "WHERE id=%s AND status='pending'",
+                    (transaction_id or f"XPAY_{int(time.time())}", body, database.now(), order["id"]),
+                )
+                paid = cur.rowcount > 0
+                session_id_for_report = order["session_id"]
     except Exception as e:
-        log_pay(f"[xpay/notify] 处理异常: {e}")
-        # 即使出错也返回成功，避免微信重试15次
-        return respond()
+        log_pay(f"[xpay/notify] 更新订单失败: {e}")
+
+    if paid and session_id_for_report:
+        try:
+            report_service.start_report_generation(session_id_for_report)
+        except Exception as e:
+            log_pay(f"[xpay/notify] 启动报告生成失败: {e}")
+
+    # 响应：明文模式 → 字符串 "success"；加密模式 → 加密的 success XML
+    if vpay.msg_push_ready():
+        reply_inner = "<xml><Content><![CDATA[success]]></Content></xml>"
+        return Response(
+            content=vpay.build_encrypted_reply_xml(reply_inner),
+            media_type="application/xml",
+        )
+    return PlainTextResponse(content="success")
 
 
 # ============================================================
@@ -1242,6 +1369,9 @@ def health():
         "xpay": {"offer_id": vpay.OFFER_ID, "env": vpay.ENV,
                  "product_id": vpay.PRODUCT_ID, "goods_price": vpay.GOODS_PRICE,
                  "app_key_set": bool(vpay.APP_KEY)},
+        "msg_push": {"ready": vpay.msg_push_ready(),
+                     "token_set": bool(vpay.MSG_TOKEN),
+                     "aes_key_set": bool(vpay.MSG_AES_KEY)},
     }}
 
 
