@@ -1168,6 +1168,56 @@ def _check_admin(username: str, password: str):
         raise HTTPException(status_code=403, detail="用户名或密码错误")
 
 
+class AdminMakeSessionsRequest(BaseModel):
+    username: str
+    password: str
+    openid: str
+    count: int = 2
+    profile: dict = {"age": 30, "gender": "male", "role": "professional", "purpose": "career"}
+
+
+@app.post("/api/admin/test/make_sessions")
+def admin_make_test_sessions(req: AdminMakeSessionsRequest):
+    """管理员造数：给指定 openid 生成 N 条「已答完题、未付款」的测评记录。
+
+    用于支付链路联调：记录与真实答题流程完全一致（selector 选题 +
+    随机答案评分 + free_summary），不创建订单（点支付时才创建）。
+    """
+    _check_admin(req.username, req.password)
+    if req.count < 1 or req.count > 10:
+        raise HTTPException(status_code=400, detail="count 需在 1-10 之间")
+    if not req.openid or len(req.openid) < 10:
+        raise HTTPException(status_code=400, detail="openid 无效")
+
+    created = []
+    for _ in range(req.count):
+        profile = req.profile
+        questions = select(profile, BANK)
+        answers = [
+            {"question_id": q["id"], "option_index": random.randrange(len(q["options"]))}
+            for q in questions
+        ]
+        results = score_answers(questions, answers)
+        free_summary = generate_free_summary(results, profile)
+
+        session_id = str(uuid.uuid4())
+        save_session(session_id, {
+            "session_id": session_id,
+            "openid": req.openid,
+            "profile": profile,
+            "questions": questions,
+            "answers": answers,
+            "results": results,
+            "free_summary": free_summary,
+            "status": "answered",
+        })
+        created.append({"session_id": session_id, "preview": (free_summary or "")[:50]})
+
+    return {"code": 0, "message": f"已生成 {len(created)} 条未付款测评记录", "data": {
+        "openid": req.openid, "count": len(created), "sessions": created,
+    }}
+
+
 @app.get("/api/admin/stats")
 def admin_stats(username: str = Query(...), password: str = Query(...)):
     """总览统计：用户数、会话数、订单数、收入、兑换码使用情况。"""
