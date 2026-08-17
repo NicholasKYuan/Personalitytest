@@ -19,6 +19,20 @@ from db import get_db, now, dumps, loads
 WX_APPID = os.getenv("WX_APPID", "wx95a916e6c9b3d382")
 WX_SECRET = os.getenv("WX_SECRET", "")
 CODEX2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session"
+
+
+def _wx_get(url: str, **kw):
+    """GET 微信 API，兼容云托管内网代理的自签名证书。
+
+    微信云托管容器内访问 api.weixin.qq.com 走内网代理，证书链不被
+    certifi 信任（报 self-signed certificate），降级 verify=False 重试。
+    """
+    try:
+        return httpx.get(url, timeout=10, **kw)
+    except Exception as e:
+        if "certificate" in str(e).lower() or "SSL" in str(e):
+            return httpx.get(url, timeout=10, verify=False, **kw)
+        raise
 TOKEN_TTL = 7 * 24 * 3600  # 7 天
 
 
@@ -47,7 +61,7 @@ def _code2session(code: str) -> dict:
         "js_code": code,
         "grant_type": "authorization_code",
     }
-    resp = httpx.get(CODEX2SESSION_URL, params=params, timeout=10)
+    resp = _wx_get(CODEX2SESSION_URL, params=params)
     data = resp.json()
     if data.get("errcode"):
         raise ValueError(f"code2session 失败: errcode={data.get('errcode')} errmsg={data.get('errmsg')}")

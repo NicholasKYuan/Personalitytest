@@ -59,13 +59,24 @@ def is_mock() -> bool:
 _access_token_cache = {"token": "", "expire_at": 0.0}
 
 
+def _wx_http(url: str, method: str = "GET", **kw):
+    """请求微信 API，兼容云托管内网代理的自签名证书（降级 verify=False 重试）。"""
+    import httpx
+
+    try:
+        return httpx.request(method, url, timeout=10, **kw)
+    except Exception as e:
+        if "certificate" in str(e).lower() or "SSL" in str(e):
+            return httpx.request(method, url, timeout=10, verify=False, **kw)
+        raise
+
+
 def get_access_token() -> str:
     """获取微信 access_token（带缓存，有效期约 2 小时）。
 
     需要 WX_APPID / WX_SECRET 环境变量。
     """
     import time as _time
-    import httpx
 
     now_ts = _time.time()
     if _access_token_cache["token"] and _access_token_cache["expire_at"] > now_ts + 300:
@@ -76,10 +87,9 @@ def get_access_token() -> str:
     if not appid or not secret:
         raise RuntimeError("WX_APPID/WX_SECRET 未配置，无法调用微信服务端 API")
 
-    resp = httpx.get(
+    resp = _wx_http(
         "https://api.weixin.qq.com/cgi-bin/token",
         params={"grant_type": "client_credential", "appid": appid, "secret": secret},
-        timeout=10,
     )
     data = resp.json()
     if data.get("errcode"):
@@ -110,8 +120,6 @@ def query_order(openid: str, out_trade_no: str) -> dict:
             "error": str,        # 错误信息（found=False 时）
         }
     """
-    import httpx
-
     body = json.dumps(
         {"openid": openid, "env": ENV, "order_id": out_trade_no},
         separators=(",", ":"),
@@ -120,8 +128,8 @@ def query_order(openid: str, out_trade_no: str) -> dict:
     token = get_access_token()
 
     url = f"https://api.weixin.qq.com/xpay/query_order?access_token={token}&pay_sig={pay_sig}"
-    resp = httpx.post(
-        url, content=body, headers={"Content-Type": "application/json"}, timeout=10
+    resp = _wx_http(
+        url, method="POST", content=body, headers={"Content-Type": "application/json"}
     )
     data = resp.json()
 
