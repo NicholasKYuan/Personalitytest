@@ -34,7 +34,7 @@ load_dotenv()  # 加载 .env 环境变量（云托管/Docker 部署用）
 
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from pydantic import BaseModel
 
 # ============================================================
@@ -543,7 +543,7 @@ def create_order(req: OrderRequest, request: Request):
     if session.get("status") not in ("answered", "ready", "failed"):
         raise HTTPException(status_code=400, detail="请先完成答题再解锁报告")
 
-    amount_fen = 2990
+    amount_fen = vpay.GOODS_PRICE
 
     with database.get_db() as db:
         existing = db.execute(
@@ -562,7 +562,8 @@ def create_order(req: OrderRequest, request: Request):
                 # 虚拟支付需要 session_key 重新签名
                 session_key = wxauth.get_session_key(openid)
                 try:
-                    pay_params = vpay.create_payment_params(session_key, out_trade_no)
+                    pay_params = vpay.create_payment_params(
+                        session_key, out_trade_no, attach=req.session_id)
                 except RuntimeError as e:
                     raise HTTPException(status_code=400, detail=str(e))
                 return {"code": 0, "message": "ok", "data": {
@@ -575,13 +576,15 @@ def create_order(req: OrderRequest, request: Request):
 
         # 虚拟支付模式
         if vpay.is_mock():
-            pay_params = vpay.create_payment_params("mock_session_key", out_trade_no)
+            pay_params = vpay.create_payment_params(
+                "mock_session_key", out_trade_no, attach=req.session_id)
         else:
             session_key = wxauth.get_session_key(openid)
             if not session_key:
                 raise HTTPException(status_code=400, detail="登录已过期，请重新进入小程序")
             try:
-                pay_params = vpay.create_payment_params(session_key, out_trade_no)
+                pay_params = vpay.create_payment_params(
+                    session_key, out_trade_no, attach=req.session_id)
             except RuntimeError as e:
                 raise HTTPException(status_code=400, detail=str(e))
 
@@ -663,17 +666,30 @@ def mock_notify(req: OrderRequest):
     return {"code": 0, "message": "模拟支付成功", "data": {"paid": True}}
 
 
+@app.get("/api/xpay/notify")
+def xpay_notify_verify(signature: str = "", timestamp: str = "", nonce: str = "", echostr: str = ""):
+    """发货订阅 URL 校验。
+
+    在 MP 后台「虚拟支付 → 基本配置 → 发货订阅」填写本回调地址保存时，
+    微信会发 GET 请求校验（携带 signature/timestamp/nonce/echostr），
+    服务端需原样返回 echostr。消息格式选择「JSON + 明文」时不需验签 token。
+    """
+    if not echostr:
+        return JSONResponse(content={"ErrCode": -1, "ErrMsg": "missing echostr"})
+    return PlainTextResponse(content=echostr)
+
+
 @app.post("/api/xpay/notify")
 async def xpay_notify(request: Request):
     """虚拟支付发货推送 xpay_goods_deliver_notify。
 
     用户通过现金购买道具且支付成功后，微信推送此回调。
-    必须 5 秒内返回 {"ErrCode": 0, "ErrMsg": "success"}。
-
-    推送格式支持 XML 和 JSON，由 Content-Type 决定。
+    必须 5 秒内返回 {"ErrCode": 0, "ErrMsg": "success"}（JSON对JSON / XML对XML）。
     """
     raw = (await request.body()).decode("utf-8")
     content_type = request.headers.get("content-type", "")
+    is_xml = raw.lstrip().startswith("<")
+    respond = lambda: vpay.make_callback_response(0, "success", xml=is_xml)  # noqa: E731
 
     try:
         data = vpay.parse_callback(raw, content_type)
@@ -689,7 +705,7 @@ async def xpay_notify(request: Request):
             ).fetchone()
             if order is None:
                 log_pay(f"[xpay/notify] 未知订单 out_trade_no={out_trade_no}")
-                return vpay.make_callback_response(0, "success")  # 未知订单不阻塞微信
+                return respond()  # 未知订单不阻塞微信
 
             # 幂等更新：仅 pending → paid
             cur = db.execute(
@@ -702,12 +718,12 @@ async def xpay_notify(request: Request):
         if paid:
             report_service.start_report_generation(order["session_id"])
 
-        return vpay.make_callback_response(0, "success")
+        return respond()
 
     except Exception as e:
         log_pay(f"[xpay/notify] 处理异常: {e}")
         # 即使出错也返回成功，避免微信重试15次
-        return vpay.make_callback_response(0, "success")
+        return respond()
 
 
 # ============================================================

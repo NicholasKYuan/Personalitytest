@@ -236,11 +236,17 @@ const mockApi = {
       out_trade_no: 'SXMOCK' + Date.now(),
       // paySig 固定为 MOCK_SIGN：前端据此识别「模拟支付」模式，走模拟成功流程
       pay_params: {
-        offerId: 'mock_offer',
-        env: 1,
-        buyQuantity: 1,
-        outTradeNo: 'SXMOCK' + Date.now(),
-        productId: 'report_unlock',
+        mode: 'short_series_goods',
+        signData: JSON.stringify({
+          offerId: 'mock_offer',
+          buyQuantity: 1,
+          env: 1,
+          currencyType: 'CNY',
+          productId: 'report_unlock',
+          goodsPrice: config.PRICE_FEN,
+          outTradeNo: 'SXMOCK' + Date.now(),
+          attach: sessionId
+        }),
         paySig: 'MOCK_SIGN',
         signature: 'MOCK_SIGN'
       },

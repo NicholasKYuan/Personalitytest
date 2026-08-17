@@ -125,14 +125,11 @@ Page({
       })
   },
 
-  /** 调起虚拟支付 */
+  /** 调起虚拟支付（signData 为服务端生成的 JSON 字符串，必须原样传递） */
   doRequestPayment(params) {
     wx.requestVirtualPayment({
-      offerId: params.offerId,
-      env: params.env,
-      buyQuantity: params.buyQuantity,
-      outTradeNo: params.outTradeNo,
-      productId: params.productId,
+      mode: params.mode,
+      signData: params.signData,
       paySig: params.paySig,
       signature: params.signature,
       success: () => {
@@ -143,8 +140,15 @@ Page({
         this.setData({ paying: false })
         const msg = (res && res.errMsg) || ''
         const isCancel = msg.indexOf('cancel') > -1
+        const tips = {
+          15005: '登录态过期，请重新进入小程序再支付',
+          15006: '支付签名错误，请稍后重试',
+          15010: '道具未发布，请联系管理员',
+          15011: '沙箱环境仅支持开发/体验版'
+        }
+        const tip = tips[res && res.errCode]
         wx.showToast({
-          title: isCancel ? '支付已取消' : '支付失败，请重试',
+          title: tip || (isCancel ? '支付已取消' : '支付失败，请重试'),
           icon: 'none'
         })
       }
