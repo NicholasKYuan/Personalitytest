@@ -9,8 +9,8 @@ app.py — 星耀启程人格测评 FastAPI 后端（Web + 微信小程序共用
 
 小程序新增接口（带 token 鉴权）:
     POST /api/login              code2session → openid → token
-    POST /api/report/order       创建 29.9 元订单，返回 wx.requestPayment 参数
-    POST /api/pay/notify         微信支付 v3 回调（验签+解密+幂等）
+    POST /api/report/order       创建虚拟支付订单，返回 wx.requestVirtualPayment 参数
+    POST /api/xpay/notify        虚拟支付发货推送回调
     POST /api/pay/mock_notify    开发期模拟支付成功（PAY_MOCK=1 时可用）
     GET  /api/report/status      轮询支付/报告状态
     POST /api/report/detail      支付成功后获取完整报告
@@ -61,6 +61,7 @@ from report_generator import generate_report_html
 import db as database
 import auth as wxauth
 import pay as wxpay
+import xpay as vpay
 import report_service
 
 database.init_db()
@@ -529,7 +530,7 @@ def get_report(session_id: str, request: Request):
 # ============================================================
 @app.post("/api/report/order")
 def create_order(req: OrderRequest, request: Request):
-    """创建付费订单（29.9 元），返回 wx.requestPayment 调起参数。
+    """创建虚拟支付订单，返回 wx.requestVirtualPayment 调起参数。
 
     幂等：同一 session 已有 pending 订单则复用；已 paid 直接返回已购状态。
     """
@@ -557,19 +558,34 @@ def create_order(req: OrderRequest, request: Request):
                 }}
             if existing["status"] == "pending":
                 # 复用原订单（重新调起支付）
+                out_trade_no = existing["out_trade_no"]
+                # 虚拟支付需要 session_key 重新签名
+                session_key = wxauth.get_session_key(openid)
+                try:
+                    pay_params = vpay.create_payment_params(session_key, out_trade_no)
+                except RuntimeError as e:
+                    raise HTTPException(status_code=400, detail=str(e))
                 return {"code": 0, "message": "ok", "data": {
-                    "order_id": existing["id"], "out_trade_no": existing["out_trade_no"],
-                    "status": "pending", "pay_params": None,
+                    "order_id": existing["id"], "out_trade_no": out_trade_no,
+                    "status": "pending", "pay_params": pay_params,
                 }}
             # closed/refunded → 新建订单
 
         out_trade_no = _out_trade_no()
-        try:
-            pay_params = wxpay.create_jsapi_order(openid, out_trade_no, amount_fen)
-        except Exception as e:
-            raise HTTPException(status_code=502, detail=f"下单失败: {e}")
 
-        prepay_id = pay_params.get("package", "").replace("prepay_id=", "")
+        # 虚拟支付模式
+        if vpay.is_mock():
+            pay_params = vpay.create_payment_params("mock_session_key", out_trade_no)
+        else:
+            session_key = wxauth.get_session_key(openid)
+            if not session_key:
+                raise HTTPException(status_code=400, detail="登录已过期，请重新进入小程序")
+            try:
+                pay_params = vpay.create_payment_params(session_key, out_trade_no)
+            except RuntimeError as e:
+                raise HTTPException(status_code=400, detail=str(e))
+
+        prepay_id = ""  # 虚拟支付不需要 prepay_id
         db.execute(
             "INSERT INTO orders (out_trade_no, session_id, openid, amount_fen, status, prepay_id, created_at) "
             "VALUES (%s,%s,%s,%s,%s,%s,%s)",
@@ -645,6 +661,53 @@ def mock_notify(req: OrderRequest):
         )
     report_service.start_report_generation(req.session_id)
     return {"code": 0, "message": "模拟支付成功", "data": {"paid": True}}
+
+
+@app.post("/api/xpay/notify")
+async def xpay_notify(request: Request):
+    """虚拟支付发货推送 xpay_goods_deliver_notify。
+
+    用户通过现金购买道具且支付成功后，微信推送此回调。
+    必须 5 秒内返回 {"ErrCode": 0, "ErrMsg": "success"}。
+
+    推送格式支持 XML 和 JSON，由 Content-Type 决定。
+    """
+    raw = (await request.body()).decode("utf-8")
+    content_type = request.headers.get("content-type", "")
+
+    try:
+        data = vpay.parse_callback(raw, content_type)
+        out_trade_no = data["out_trade_no"]
+        transaction_id = data.get("transaction_id", "")
+        actual_price = data.get("actual_price", 0)
+
+        log_pay(f"[xpay/notify] out_trade_no={out_trade_no} price={actual_price} txn={transaction_id}")
+
+        with database.get_db() as db:
+            order = db.execute(
+                "SELECT * FROM orders WHERE out_trade_no=%s", (out_trade_no,)
+            ).fetchone()
+            if order is None:
+                log_pay(f"[xpay/notify] 未知订单 out_trade_no={out_trade_no}")
+                return vpay.make_callback_response(0, "success")  # 未知订单不阻塞微信
+
+            # 幂等更新：仅 pending → paid
+            cur = db.execute(
+                "UPDATE orders SET status='paid', transaction_id=%s, notify_raw=%s, paid_at=%s "
+                "WHERE id=%s AND status='pending'",
+                (transaction_id or f"XPAY_{int(time.time())}", raw, database.now(), order["id"]),
+            )
+            paid = cur.rowcount > 0
+
+        if paid:
+            report_service.start_report_generation(order["session_id"])
+
+        return vpay.make_callback_response(0, "success")
+
+    except Exception as e:
+        log_pay(f"[xpay/notify] 处理异常: {e}")
+        # 即使出错也返回成功，避免微信重试15次
+        return vpay.make_callback_response(0, "success")
 
 
 # ============================================================

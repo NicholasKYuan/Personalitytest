@@ -234,14 +234,15 @@ const mockApi = {
     return delay(400).then(() => ({
       order_id: 10001,
       out_trade_no: 'SXMOCK' + Date.now(),
-      // paySign 固定为 MOCK_SIGN：前端据此识别「模拟支付」模式，走模拟成功流程
+      // paySig 固定为 MOCK_SIGN：前端据此识别「模拟支付」模式，走模拟成功流程
       pay_params: {
-        appId: 'wx95a916e6c9b3d382',
-        timeStamp: String(Math.floor(Date.now() / 1000)),
-        nonceStr: 'mock_nonce',
-        package: 'prepay_id=mock_' + sessionId,
-        signType: 'RSA',
-        paySign: 'MOCK_SIGN'
+        offerId: 'mock_offer',
+        env: 1,
+        buyQuantity: 1,
+        outTradeNo: 'SXMOCK' + Date.now(),
+        productId: 'report_unlock',
+        paySig: 'MOCK_SIGN',
+        signature: 'MOCK_SIGN'
       },
       amount_fen: config.PRICE_FEN,
       paid: false

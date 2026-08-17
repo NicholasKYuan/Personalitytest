@@ -1,7 +1,7 @@
 /**
  * pages/pay/pay.js — 付费解锁页
  *
- * 流程：createOrder 获取支付参数 → wx.requestPayment（mock 模式跳过） →
+ * 流程：createOrder 获取虚拟支付参数 → wx.requestVirtualPayment（mock 模式跳过） →
  *       支付成功后轮询 /api/report/status → report ready → 跳转完整报告页。
  */
 const api = require('../../utils/api')
@@ -108,8 +108,8 @@ Page({
           throw new Error('未获取到支付参数')
         }
 
-        // mock 模式（paySign=MOCK_SIGN）：模拟支付成功，跳过真实调起
-        if (params.paySign === 'MOCK_SIGN') {
+        // mock 模式（paySig=MOCK_SIGN）：模拟支付成功，跳过真实调起
+        if (params.paySig === 'MOCK_SIGN') {
           setTimeout(() => {
             this.markPaid()
             this.startPolling()
@@ -125,10 +125,16 @@ Page({
       })
   },
 
-  /** 调起微信支付 */
+  /** 调起虚拟支付 */
   doRequestPayment(params) {
-    wx.requestPayment({
-      ...params,
+    wx.requestVirtualPayment({
+      offerId: params.offerId,
+      env: params.env,
+      buyQuantity: params.buyQuantity,
+      outTradeNo: params.outTradeNo,
+      productId: params.productId,
+      paySig: params.paySig,
+      signature: params.signature,
       success: () => {
         this.markPaid()
         this.startPolling()

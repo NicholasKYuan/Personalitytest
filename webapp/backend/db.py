@@ -148,6 +148,11 @@ def init_db():
             db.execute("ALTER TABLE redeem_codes ADD COLUMN reusable TINYINT DEFAULT 0")
         except Exception:
             pass  # 列已存在，忽略
+        # 安全添加 session_key 列（虚拟支付签名需要）
+        try:
+            db.execute("ALTER TABLE users ADD COLUMN session_key VARCHAR(128) DEFAULT ''")
+        except Exception:
+            pass  # 列已存在，忽略
 
 
 # ---------------------------------------------------------------------------

@@ -62,6 +62,7 @@ def login_with_code(code: str, nickname: str = "", avatar_url: str = "") -> dict
     """
     data = _code2session(code)
     openid = data["openid"]
+    session_key = data.get("session_key", "")
     t = now()
     is_new = False
     pay_mock = os.getenv("PAY_MOCK", "0") == "1"
@@ -71,14 +72,15 @@ def login_with_code(code: str, nickname: str = "", avatar_url: str = "") -> dict
         if row is None:
             is_new = True
             db.execute(
-                "INSERT INTO users (openid, nickname, avatar_url, created_at, last_login_at) VALUES (%s,%s,%s,%s,%s)",
-                (openid, nickname, avatar_url, t, t),
+                "INSERT INTO users (openid, nickname, avatar_url, created_at, last_login_at, session_key) VALUES (%s,%s,%s,%s,%s,%s)",
+                (openid, nickname, avatar_url, t, t, session_key),
             )
         else:
             db.execute(
                 "UPDATE users SET last_login_at=%s, nickname=CASE WHEN %s<>'' THEN %s ELSE nickname END, "
-                "avatar_url=CASE WHEN %s<>'' THEN %s ELSE avatar_url END WHERE openid=%s",
-                (t, nickname, nickname, avatar_url, avatar_url, openid),
+                "avatar_url=CASE WHEN %s<>'' THEN %s ELSE avatar_url END, "
+                "session_key=%s WHERE openid=%s",
+                (t, nickname, nickname, avatar_url, avatar_url, session_key, openid),
             )
 
         # mock 模式：复用已有有效 token，避免多客户端互相覆盖
@@ -117,3 +119,10 @@ def get_openid_from_authorization(header: str):
     if scheme.lower() != "bearer" or not token.strip():
         return None
     return verify_token(token.strip())
+
+
+def get_session_key(openid: str) -> str:
+    """查询用户最新的 session_key（虚拟支付签名需要）。"""
+    with get_db() as db:
+        row = db.execute("SELECT session_key FROM users WHERE openid=%s", (openid,)).fetchone()
+    return row["session_key"] if row else ""
