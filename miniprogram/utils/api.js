@@ -39,7 +39,7 @@ function isMock() {
  * @param {object} options { auth: boolean, retried: boolean }
  */
 function request(method, path, data, options = {}) {
-  const { auth = true, retried = false } = options
+  const { auth = true, retried = false, retriedCloud = false } = options
   return new Promise((resolve, reject) => {
     const header = { 'Content-Type': 'application/json' }
     if (auth) {
@@ -47,7 +47,18 @@ function request(method, path, data, options = {}) {
       if (token) header.Authorization = 'Bearer ' + token
     }
 
-    const useCloud = !!(config.CLOUD_ENV && wx.cloud && wx.cloud.callContainer)
+    const cloudConfigured = !!config.CLOUD_ENV
+    const cloudReady = !!(wx.cloud && wx.cloud.callContainer)
+
+    // 配置了云环境但 wx.cloud 不可用（基础库过低等）→ 明确报错，
+    // 不允许降级到未备案的 BASE_URL（会导致 domain list 错误）
+    if (cloudConfigured && !cloudReady) {
+      const err = new Error('当前微信基础库过低，请升级微信后重试')
+      err.code = -1
+      return reject(err)
+    }
+
+    const useCloud = cloudConfigured && cloudReady
 
     const handleSuccess = (res) => {
       const body = res.data
@@ -88,24 +99,47 @@ function request(method, path, data, options = {}) {
       return reject(err)
     }
 
+    const directRequest = () => {
+      const baseUrl = useCloud
+        ? config.CLOUD_FALLBACK_URL
+        : config.BASE_URL || config.CLOUD_FALLBACK_URL || ''
+      wx.request({
+        url: baseUrl + path,
+        method,
+        data,
+        header,
+        success: handleSuccess,
+        fail: (e) => {
+          let msg2 = (e && (e.errMsg || e.message)) || '网络异常'
+          // 域名不在白名单：给出可操作的指引，而不是裸报错
+          if (msg2.includes('domain list') || msg2.includes('url not in')) {
+            console.error('[api] 直连域名不在小程序白名单:', baseUrl)
+            msg2 = '服务暂不可用，请稍后重试'
+          }
+          reject(new Error(msg2))
+        }
+      })
+    }
+
     const handleFail = (err) => {
       const errMsg = (err && (err.errMsg || err.message)) || '网络异常'
       console.error('[api] request fail:', method, path, errMsg)
 
-      // 云托管 102002 系统错误 → 降级直连
-      if (useCloud && errMsg.includes('102002') && config.CLOUD_FALLBACK_URL && !retried) {
-        console.log('[api] cloud.callContainer 失败，降级直连:', config.CLOUD_FALLBACK_URL + path)
-        wx.request({
-          url: config.CLOUD_FALLBACK_URL + path,
-          method,
-          data,
-          header,
-          success: handleSuccess,
-          fail: (e) => {
-            const msg2 = (e && (e.errMsg || e.message)) || '网络异常'
-            reject(new Error(msg2))
-          }
-        })
+      // 云托管瞬时系统错误（102002 等，常见于服务冷启动/部署中）：
+      // 先延迟重试一次 callContainer，仍失败再降级直连
+      if (useCloud && !retriedCloud) {
+        setTimeout(() => {
+          request(method, path, data, { auth, retried, retriedCloud: true })
+            .then(resolve)
+            .catch(reject)
+        }, 800)
+        return
+      }
+
+      // 重试后仍失败 → 降级直连（域名需在小程序后台 request 白名单内）
+      if (useCloud && config.CLOUD_FALLBACK_URL) {
+        console.log('[api] cloud.callContainer 重试仍失败，降级直连:', config.CLOUD_FALLBACK_URL + path)
+        directRequest()
         return
       }
 
@@ -127,15 +161,7 @@ function request(method, path, data, options = {}) {
       })
     } else {
       // 传统模式：wx.request
-      const baseUrl = config.BASE_URL || config.CLOUD_FALLBACK_URL || ''
-      wx.request({
-        url: baseUrl + path,
-        method,
-        data,
-        header,
-        success: handleSuccess,
-        fail: handleFail
-      })
+      directRequest()
     }
   })
 }
