@@ -1237,7 +1237,12 @@ def serve_js(filename: str):
 # ============================================================
 @app.get("/api/health")
 def health():
-    return {"code": 0, "message": "ok", "data": {"status": "ok", "bank_size": len(BANK), "pay_mock": wxpay.is_mock()}}
+    return {"code": 0, "message": "ok", "data": {
+        "status": "ok", "bank_size": len(BANK), "pay_mock": wxpay.is_mock(),
+        "xpay": {"offer_id": vpay.OFFER_ID, "env": vpay.ENV,
+                 "product_id": vpay.PRODUCT_ID, "goods_price": vpay.GOODS_PRICE,
+                 "app_key_set": bool(vpay.APP_KEY)},
+    }}
 
 
 @app.get("/api/stats")
