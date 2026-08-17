@@ -12,6 +12,7 @@ selector.py — 从融合题库为用户筛选 120 题
 """
 import json, argparse, random, re
 from collections import Counter, defaultdict
+from functools import lru_cache
 
 # purpose/current_state/role → applicable_states 映射
 PURPOSE_TO_STATES = {
@@ -153,8 +154,13 @@ def coverage_of(selected):
     return en, mb, ho, ga
 
 
+@lru_cache(maxsize=65536)
 def _normalize_stem(stem):
-    """标准化题干用于去重比较：去除标点、空格、尾部人称代词"""
+    """标准化题干用于去重比较：去除标点、空格、尾部人称代词
+
+    注：题干字符串集合很小（题库量级），lru_cache 可将归一化开销
+    从每次比较 2 次正则降为每题一次（否则 select 会慢 40s+）。
+    """
     s = re.sub(r'[，。？！,. ?！]', '', stem)
     s = re.sub(r'[（(][^）)]*[）)]', '', s)
     s = s.replace('②', '').strip()
@@ -164,8 +170,9 @@ def _normalize_stem(stem):
     return s
 
 
+@lru_cache(maxsize=1 << 20)
 def _is_near_duplicate(stem1, stem2):
-    """判断两个题干是否近似重复"""
+    """判断两个题干是否近似重复（纯函数，题对组合有限，可缓存）"""
     n1, n2 = _normalize_stem(stem1), _normalize_stem(stem2)
     if n1 == n2:
         return True
