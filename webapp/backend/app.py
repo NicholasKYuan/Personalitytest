@@ -10,7 +10,8 @@ app.py — 星耀启程人格测评 FastAPI 后端（Web + 微信小程序共用
 小程序新增接口（带 token 鉴权）:
     POST /api/login              code2session → openid → token
     POST /api/report/order       创建虚拟支付订单，返回 wx.requestVirtualPayment 参数
-    POST /api/xpay/notify        虚拟支付发货推送回调
+    POST /api/report/confirm_payment  客户端支付成功通知（服务端 query_order 核实，发货轮询分支）
+    POST /api/xpay/notify        虚拟支付消息推送回调（备用，需配置 MSG_TOKEN/MSG_AES_KEY）
     POST /api/pay/mock_notify    开发期模拟支付成功（PAY_MOCK=1 时可用）
     GET  /api/report/status      轮询支付/报告状态
     POST /api/report/detail      支付成功后获取完整报告
@@ -34,7 +35,7 @@ load_dotenv()  # 加载 .env 环境变量（云托管/Docker 部署用）
 
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response
 from pydantic import BaseModel
 
 # ============================================================
@@ -126,6 +127,11 @@ class LoginRequest(BaseModel):
 
 class OrderRequest(BaseModel):
     session_id: str
+
+
+class ConfirmPayRequest(BaseModel):
+    session_id: str = ""
+    out_trade_no: str = ""
 
 
 class StatusRequest(BaseModel):
@@ -557,9 +563,28 @@ def create_order(req: OrderRequest, request: Request):
                     "status": "paid", "pay_params": None,
                 }}
             if existing["status"] == "pending":
-                # 复用原订单（重新调起支付）
                 out_trade_no = existing["out_trade_no"]
-                # 虚拟支付需要 session_key 重新签名
+
+                # 兜底核实：用户可能已支付但 confirm_payment 网络失败，
+                # 重新进入支付页时先向微信查一次，已支付则直接放行
+                if not vpay.is_mock():
+                    try:
+                        q = vpay.query_order(openid, out_trade_no)
+                        if q.get("is_paid"):
+                            db.execute(
+                                "UPDATE orders SET status='paid', transaction_id=%s, paid_at=%s "
+                                "WHERE id=%s AND status='pending'",
+                                (q.get("wx_order_id", ""), database.now(), existing["id"]),
+                            )
+                            report_service.start_report_generation(req.session_id)
+                            return {"code": 0, "message": "ok", "data": {
+                                "order_id": existing["id"], "out_trade_no": out_trade_no,
+                                "status": "paid", "pay_params": None,
+                            }}
+                    except Exception as e:
+                        log_pay(f"[order] pending 兜底核实失败(忽略): {e}")
+
+                # 复用原订单（重新调起支付）
                 session_key = wxauth.get_session_key(openid)
                 try:
                     pay_params = vpay.create_payment_params(
@@ -600,6 +625,80 @@ def create_order(req: OrderRequest, request: Request):
         "order_id": order_id, "out_trade_no": out_trade_no,
         "amount_fen": amount_fen, "status": "pending", "pay_params": pay_params,
     }}
+
+
+@app.post("/api/report/confirm_payment")
+def confirm_payment(req: ConfirmPayRequest, request: Request):
+    """客户端支付成功后通知服务端验证（发货轮询分支，替代消息推送回调）。
+
+    背景：云托管默认域名不可用于正式环境消息推送，因此采用官方推荐的
+    「发货轮询」分支——wx.requestVirtualPayment success 后由客户端调此接口，
+    服务端调 /xpay/query_order 向微信核实订单状态，核实通过才标记 paid。
+
+    幂等：订单已是 paid 直接返回 confirmed；验证失败不标记，客户端轮询兜底。
+    """
+    openid = _require_openid(request)
+    if not req.out_trade_no:
+        raise HTTPException(status_code=400, detail="缺少 out_trade_no")
+
+    with database.get_db() as db:
+        order = db.execute(
+            "SELECT * FROM orders WHERE out_trade_no=%s", (req.out_trade_no,)
+        ).fetchone()
+
+    if order is None:
+        raise HTTPException(status_code=404, detail="订单不存在")
+    if order["openid"] != openid:
+        raise HTTPException(status_code=403, detail="无权操作此订单")
+    if order["status"] == "paid":
+        # 幂等：已支付直接确认（报告生成可能在路上）
+        return {"code": 0, "message": "ok", "data": {"confirmed": True, "already_paid": True}}
+
+    # mock 模式：跳过微信核实，直接标记
+    if vpay.is_mock():
+        with database.get_db() as db:
+            db.execute(
+                "UPDATE orders SET status='paid', paid_at=%s "
+                "WHERE out_trade_no=%s AND status='pending'",
+                (database.now(), req.out_trade_no),
+            )
+        report_service.start_report_generation(order["session_id"])
+        return {"code": 0, "message": "ok", "data": {"confirmed": True, "mock": True}}
+
+    # 真实模式：向微信核实（最多 3 次，间隔 1s，覆盖支付落库延迟）
+    last_err = ""
+    for attempt in range(3):
+        try:
+            result = vpay.query_order(openid, req.out_trade_no)
+        except RuntimeError as e:
+            last_err = str(e)
+            log_pay(f"[confirm_payment] query_order 异常({attempt+1}/3): {e}")
+            time.sleep(1)
+            continue
+
+        if result.get("is_paid"):
+            with database.get_db() as db:
+                cur = db.execute(
+                    "UPDATE orders SET status='paid', transaction_id=%s, notify_raw=%s, paid_at=%s "
+                    "WHERE out_trade_no=%s AND status='pending'",
+                    (result.get("wx_order_id", ""),
+                     json.dumps(result, ensure_ascii=False), database.now(), req.out_trade_no),
+                )
+                paid_now = cur.rowcount > 0
+            log_pay(f"[confirm_payment] 核实通过 status={result['status']} paid_fee={result['paid_fee']}")
+            if paid_now:
+                report_service.start_report_generation(order["session_id"])
+            return {"code": 0, "message": "ok", "data": {
+                "confirmed": True, "wx_status": result["status"]}}
+
+        last_err = f"wx_status={result.get('status', -1)}"
+        log_pay(f"[confirm_payment] 未支付({attempt+1}/3): {last_err}")
+        time.sleep(1)
+
+    # 微信侧重试期间未确认：不报错，客户端轮询 /api/report/status 兜底
+    # （后续用户重新进入支付页时 create_order 也会再次触发核实机会）
+    return {"code": 0, "message": "ok", "data": {
+        "confirmed": False, "pending_verify": True, "detail": last_err}}
 
 
 @app.post("/api/pay/notify")

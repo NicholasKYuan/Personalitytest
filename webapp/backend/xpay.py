@@ -53,6 +53,104 @@ def is_mock() -> bool:
     return PAY_MOCK
 
 
+# ---------------------------------------------------------------------------
+# access_token 管理（服务端 API 调用凭证）
+# ---------------------------------------------------------------------------
+_access_token_cache = {"token": "", "expire_at": 0.0}
+
+
+def get_access_token() -> str:
+    """获取微信 access_token（带缓存，有效期约 2 小时）。
+
+    需要 WX_APPID / WX_SECRET 环境变量。
+    """
+    import time as _time
+    import httpx
+
+    now_ts = _time.time()
+    if _access_token_cache["token"] and _access_token_cache["expire_at"] > now_ts + 300:
+        return _access_token_cache["token"]
+
+    appid = os.getenv("WX_APPID", "")
+    secret = os.getenv("WX_SECRET", "")
+    if not appid or not secret:
+        raise RuntimeError("WX_APPID/WX_SECRET 未配置，无法调用微信服务端 API")
+
+    resp = httpx.get(
+        "https://api.weixin.qq.com/cgi-bin/token",
+        params={"grant_type": "client_credential", "appid": appid, "secret": secret},
+        timeout=10,
+    )
+    data = resp.json()
+    if data.get("errcode"):
+        raise RuntimeError(
+            f"获取 access_token 失败: errcode={data['errcode']} errmsg={data.get('errmsg', '')}"
+        )
+
+    _access_token_cache["token"] = data["access_token"]
+    _access_token_cache["expire_at"] = now_ts + data.get("expires_in", 7200)
+    return data["access_token"]
+
+
+def query_order(openid: str, out_trade_no: str) -> dict:
+    """查询虚拟支付订单状态（服务端 API /xpay/query_order）。
+
+    文档: https://developers.weixin.qq.com/miniprogram/dev/server/API/VirtualPayment/api_query_order.html
+
+    返回:
+        {
+            "found": bool,       # 是否查询到订单
+            "is_paid": bool,     # status in (2,3,4)：已支付待发货/发货中/已发货
+            "status": int,       # 0=初始化 1=创建成功(未支付) 2=已支付待发货
+                                  # 3=发货中 4=已发货 5=已退款 6=已关闭 7+=退款相关
+            "order_id": str,     # 商户订单号
+            "wx_order_id": str,  # 微信内部单号
+            "paid_fee": int,     # 用户支付金额（分）
+            "paid_time": int,    # 支付时间 unix 秒
+            "error": str,        # 错误信息（found=False 时）
+        }
+    """
+    import httpx
+
+    body = json.dumps(
+        {"openid": openid, "env": ENV, "order_id": out_trade_no},
+        separators=(",", ":"),
+    )
+    pay_sig = _calc_pay_sig("/xpay/query_order", body, APP_KEY)
+    token = get_access_token()
+
+    url = f"https://api.weixin.qq.com/xpay/query_order?access_token={token}&pay_sig={pay_sig}"
+    resp = httpx.post(
+        url, content=body, headers={"Content-Type": "application/json"}, timeout=10
+    )
+    data = resp.json()
+
+    if data.get("errcode"):
+        log.warning(
+            "query_order 失败: errcode=%s errmsg=%s order=%s",
+            data.get("errcode"), data.get("errmsg"), out_trade_no,
+        )
+        return {
+            "found": False, "is_paid": False, "status": -1,
+            "order_id": out_trade_no, "wx_order_id": "",
+            "paid_fee": 0, "paid_time": 0,
+            "error": f"errcode={data.get('errcode')} {data.get('errmsg', '')}",
+        }
+
+    order = data.get("order") or {}
+    status = int(order.get("status", 0))
+    return {
+        "found": True,
+        "is_paid": status in (2, 3, 4),
+        "status": status,
+        "order_id": order.get("order_id", ""),
+        "wx_order_id": order.get("wx_order_id", ""),
+        "paid_fee": int(order.get("paid_fee", 0)),
+        "paid_time": int(order.get("paid_time", 0)),
+        "error": "",
+    }
+
+
 def _calc_pay_sig(uri: str, sign_data: str, appkey: str) -> str:
     """支付签名: HMAC-SHA256(appkey, uri + '&' + signData)"""
     msg = f"{uri}&{sign_data}"

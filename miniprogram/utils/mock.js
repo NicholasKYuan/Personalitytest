@@ -264,6 +264,10 @@ const mockApi = {
     }))
   },
 
+  confirmPayment(sessionId, outTradeNo) {
+    return delay(300).then(() => ({ confirmed: true, mock: true }))
+  },
+
   getFreeResult(sessionId) {
     return delay(300).then(() => ({
       session_id: sessionId,

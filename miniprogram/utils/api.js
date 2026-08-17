@@ -213,10 +213,19 @@ function submitAnswers(sessionId, answers) {
   return request('POST', '/api/submit', { session_id: sessionId, answers })
 }
 
-/** POST /api/report/order — 创建 29.9 元付费订单，返回 wx.requestPayment 参数 */
+/** POST /api/report/order — 创建 29.9 元付费订单，返回 wx.requestVirtualPayment 参数 */
 function createOrder(sessionId) {
   if (isMock()) return mockApi.createOrder(sessionId)
   return request('POST', '/api/report/order', { session_id: sessionId })
+}
+
+/** POST /api/report/confirm_payment — 支付成功后通知服务端核实（发货轮询分支） */
+function confirmPayment(sessionId, outTradeNo) {
+  if (isMock()) return mockApi.confirmPayment(sessionId, outTradeNo)
+  return request('POST', '/api/report/confirm_payment', {
+    session_id: sessionId,
+    out_trade_no: outTradeNo
+  })
 }
 
 /** GET /api/report/status — 查询支付 / 报告生成状态（支付成功后轮询） */
@@ -287,6 +296,7 @@ module.exports = {
   createSession,
   submitAnswers,
   createOrder,
+  confirmPayment,
   getReportStatus,
   getFreeResult,
   getReportDetail,

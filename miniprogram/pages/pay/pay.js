@@ -97,8 +97,8 @@ Page({
     api
       .createOrder(this.sessionId)
       .then((data) => {
-        // 服务端判定已支付 → 直接进入报告
-        if (data && data.paid) {
+        // 服务端判定已支付（含兜底核实命中）→ 直接进入报告
+        if (data && (data.paid || data.status === 'paid')) {
           this.markPaid()
           this.startPolling()
           return
@@ -107,13 +107,12 @@ Page({
         if (!params) {
           throw new Error('未获取到支付参数')
         }
+        // 记录订单号：支付成功后 confirmPayment 需要带给服务端核实
+        this._outTradeNo = data.out_trade_no || ''
 
         // mock 模式（paySig=MOCK_SIGN）：模拟支付成功，跳过真实调起
         if (params.paySig === 'MOCK_SIGN') {
-          setTimeout(() => {
-            this.markPaid()
-            this.startPolling()
-          }, 600)
+          setTimeout(() => this.confirmPayment(), 600)
           return
         }
 
@@ -133,8 +132,7 @@ Page({
       paySig: params.paySig,
       signature: params.signature,
       success: () => {
-        this.markPaid()
-        this.startPolling()
+        this.confirmPayment()
       },
       fail: (res) => {
         this.setData({ paying: false })
@@ -153,6 +151,22 @@ Page({
         })
       }
     })
+  },
+
+  /** 支付成功 → 通知服务端核实（发货轮询分支）→ 本地标记已付费 → 轮询报告
+   *
+   * 服务端会调微信 /xpay/query_order 核实订单后才标记 paid 并启动报告生成。
+   * 即使核实请求失败（网络抖动），也继续轮询——用户重进支付页时
+   * create_order 的兜底核实会补上。
+   */
+  confirmPayment() {
+    api
+      .confirmPayment(this.sessionId, this._outTradeNo || '')
+      .catch(() => {}) // 核实失败不阻塞：轮询 + create_order 兜底核实覆盖
+      .then(() => {
+        this.markPaid()
+        this.startPolling()
+      })
   },
 
   /** 支付成功 → 本地标记已付费 */
